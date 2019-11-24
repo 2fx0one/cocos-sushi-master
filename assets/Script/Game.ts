@@ -8,36 +8,44 @@
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
-
-    @property([cc.Button])
-    rice: cc.Button[] = [];
+export default class Game extends cc.Component {
 
     @property(cc.Prefab)
-    ricePrefab: cc.Prefab = null
+    ricePreFab: cc.Prefab = null;
 
-    @property(cc.Canvas)
-    canvas: cc.Canvas = null
     // @property
     // text: string = 'hello';
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {}
-
-    start () {
-        let rice = cc.instantiate(this.ricePrefab)
-        rice.x = 100
-        this.node.parent.addChild(rice)
-        // this.canvas.add(rice)
-        
+    onLoad() {
+   
+        this.init();
 
     }
-    onTouchFood(event, customEventData) {
-        console.log('xx', event,  customEventData)
+
+    init(){
+        this.createFood(100, 100, "a")
+        this.createFood(200, 200, "b")
+    }
+
+    createFood(x: number, y:number, name:string) {
+        let food = cc.instantiate(this.ricePreFab)
+
+        food.setPosition(cc.v2(x, y))
+
+        food.getComponent('Food').init(this, name)
+
+        this.node.addChild(food)
+
+        return food;
+    }
+
+    start() {
+
     }
 
     // update (dt) {}

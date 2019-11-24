@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "rice",
+    "_name": "FoodPrefab",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -26,10 +26,13 @@
     "_components": [
       {
         "__id__": 9
+      },
+      {
+        "__id__": 11
       }
     ],
     "_prefab": {
-      "__id__": 10
+      "__id__": 12
     },
     "_opacity": 255,
     "_color": {
@@ -322,7 +325,9 @@
     "duration": 0.1,
     "zoomScale": 1.2,
     "clickEvents": [
-      null
+      {
+        "__id__": 10
+      }
     ],
     "_N$interactable": true,
     "_N$enableAutoGrayEffect": false,
@@ -391,6 +396,26 @@
     "_N$target": {
       "__id__": 2
     },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.ClickEvent",
+    "target": {
+      "__id__": 1
+    },
+    "component": "",
+    "_componentId": "64c82Sl+I1Cyrs/IaVdMd7x",
+    "handler": "onclick",
+    "customEventData": ""
+  },
+  {
+    "__type__": "64c82Sl+I1Cyrs/IaVdMd7x",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
     "_id": ""
   },
   {
