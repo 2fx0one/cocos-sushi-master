@@ -11,6 +11,7 @@
 const {ccclass, property} = cc._decorator;
 
 import Game from "./Game";
+import Singleton from "./Singleton";
 
 @ccclass
 export default class Food extends cc.Component {
@@ -33,10 +34,11 @@ export default class Food extends cc.Component {
     }
 
     onclick(event, data) {
-        console.log(this.name)
+        console.log(this.typeName)
         console.log(this.game)
         console.log(event)
         console.log(data)
+        console.log(Singleton.Instance.a)
 
     }
 
