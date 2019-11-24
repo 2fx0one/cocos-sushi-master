@@ -24,12 +24,12 @@ export default class Food extends cc.Component {
     // text: string = 'hello';
 
     private game: Game = null
-    private name: string = ''
+    private typeName: string = ''
     // LIFE-CYCLE CALLBACKS:
 
-    public init(game: Game, name: string){
+    public init(game: Game, typeName: string){
         this.game = game
-        this.name = name
+        this.typeName = typeName
     }
 
     onclick(event, data) {

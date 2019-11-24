@@ -28,7 +28,7 @@ export default class Game extends cc.Component {
     }
 
     init(){
-        this.createFood(100, 100, "a")
+        this.createFood(100, 100, "rice")
         this.createFood(200, 200, "b")
     }
 
