@@ -24,9 +24,13 @@ export default class Game extends cc.Component {
     @property(cc.Prefab)
     ricePreFab: cc.Prefab = null
 
+    // @property(cc.Node)
+    // curtain: cc.Node = null
+
     //拥有的所有食物组件
-    private foodSpriteFrameMap: { [key: string]: cc.SpriteFrame } = {}
-    private foodMap: { [key: string]: Food } = {}
+    // private foodSmallSpriteFrameMap: { [key: string]: cc.SpriteFrame } = {}
+    // private foodSpriteFrameMap: { [key: string]: cc.SpriteFrame } = {}
+    private foodsMap: { [key: string]: Food } = {}
 
     //板子上的食物
     private foodInCurtain: string[] = []
@@ -37,10 +41,6 @@ export default class Game extends cc.Component {
 
     onLoad() {
         Singleton.Instance.game = this
-        this.init()
-    }
-
-    init() {
 
         let data = [
             {x: 265, y: 260, foodName: "1"},
@@ -56,9 +56,45 @@ export default class Game extends cc.Component {
             {x: 65, y: 60, foodName: "9"}
         ]
 
+        let nameList: string[] = data.map(v=>v.foodName)
+
+        // nameList.forEach((v,i)=>{
+        //     cc.loader.loadRes('foods-small/' + v, (err, spriteFrame) => {
+        //         this.foodSmallSpriteFrameMap[v] = spriteFrame
+        //     })
+        // })
+        //
+        // nameList.forEach((v,i)=>{
+        //     cc.loader.loadRes('foods/' + v, (err, spriteFrame) => {
+        //         this.foodSpriteFrameMap[v] = spriteFrame
+        //     })
+        // })
+
+        this.init(data)
+    }
+
+    init(data) {
+
+        // let data = [
+        //     {x: 265, y: 260, foodName: "1"},
+        //     {x: 265, y: 160, foodName: "2"},
+        //     {x: 265, y: 60, foodName: "3"},
+        //
+        //     {x: 165, y: 260, foodName: "4"},
+        //     {x: 165, y: 160, foodName: "5"},
+        //     {x: 165, y: 60, foodName: "6"},
+        //
+        //     {x: 65, y: 260, foodName: "7"},
+        //     {x: 65, y: 160, foodName: "8"},
+        //     {x: 65, y: 60, foodName: "9"}
+        // ]
+
+        // cc.loader.loadResArray(data.map(x=>'foods-small/' + x.foodName), (err, resourceList)=>{
+        //     console.log('resourceList', resourceList.map(x=>x.name))
+        // })
 
         data.forEach((v, i) => {
-            this.foodMap[v.foodName] = this.createFood(v.x, v.y, v.foodName)
+            this.foodsMap[v.foodName] = this.createFood(v.x, v.y, v.foodName)
         })
     }
 
@@ -90,16 +126,29 @@ export default class Game extends cc.Component {
 
 
     clickFood(food: Food) {
-        if (this.foodInCurtain.length < 9) {
-            this.foodInCurtain.push(food.foodName)
-            this.foodMap[food.foodName].tackFood()
-            console.log(this.foodInCurtain)
+        console.log('Singleton.Instance.curtain.foodIndex', Singleton.Instance.curtain.foodsAmount())
+
+        if (Singleton.Instance.curtain.foodsAmount() < 9) {
+
+            cc.loader.loadRes('foods-small/' + food.foodName, cc.SpriteFrame,(err, spriteFrame) => {
+                // this.foodSmallSpriteFrameMap[food.foodName] = spriteFrame
+                this.foodInCurtain.push(food.foodName)
+
+                // let sf = this.foodSmallSpriteFrameMap[food.foodName];
+                // console.log('sf', sf)
+                // let component = this.curtain.getComponent(SushiCurtain);
+                // console.log(component)
+                Singleton.Instance.curtain.addFood(spriteFrame)
+                // Singleton.Instance.curtain.addFood()
+                this.foodsMap[food.foodName].tackFood()
+            })
         }
     }
 
-    canScroll() {
-        return this.foodInCurtain.length == 0
-    }
+    // canScroll() {
+    //     // return true
+    //     return this.foodInCurtain.length < 0
+    // }
 
     makeSushi(foods: string[]) {
         console.log("==== make sushi ====")
@@ -113,10 +162,11 @@ export default class Game extends cc.Component {
     }
 
     backFood() {
-        console.log('return food')
+        console.log('game.backFood')
         if (this.foodInCurtain.length > 0) {
             let t = this.foodInCurtain.pop();
-            this.foodMap[t].backFood()
+            this.foodsMap[t].backFood()
+            Singleton.Instance.curtain.backFood()
         }
     }
 }

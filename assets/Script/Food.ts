@@ -24,7 +24,7 @@ export default class Food extends cc.Component {
     // text: string = 'hello';
 
     private game: Game = null
-    public foodName: string = ''
+    public foodName: string = null
     private amount: number = 9
 
     // LIFE-CYCLE CALLBACKS:
