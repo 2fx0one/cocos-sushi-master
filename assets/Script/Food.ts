@@ -11,13 +11,12 @@
 const {ccclass, property} = cc._decorator;
 
 import Game from "./Game";
-import Singleton from "./Singleton";
 
 @ccclass
 export default class Food extends cc.Component {
 
-    // @property(cc.Label)
-    // label: cc.Label = null;
+    @property(cc.Label)
+    label: cc.Label = null;
 
 
 
@@ -25,20 +24,24 @@ export default class Food extends cc.Component {
     // text: string = 'hello';
 
     private game: Game = null
-    private typeName: string = ''
+    public typeName: string = ''
+    private amount: number = 9
     // LIFE-CYCLE CALLBACKS:
 
-    public init(game: Game, typeName: string){
+    public init(game: Game, typeName: string, amount: number){
         this.game = game
         this.typeName = typeName
+        this.amount = amount
+        this.label.string = '' + this.amount
     }
 
     onclick(event, data) {
         console.log(this.typeName)
-        console.log(this.game)
-        console.log(event)
+        // console.log(this.game)
+        // console.log(event)
         console.log(data)
-        console.log(Singleton.Instance.a)
+        this.game.clickFood(this)
+
 
     }
 
