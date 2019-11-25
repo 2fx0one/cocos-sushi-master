@@ -9,7 +9,7 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "1_rice": {
+    "1": {
       "ver": "1.0.4",
       "uuid": "df67689b-5ad3-47b2-b9c3-0a952ee34598",
       "rawTextureUuid": "db20cca9-e720-4244-ad3f-fdfd817a53b0",

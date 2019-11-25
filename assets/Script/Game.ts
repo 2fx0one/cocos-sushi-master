@@ -42,11 +42,11 @@ export default class Game extends cc.Component {
     init() {
 
         let data = [
-            {x: 265, y: 260, foodName: "1_rice"},
-            {x: 265, y: 160, foodName: "2_seaweed"},
-            {x: 265, y: 60, foodName: "3_salmon_roe"},
+            {x: 265, y: 260, foodName: "1"},
+            {x: 265, y: 160, foodName: "2"},
+            {x: 265, y: 60, foodName: "3"},
 
-            {x: 165, y: 260, foodName: "4_salmon_fillet"},
+            {x: 165, y: 260, foodName: "4"},
             {x: 165, y: 160, foodName: "5"},
             {x: 165, y: 60, foodName: "6"},
 
