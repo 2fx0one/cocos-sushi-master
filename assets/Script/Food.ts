@@ -19,24 +19,36 @@ export default class Food extends cc.Component {
     label: cc.Label = null;
 
 
-
     // @property
     // text: string = 'hello';
 
     private game: Game = null
-    public typeName: string = ''
+    public foodName: string = ''
     private amount: number = 9
+
     // LIFE-CYCLE CALLBACKS:
 
-    public init(game: Game, typeName: string, amount: number){
+    public init(game: Game, foodName: string, sf: cc.SpriteFrame, amount: number) {
+        // console.log(this.node.parent.getComponent(cc.Sprite))
+        // const button = this.getComponent(cc.Button);
+        // console.log(button)
+        console.log(sf)
+        const sprite: cc.Sprite = this.getComponentInChildren(cc.Sprite)
+        sprite.spriteFrame = sf
+        console.log(sprite.spriteFrame)
+        // console.log(this.getComponentsInChildren(cc.Sprite))
         this.game = game
-        this.typeName = typeName
+        this.foodName = foodName
         this.amount = amount
+        this.updateLabelDisplay()
+    }
+
+    updateLabelDisplay() {
         this.label.string = '' + this.amount
     }
 
     onclick(event, data) {
-        console.log(this.typeName)
+        console.log(this.foodName)
         // console.log(this.game)
         // console.log(event)
         console.log(data)
@@ -45,13 +57,25 @@ export default class Food extends cc.Component {
 
     }
 
-    // onLoad () {
+    addAmonut(amount: number) {
+        this.amount += amount
+        console.log('add', this.amount)
+        this.updateLabelDisplay()
+    }
 
-    // }
+    subtractAmonut(amount: number) {
+        this.amount -= amount
+        console.log('subtract', this.amount)
+        this.updateLabelDisplay()
+    }
 
-    // start () {
+    // 退回食物
+    tackFood() {
+        this.subtractAmonut(1)
+    }
 
-    // }
-
-    // update (dt) {}
+    // 退回食物
+    backFood() {
+        this.addAmonut(1)
+    }
 }

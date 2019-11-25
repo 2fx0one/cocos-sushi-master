@@ -192,5 +192,11 @@
       }
     }
   },
-  "events": []
+  "events": [
+    {
+      "frame": 1.3333333333333333,
+      "func": "sushiCompleted",
+      "params": []
+    }
+  ]
 }

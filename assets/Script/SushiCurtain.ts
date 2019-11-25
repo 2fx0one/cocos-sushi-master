@@ -33,8 +33,12 @@ export default class SushiCurtain extends cc.Component {
 
     }
 
-    onClick(event, data) {
-        console.log(data)
+    onClickFoodBack(event, data) {
+        Singleton.Instance.game.backFood()
+    }
+
+    onClickFood(event, data) {
+        // console.log(data)
 
         // if (this.animState==null) {
         //     this.animState = this.anim.play('curtain');
@@ -42,9 +46,6 @@ export default class SushiCurtain extends cc.Component {
 
         if (this.animState==null || this.animState.isPlaying==false) {
             this.animState = this.anim.play('curtain');
-
-            Singleton.Instance.game.clickCurtain(this)
-
         }
 
         // console.log(this.animState.isPlaying)
@@ -53,8 +54,9 @@ export default class SushiCurtain extends cc.Component {
 
     }
 
-    start() {
-
+    sushiCompleted() {
+        console.log('sushiCompleted!')
+        Singleton.Instance.game.sushiCompleted(this)
     }
 
     // update (dt) {}
