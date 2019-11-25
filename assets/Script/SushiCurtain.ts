@@ -38,6 +38,10 @@ export default class SushiCurtain extends cc.Component {
     }
 
     onClickFood(event, data) {
+
+        if (Singleton.Instance.game.canScroll()) {
+            return;
+        }
         // console.log(data)
 
         // if (this.animState==null) {

@@ -20,6 +20,7 @@ import SpriteFrame = cc.SpriteFrame;
 @ccclass
 export default class Game extends cc.Component {
 
+
     @property(cc.Prefab)
     ricePreFab: cc.Prefab = null
 
@@ -96,6 +97,9 @@ export default class Game extends cc.Component {
         }
     }
 
+    canScroll() {
+        return this.foodInCurtain.length == 0
+    }
 
     makeSushi(foods: string[]) {
         console.log("==== make sushi ====")
