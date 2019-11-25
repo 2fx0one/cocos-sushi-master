@@ -8,62 +8,115 @@
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
-const { ccclass, property } = cc._decorator;
+import Food from "./Food";
+
+const {ccclass, property} = cc._decorator;
 
 import Singleton from './Singleton'
+import SushiCurtain from "./SushiCurtain";
+import SpriteFrame = cc.SpriteFrame;
+
+
 @ccclass
 export default class Game extends cc.Component {
 
-    @property(cc.Prefab)
-    ricePreFab: cc.Prefab = null;
 
+    @property(cc.Prefab)
+    ricePreFab: cc.Prefab = null
+
+    //拥有的所有食物组件
+    private foodSpriteFrameMap: { [key: string]: cc.SpriteFrame } = {}
+    private foodMap: { [key: string]: Food } = {}
+
+    //板子上的食物
+    private foodInCurtain: string[] = []
     // @property
     // text: string = 'hello';
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
-
-        Singleton.Instance.a = '123'
-        this.init();
-
+        Singleton.Instance.game = this
+        this.init()
     }
 
     init() {
-        // this.node.height
-        this.createFood(265, 260, "1")
-        this.createFood(265, 160, "2")
-        this.createFood(265, 60, "3")
 
-        this.createFood(165, 260, "4")
-        this.createFood(165, 160, "5")
-        this.createFood(165, 60, "6")
+        let data = [
+            {x: 265, y: 260, foodName: "1"},
+            {x: 265, y: 160, foodName: "2"},
+            {x: 265, y: 60, foodName: "3"},
 
-        this.createFood(65, 260, "7")
-        this.createFood(65, 160, "8")
-        this.createFood(65, 65, "9")
+            {x: 165, y: 260, foodName: "4"},
+            {x: 165, y: 160, foodName: "5"},
+            {x: 165, y: 60, foodName: "6"},
+
+            {x: 65, y: 260, foodName: "7"},
+            {x: 65, y: 160, foodName: "8"},
+            {x: 65, y: 60, foodName: "9"}
+        ]
+
+
+        data.forEach((v, i) => {
+            this.foodMap[v.foodName] = this.createFood(v.x, v.y, v.foodName)
+        })
     }
 
-    createFood(x: number, y: number, name: string) {
+    createFood(x: number, y: number, foodName: string): Food {
         let food = cc.instantiate(this.ricePreFab)
 
         // food.setPosition(cc.v2(x - this.node.width * 0.5, y - this.node.height * 0.5))
         food.setPosition(this.getPosition(x, y))
 
-        food.getComponent('Food').init(this, name)
+        let foodComponent: Food = food.getComponent('Food');
+
+        cc.loader.loadRes('foods/' + foodName, cc.SpriteFrame, (err, spriteFrame)=>{
+            console.log(spriteFrame)
+            // let sf:cc.SpriteFrame = spriteFrame
+            // console.log('xx', sf.name)
+            // this.foodSpriteFrameMap[sf.name] = sf
+            foodComponent.init(this, foodName, spriteFrame, 10)
+        })
+
 
         this.node.addChild(food)
 
-        return food;
+        return foodComponent;
     }
 
     getPosition(x: number, y: number) {
         return cc.v2(x, y);
     }
 
-    start() {
 
+    clickFood(food: Food) {
+        if (this.foodInCurtain.length < 9) {
+            this.foodInCurtain.push(food.foodName)
+            this.foodMap[food.foodName].tackFood()
+            console.log(this.foodInCurtain)
+        }
     }
 
-    // update (dt) {}
+    canScroll() {
+        return this.foodInCurtain.length == 0
+    }
+
+    makeSushi(foods: string[]) {
+        console.log("==== make sushi ====")
+        console.log(foods)
+    }
+
+    sushiCompleted(curtain: SushiCurtain) {
+        this.makeSushi(this.foodInCurtain)
+        this.foodInCurtain = []
+        console.log('sushi complete => ', this.foodInCurtain)
+    }
+
+    backFood() {
+        console.log('return food')
+        if (this.foodInCurtain.length > 0) {
+            let t = this.foodInCurtain.pop();
+            this.foodMap[t].backFood()
+        }
+    }
 }
