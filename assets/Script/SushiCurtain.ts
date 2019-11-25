@@ -18,6 +18,9 @@ export default class SushiCurtain extends cc.Component {
     @property([cc.Node])
     foods: cc.Node[] = [];
 
+    //板子上的食物
+    foodInCurtain: string[] = []
+
     private foodIndex: number = 0
 
     // @property
@@ -68,11 +71,22 @@ export default class SushiCurtain extends cc.Component {
         this.foods.forEach((v,i)=>{
             v.getComponent(cc.Sprite).spriteFrame = null
         })
+        this.foodIndex = 0
+
+        this.makeSushi()
         Singleton.Instance.game.sushiCompleted(this)
     }
 
+    makeSushi() {
+        console.log("==== make sushi ====")
+        console.log(this.foodInCurtain)
+        this.foodInCurtain = []
+    }
+
+
     // update (dt) {}
-    addFood(sf: cc.SpriteFrame) {
+    addFood(foodName: string, sf: cc.SpriteFrame) {
+        this.foodInCurtain.push(foodName)
         let t: cc.Node = this.foods[this.foodIndex++]
         // console.log(t)
         // console.log(t.getComponent(cc.Sprite))
@@ -80,12 +94,14 @@ export default class SushiCurtain extends cc.Component {
 
     }
 
-    backFood() {
+    backFood(): string {
         console.log('curtain.backFood')
-        if (this.foodIndex > 0) {
+        if (this.foodsAmount() > 0) {
             let t: cc.Node = this.foods[--this.foodIndex]
-            console.log(t)
+            // console.log(t)
             t.getComponent(cc.Sprite).spriteFrame = null
+            return this.foodInCurtain.pop();
         }
+        return ''
     }
 }

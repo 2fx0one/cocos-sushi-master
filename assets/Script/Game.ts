@@ -33,7 +33,7 @@ export default class Game extends cc.Component {
     private foodsMap: { [key: string]: Food } = {}
 
     //板子上的食物
-    private foodInCurtain: string[] = []
+    // private foodInCurtain: string[] = []
     // @property
     // text: string = 'hello';
 
@@ -56,7 +56,7 @@ export default class Game extends cc.Component {
             {x: 65, y: 60, foodName: "9"}
         ]
 
-        let nameList: string[] = data.map(v=>v.foodName)
+        let nameList: string[] = data.map(v => v.foodName)
 
         // nameList.forEach((v,i)=>{
         //     cc.loader.loadRes('foods-small/' + v, (err, spriteFrame) => {
@@ -106,7 +106,7 @@ export default class Game extends cc.Component {
 
         let foodComponent: Food = food.getComponent('Food');
 
-        cc.loader.loadRes('foods/' + foodName, cc.SpriteFrame, (err, spriteFrame)=>{
+        cc.loader.loadRes('foods/' + foodName, cc.SpriteFrame, (err, spriteFrame) => {
             console.log(spriteFrame)
             // let sf:cc.SpriteFrame = spriteFrame
             // console.log('xx', sf.name)
@@ -130,43 +130,32 @@ export default class Game extends cc.Component {
 
         if (Singleton.Instance.curtain.foodsAmount() < 9) {
 
-            cc.loader.loadRes('foods-small/' + food.foodName, cc.SpriteFrame,(err, spriteFrame) => {
+            cc.loader.loadRes('foods-small/' + food.foodName, cc.SpriteFrame, (err, spriteFrame) => {
                 // this.foodSmallSpriteFrameMap[food.foodName] = spriteFrame
-                this.foodInCurtain.push(food.foodName)
+
 
                 // let sf = this.foodSmallSpriteFrameMap[food.foodName];
                 // console.log('sf', sf)
                 // let component = this.curtain.getComponent(SushiCurtain);
                 // console.log(component)
-                Singleton.Instance.curtain.addFood(spriteFrame)
+                Singleton.Instance.curtain.addFood(food.foodName, spriteFrame)
                 // Singleton.Instance.curtain.addFood()
                 this.foodsMap[food.foodName].tackFood()
             })
         }
     }
 
-    // canScroll() {
-    //     // return true
-    //     return this.foodInCurtain.length < 0
-    // }
-
-    makeSushi(foods: string[]) {
-        console.log("==== make sushi ====")
-        console.log(foods)
-    }
 
     sushiCompleted(curtain: SushiCurtain) {
-        this.makeSushi(this.foodInCurtain)
-        this.foodInCurtain = []
-        console.log('sushi complete => ', this.foodInCurtain)
+
+        console.log('sushi complete => ', curtain)
     }
 
     backFood() {
         console.log('game.backFood')
-        if (this.foodInCurtain.length > 0) {
-            let t = this.foodInCurtain.pop();
-            this.foodsMap[t].backFood()
-            Singleton.Instance.curtain.backFood()
+        if (Singleton.Instance.curtain.foodsAmount() > 0) {
+            let name = Singleton.Instance.curtain.backFood()
+            this.foodsMap[name].backFood()
         }
     }
 }
