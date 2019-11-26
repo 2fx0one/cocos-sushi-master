@@ -10,7 +10,7 @@
 
 import Game from "./Game";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 
 @ccclass
@@ -53,7 +53,10 @@ export default class Food extends cc.Component {
         // console.log(this.game)
         // console.log(event)
         console.log(data)
-        this.game.clickFood(this)
+        console.log('this.amount', this.amount)
+        if (this.amount > 0) {
+            this.game.clickFood(this)
+        }
 
 
     }

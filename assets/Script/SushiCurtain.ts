@@ -10,7 +10,7 @@ import Singleton from "./Singleton";
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class SushiCurtain extends cc.Component {
@@ -66,9 +66,38 @@ export default class SushiCurtain extends cc.Component {
 
     }
 
+    sushiScrollColumn1() {
+        console.log('1')
+
+        let target = [0, 3, 6]
+        this.foods.filter((v, i) => target.indexOf(i)>=0)
+            .forEach((v, i) => {
+                v.getComponent(cc.Sprite).spriteFrame = null
+            })
+    }
+
+    sushiScrollColumn2() {
+        console.log('2')
+        let target = [1, 4, 7]
+        this.foods.filter((v, i) => target.indexOf(i)>=0)
+            .forEach((v, i) => {
+                v.getComponent(cc.Sprite).spriteFrame = null
+            })
+
+    }
+    sushiScrollColumn3() {
+        console.log('3')
+        let target = [2, 5, 8]
+        this.foods.filter((v, i) => target.indexOf(i)>=0)
+            .forEach((v, i) => {
+                v.getComponent(cc.Sprite).spriteFrame = null
+            })
+
+    }
+
     sushiCompleted() {
         console.log('sushiCompleted!')
-        this.foods.forEach((v,i)=>{
+        this.foods.forEach((v, i) => {
             v.getComponent(cc.Sprite).spriteFrame = null
         })
         this.foodIndex = 0
