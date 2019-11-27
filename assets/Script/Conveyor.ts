@@ -36,12 +36,11 @@ export default class Conveyor extends cc.Component {
 
     }
 
-    update (dt) {
-        this.node.x += 1 * this.speed
-        console.log(this.node.x)
-        if (this.node.x > this.resetX) {
-            this.node.x -= this.resetX
-        }
-        // console.log(dt)
-    }
+    // update (dt) {
+    //     this.node.x += 1 * this.speed
+    //     console.log(this.node.x)
+    //     if (this.node.x > this.resetX) {
+    //         this.node.x -= this.resetX
+    //     }
+    // }
 }
