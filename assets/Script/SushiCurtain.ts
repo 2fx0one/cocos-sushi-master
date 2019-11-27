@@ -30,6 +30,8 @@ export default class SushiCurtain extends cc.Component {
     private anim: cc.Animation = null
     private animState: cc.AnimationState = null
 
+    private canAddFood: boolean = true
+
     foodsAmount() {
         return this.foodIndex;
     }
@@ -59,6 +61,7 @@ export default class SushiCurtain extends cc.Component {
 
         if (this.animState == null || this.animState.isPlaying == false) {
             this.animState = this.anim.play('curtain');
+            this.canAddFood = false
         }
 
         // console.log(this.animState.isPlaying)
@@ -70,7 +73,7 @@ export default class SushiCurtain extends cc.Component {
         console.log('1')
 
         let target = [0, 3, 6]
-        this.foods.filter((v, i) => target.indexOf(i)>=0)
+        this.foods.filter((v, i) => target.indexOf(i) >= 0)
             .forEach((v, i) => {
                 v.getComponent(cc.Sprite).spriteFrame = null
             })
@@ -79,7 +82,7 @@ export default class SushiCurtain extends cc.Component {
     sushiScrollColumn2() {
         console.log('2')
         let target = [1, 4, 7]
-        this.foods.filter((v, i) => target.indexOf(i)>=0)
+        this.foods.filter((v, i) => target.indexOf(i) >= 0)
             .forEach((v, i) => {
                 v.getComponent(cc.Sprite).spriteFrame = null
             })
@@ -88,7 +91,7 @@ export default class SushiCurtain extends cc.Component {
     sushiScrollColumn3() {
         console.log('3')
         let target = [2, 5, 8]
-        this.foods.filter((v, i) => target.indexOf(i)>=0)
+        this.foods.filter((v, i) => target.indexOf(i) >= 0)
             .forEach((v, i) => {
                 v.getComponent(cc.Sprite).spriteFrame = null
             })
@@ -97,6 +100,7 @@ export default class SushiCurtain extends cc.Component {
 
     sushiCompleted() {
         console.log('sushiCompleted!')
+        this.canAddFood = true
         this.foods.forEach((v, i) => {
             v.getComponent(cc.Sprite).spriteFrame = null
         })
@@ -113,13 +117,24 @@ export default class SushiCurtain extends cc.Component {
     }
 
 
-    // update (dt) {}
-    addFood(foodName: string, sf: cc.SpriteFrame) {
+    addFood(foodName: string): boolean {
+        console.log('this.animState.isPlaying ==== ', this.canAddFood)
+
+        if (Singleton.Instance.curtain.foodsAmount() >= 9 || !this.canAddFood) {
+            return false
+        }
+
+
         this.foodInCurtain.push(foodName)
         let t: cc.Node = this.foods[this.foodIndex++]
         // console.log(t)
         // console.log(t.getComponent(cc.Sprite))
-        t.getComponent(cc.Sprite).spriteFrame = sf
+        cc.loader.loadRes('foods-small/' + foodName, cc.SpriteFrame, (err, spriteFrame) => {
+            t.getComponent(cc.Sprite).spriteFrame = spriteFrame
+        })
+        return true
+
+
 
     }
 

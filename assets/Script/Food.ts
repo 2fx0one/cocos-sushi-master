@@ -33,10 +33,10 @@ export default class Food extends cc.Component {
         // console.log(this.node.parent.getComponent(cc.Sprite))
         // const button = this.getComponent(cc.Button);
         // console.log(button)
-        console.log(sf)
+        // console.log(sf)
         const sprite: cc.Sprite = this.getComponentInChildren(cc.Sprite)
         sprite.spriteFrame = sf
-        console.log(sprite.spriteFrame)
+        // console.log(sprite.spriteFrame)
         // console.log(this.getComponentsInChildren(cc.Sprite))
         this.game = game
         this.foodName = foodName
@@ -73,7 +73,7 @@ export default class Food extends cc.Component {
         this.updateLabelDisplay()
     }
 
-    // 退回食物
+    // 拿食物
     tackFood() {
         this.subtractAmonut(1)
     }

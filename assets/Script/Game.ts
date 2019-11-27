@@ -10,7 +10,7 @@
 
 import Food from "./Food";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 import Singleton from './Singleton'
 import SushiCurtain from "./SushiCurtain";
@@ -27,10 +27,10 @@ export default class Game extends cc.Component {
     // @property(cc.Node)
     // curtain: cc.Node = null
 
-    //拥有的所有食物组件
+    //拥有的所有食物 放在容器里面
     // private foodSmallSpriteFrameMap: { [key: string]: cc.SpriteFrame } = {}
     // private foodSpriteFrameMap: { [key: string]: cc.SpriteFrame } = {}
-    private foodsMap: { [key: string]: Food } = {}
+    private foodsInContainMap: { [key: string]: Food } = {}
 
     //板子上的食物
     // private foodInCurtain: string[] = []
@@ -43,20 +43,20 @@ export default class Game extends cc.Component {
         Singleton.Instance.game = this
 
         let data = [
-            {x: 265, y: 260, foodName: "1"},
-            {x: 265, y: 160, foodName: "2"},
-            {x: 265, y: 60, foodName: "3"},
+            { x: 265, y: 260, foodName: "1" },
+            { x: 265, y: 160, foodName: "2" },
+            { x: 265, y: 60, foodName: "3" },
 
-            {x: 165, y: 260, foodName: "4"},
-            {x: 165, y: 160, foodName: "5"},
-            {x: 165, y: 60, foodName: "6"},
+            { x: 165, y: 260, foodName: "4" },
+            { x: 165, y: 160, foodName: "5" },
+            { x: 165, y: 60, foodName: "6" },
 
-            {x: 65, y: 260, foodName: "7"},
-            {x: 65, y: 160, foodName: "8"},
-            {x: 65, y: 60, foodName: "9"}
+            { x: 65, y: 260, foodName: "7" },
+            { x: 65, y: 160, foodName: "8" },
+            { x: 65, y: 60, foodName: "9" }
         ]
 
-        let nameList: string[] = data.map(v => v.foodName)
+        // let nameList: string[] = data.map(v => v.foodName)
 
         // nameList.forEach((v,i)=>{
         //     cc.loader.loadRes('foods-small/' + v, (err, spriteFrame) => {
@@ -94,7 +94,7 @@ export default class Game extends cc.Component {
         // })
 
         data.forEach((v, i) => {
-            this.foodsMap[v.foodName] = this.createFood(v.x, v.y, v.foodName)
+            this.foodsInContainMap[v.foodName] = this.createFood(v.x, v.y, v.foodName)
         })
     }
 
@@ -107,7 +107,7 @@ export default class Game extends cc.Component {
         let foodComponent: Food = food.getComponent('Food');
 
         cc.loader.loadRes('foods/' + foodName, cc.SpriteFrame, (err, spriteFrame) => {
-            console.log(spriteFrame)
+            // console.log(spriteFrame)
             // let sf:cc.SpriteFrame = spriteFrame
             // console.log('xx', sf.name)
             // this.foodSpriteFrameMap[sf.name] = sf
@@ -126,22 +126,13 @@ export default class Game extends cc.Component {
 
 
     clickFood(food: Food) {
+        // 点击食物，首先帘子需要有空位，且帘子卷的动画已经结束才行。
         console.log('Singleton.Instance.curtain.foodIndex', Singleton.Instance.curtain.foodsAmount())
 
-        if (Singleton.Instance.curtain.foodsAmount() < 9) {
-
-            cc.loader.loadRes('foods-small/' + food.foodName, cc.SpriteFrame, (err, spriteFrame) => {
-                // this.foodSmallSpriteFrameMap[food.foodName] = spriteFrame
-
-
-                // let sf = this.foodSmallSpriteFrameMap[food.foodName];
-                // console.log('sf', sf)
-                // let component = this.curtain.getComponent(SushiCurtain);
-                // console.log(component)
-                Singleton.Instance.curtain.addFood(food.foodName, spriteFrame)
-                // Singleton.Instance.curtain.addFood()
-                this.foodsMap[food.foodName].tackFood()
-            })
+        // 放到帘子上 放成功了
+        if (Singleton.Instance.curtain.addFood(food.foodName)){
+            //从格子里面拿食物
+            this.foodsInContainMap[food.foodName].tackFood()
         }
     }
 
@@ -155,7 +146,7 @@ export default class Game extends cc.Component {
         console.log('game.backFood')
         if (Singleton.Instance.curtain.foodsAmount() > 0) {
             let name = Singleton.Instance.curtain.backFood()
-            this.foodsMap[name].backFood()
+            this.foodsInContainMap[name].backFood()
         }
     }
 }
