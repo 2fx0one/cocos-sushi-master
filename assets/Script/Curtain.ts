@@ -10,10 +10,10 @@ import Singleton from "./Singleton";
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
-const { ccclass, property } = cc._decorator;
+const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class SushiCurtain extends cc.Component {
+export default class Curtain extends cc.Component {
 
     @property([cc.Node])
     foods: cc.Node[] = [];
@@ -47,100 +47,84 @@ export default class SushiCurtain extends cc.Component {
         Singleton.Instance.game.backFood()
     }
 
+    //开始卷帘子
     onClickCurtain(event, data) {
         console.log('onClickCurtain')
 
         if (this.foodIndex === 0) {
             return;
         }
-        // console.log(data)
-
-        // if (this.animState==null) {
-        //     this.animState = this.anim.play('curtain');
-        // }
 
         if (this.animState == null || this.animState.isPlaying == false) {
             this.animState = this.anim.play('curtain');
             this.canAddFood = false
         }
+    }
 
-        // console.log(this.animState.isPlaying)
-
-
+    cleanUpCurtain(target: number[]) {
+        target.forEach((v, i) => {
+            this.foods[v].getComponent(cc.Sprite).spriteFrame = null
+        })
     }
 
     sushiScrollColumn1() {
         console.log('1')
-
-        let target = [0, 3, 6]
-        this.foods.filter((v, i) => target.indexOf(i) >= 0)
-            .forEach((v, i) => {
-                v.getComponent(cc.Sprite).spriteFrame = null
-            })
+        this.cleanUpCurtain([0, 3, 6])
     }
 
     sushiScrollColumn2() {
         console.log('2')
-        let target = [1, 4, 7]
-        this.foods.filter((v, i) => target.indexOf(i) >= 0)
-            .forEach((v, i) => {
-                v.getComponent(cc.Sprite).spriteFrame = null
-            })
-
+        this.cleanUpCurtain([1, 4, 7])
     }
+
     sushiScrollColumn3() {
         console.log('3')
-        let target = [2, 5, 8]
-        this.foods.filter((v, i) => target.indexOf(i) >= 0)
-            .forEach((v, i) => {
-                v.getComponent(cc.Sprite).spriteFrame = null
-            })
-
+        this.cleanUpCurtain([2, 5, 8])
     }
 
     sushiCompleted() {
         console.log('sushiCompleted!')
+
+        //可添加食物状态
         this.canAddFood = true
+
         this.foods.forEach((v, i) => {
             v.getComponent(cc.Sprite).spriteFrame = null
         })
+
+        // this.makeSushi()
+        Singleton.Instance.game.sushiScrollCompleted(this.foodInCurtain)
+
+        //制作完成 清空该区域
         this.foodIndex = 0
-
-        this.makeSushi()
-        Singleton.Instance.game.sushiCompleted(this)
-    }
-
-    makeSushi() {
-        console.log("==== make sushi ====")
-        console.log(this.foodInCurtain)
         this.foodInCurtain = []
     }
 
+    // makeSushi() {
+    //     console.log("==== make sushi ====")
+    //     console.log(this.foodInCurtain)
+    // }
 
-    addFood(foodName: string): boolean {
-        console.log('this.animState.isPlaying ==== ', this.canAddFood)
+    isCanAddFood(): boolean {
+        //帘子上食物小于9，
+        return this.foodIndex < 9 && this.canAddFood
+    }
 
-        if (Singleton.Instance.curtain.foodsAmount() >= 9 || !this.canAddFood) {
-            return false
+    addFood(foodId: string) {
+        if (this.isCanAddFood()) {
+            this.foodInCurtain.push(foodId)
+            let t: cc.Node = this.foods[this.foodIndex++]
+            // console.log(t)
+            // console.log(t.getComponent(cc.Sprite))
+            cc.loader.loadRes('foods-small/' + foodId, cc.SpriteFrame, (err, spriteFrame) => {
+                t.getComponent(cc.Sprite).spriteFrame = spriteFrame
+            })
         }
-
-
-        this.foodInCurtain.push(foodName)
-        let t: cc.Node = this.foods[this.foodIndex++]
-        // console.log(t)
-        // console.log(t.getComponent(cc.Sprite))
-        cc.loader.loadRes('foods-small/' + foodName, cc.SpriteFrame, (err, spriteFrame) => {
-            t.getComponent(cc.Sprite).spriteFrame = spriteFrame
-        })
-        return true
-
-
-
     }
 
     backFood(): string {
-        console.log('curtain.backFood')
-        if (this.foodsAmount() > 0) {
+        // console.log('curtain.backFood')
+        if (this.foodIndex > 0) { //帘子上有食物才能退回
             let t: cc.Node = this.foods[--this.foodIndex]
             // console.log(t)
             t.getComponent(cc.Sprite).spriteFrame = null
