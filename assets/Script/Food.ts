@@ -30,20 +30,27 @@ export default class Food extends cc.Component {
 
     // LIFE-CYCLE CALLBACKS:
 
-    public init(game: Game, foodId: string, foodName: string, sf: cc.SpriteFrame, amount: number) {
-        // console.log(this.node.parent.getComponent(cc.Sprite))
-        // const button = this.getComponent(cc.Button);
-        // console.log(button)
-        // console.log(sf)
-        const sprite: cc.Sprite = this.getComponentInChildren(cc.Sprite)
-        sprite.spriteFrame = sf
-        // console.log(sprite.spriteFrame)
-        // console.log(this.getComponentsInChildren(cc.Sprite))
+    public init(game: Game, foodId: string, foodName: string, amount: number) {
+
         this.game = game
         this.foodName = foodName
         this.foodId = foodId
         this.amount = amount
         this.updateLabelDisplay()
+
+        cc.loader.loadRes('foods/' + foodId, cc.SpriteFrame, (err, spriteFrame) => {
+            this.getComponentInChildren(cc.Sprite).spriteFrame = spriteFrame
+        })
+        return this
+
+        // console.log(this.node.parent.getComponent(cc.Sprite))
+        // const button = this.getComponent(cc.Button);
+        // console.log(button)
+        // console.log(sf)
+        // const sprite: cc.Sprite = this.getComponentInChildren(cc.Sprite)
+        // sprite.spriteFrame = sf
+        // console.log(sprite.spriteFrame)
+        // console.log(this.getComponentsInChildren(cc.Sprite))
     }
 
     updateLabelDisplay() {

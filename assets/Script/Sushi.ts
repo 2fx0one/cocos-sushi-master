@@ -1,25 +1,18 @@
-// Learn TypeScript:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/typescript.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
+import Game from "./Game";
 
 const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class Sushi extends cc.Component {
 
-    @property(cc.Label)
-    label: cc.Label = null;
+    @property([cc.Node])
+    foods: cc.Node[] = []
+    // label: cc.Label = null;
 
-    @property
-    text: string = 'hello';
+    // @property
+    // text: string = 'hello';
 
-    // LIFE-CYCLE CALLBACKS:
+    private game: Game = null
 
     // onLoad () {}
 
@@ -27,5 +20,16 @@ export default class Sushi extends cc.Component {
 
     }
 
-    // update (dt) {}
+    init(game: Game, sushiImageNameList: string[]): Sushi {
+        console.log(sushiImageNameList)
+
+        this.game = game
+        sushiImageNameList.forEach((img, i)=> {
+            cc.loader.loadRes('sushi/' + img, cc.SpriteFrame, (err, spriteFrame) => {
+                console.log(spriteFrame)
+                this.foods[i].getComponent(cc.Sprite).spriteFrame = spriteFrame
+            })
+        })
+        return this
+    }
 }

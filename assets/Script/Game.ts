@@ -10,10 +10,11 @@
 
 import Food from "./Food";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 import Singleton from './Singleton'
 import SpriteFrame = cc.SpriteFrame;
+import Sushi from "./Sushi";
 
 
 @ccclass
@@ -21,7 +22,7 @@ export default class Game extends cc.Component {
 
 
     @property(cc.Prefab)
-    ricePreFab: cc.Prefab = null
+    foodPreFab: cc.Prefab = null
 
     // @property(cc.Node)
     // curtain: cc.Node = null
@@ -40,17 +41,17 @@ export default class Game extends cc.Component {
         Singleton.Instance.game = this
 
         let data = [
-            {x: 265, y: 260, foodDisPlayName: "rice", foodId: "1"},
-            {x: 265, y: 160, foodDisPlayName: "2", foodId: "2"},
-            {x: 265, y: 60, foodDisPlayName: "3", foodId: "3"},
+            { x: 265, y: 260, foodDisPlayName: "rice", foodId: "1" },
+            { x: 265, y: 160, foodDisPlayName: "2", foodId: "2" },
+            { x: 265, y: 60, foodDisPlayName: "3", foodId: "3" },
 
-            {x: 165, y: 260, foodDisPlayName: "4", foodId: "4"},
-            {x: 165, y: 160, foodDisPlayName: "5", foodId: "5"},
-            {x: 165, y: 60, foodDisPlayName: "6", foodId: "6"},
+            { x: 165, y: 260, foodDisPlayName: "4", foodId: "4" },
+            { x: 165, y: 160, foodDisPlayName: "5", foodId: "5" },
+            { x: 165, y: 60, foodDisPlayName: "6", foodId: "6" },
 
-            {x: 65, y: 260, foodDisPlayName: "7", foodId: "7"},
-            {x: 65, y: 160, foodDisPlayName: "8", foodId: "8"},
-            {x: 65, y: 60, foodDisPlayName: "9", foodId: "9"}
+            { x: 65, y: 260, foodDisPlayName: "7", foodId: "7" },
+            { x: 65, y: 160, foodDisPlayName: "8", foodId: "8" },
+            { x: 65, y: 60, foodDisPlayName: "9", foodId: "9" }
         ]
 
 
@@ -65,19 +66,11 @@ export default class Game extends cc.Component {
     }
 
     createFood(x: number, y: number, foodId: string, foodName: string): Food {
-        const foodNode = cc.instantiate(this.ricePreFab)
-
+        const foodNode = cc.instantiate(this.foodPreFab)
         foodNode.setPosition(this.getPosition(x, y))
-
-        let food: Food = foodNode.getComponent('Food');
-
-        cc.loader.loadRes('foods/' + foodId, cc.SpriteFrame, (err, spriteFrame) => {
-            food.init(this, foodId, foodName, spriteFrame, 10)
-        })
-
         this.node.addChild(foodNode)
 
-        return food;
+        return foodNode.getComponent(Food).init(this, foodId, foodName, 10)
     }
 
     getPosition(x: number, y: number) {
@@ -98,16 +91,20 @@ export default class Game extends cc.Component {
 
     }
 
-    sushiScrollCompleted(foodInCurtain: string[]) {
-        // console.log('sushi complete food Curtain => ', foods)
-        Singleton.Instance.sushichef.makeSushi(foodInCurtain);
-    }
-
     backFood() {
         // console.log('game.backFood')
         if (Singleton.Instance.curtain.foodsAmount() > 0) {
             let name = Singleton.Instance.curtain.backFood()
             this.foodsInContainMap[name].backFood()
         }
+    }
+
+    sushiScrollCompleted(foodInCurtain: string[]) {
+        // console.log('sushi complete food Curtain => ', foods)
+        Singleton.Instance.sushichef.makeSushi(this, foodInCurtain);
+
+        // let sushiNode:cc.Node = sushi.node.parent;
+        // sushiNode.setPosition(cc.v2(200, 200))
+        // this.node.addChild(sushiNode)
     }
 }

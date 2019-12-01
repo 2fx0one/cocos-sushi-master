@@ -1,4 +1,5 @@
 import Singleton from "./Singleton";
+import Sushi from "./Sushi";
 
 // Learn TypeScript:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/typescript.html
@@ -16,13 +17,8 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class Conveyor extends cc.Component {
 
-    // @property(cc.Label)
-    // label: cc.Label = null;
 
-    // @property
-    // text: string = 'hello';
-
-    // LIFE-CYCLE CALLBACKS:
+    private sushiList: Sushi[] = []
 
     private speed :number = 2
     private resetX: number = 110
@@ -34,6 +30,15 @@ export default class Conveyor extends cc.Component {
 
     start () {
 
+    }
+
+    addSushi(sushiNode: cc.Node){
+        sushiNode.setPosition(cc.v2(200, 200))
+        sushiNode.scaleX = 1
+        sushiNode.scaleY = 1
+        this.node.addChild(sushiNode)
+        this.sushiList.push(sushiNode.getComponent(Sushi))
+        console.log(this.sushiList)
     }
 
     // update (dt) {
