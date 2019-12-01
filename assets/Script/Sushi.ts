@@ -1,6 +1,6 @@
 import Game from "./Game";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Sushi extends cc.Component {
@@ -26,20 +26,42 @@ export default class Sushi extends cc.Component {
 
     private isMove = true
 
-    init(game: Game, sushiName: string): Sushi {
-        console.log(sushiName)
-        this.sushiName = sushiName
-
-        this.game = game
-        sushiName.split('_').forEach((img, i)=> {
-            cc.loader.loadRes('sushi/' + img, cc.SpriteFrame, (err, spriteFrame) => {
-                console.log(spriteFrame)
-                this.foods[i].getComponent(cc.Sprite).spriteFrame = spriteFrame
-            })
+    setSpriteFrame(img, index) {
+        console.log(img, index)
+        cc.loader.loadRes('sushi/' + img, cc.SpriteFrame, (err, spriteFrame) => {
+            // console.log(spriteFrame)
+            this.foods[index].getComponent(cc.Sprite).spriteFrame = spriteFrame
         })
+    }
+
+    init(game: Game, sushiName: string[]): Sushi {
+        // console.log(sushiName)
+        this.sushiName = sushiName.join("_")
+        this.game = game
+
+        let sushiList = sushiName
+        console.log(sushiList)
+
+        sushiList.forEach((img, index) => {
+            this.setSpriteFrame(img, index)
+        })
+
+        // if (sushiList.length == 1) {
+        //     sushiList.forEach((img, index) => {
+        //         this.setSpriteFrame(img, 1)
+        //     })
+        // // } else if (sushiList.length == 2) {
+        // //     sushiList.forEach((img, index) => {
+        // //         this.setSpriteFrame(img, index)
+        // //     })
+        // } else {
+        //     sushiList.forEach((img, index) => {
+        //         this.setSpriteFrame(img, index)
+        //     })
+        // }
         return this
     }
-    
+
     // onCollisionEnter(other: cc.BoxCollider, self: cc.BoxCollider) {
     //     // console.log(' Sushi on collision enter');
     //     // console.log(other)

@@ -64,7 +64,7 @@ export default class Food extends cc.Component {
         console.log(data)
         console.log('this.amount', this.amount)
         if (this.amount > 0) {
-            this.game.clickFood(this.foodId)
+            this.game.clickFood(this)
         }
 
 

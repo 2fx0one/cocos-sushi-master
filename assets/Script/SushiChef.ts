@@ -21,13 +21,19 @@ export default class SushiChef extends cc.Component {
     @property(cc.Prefab)
     sushiPrefab: cc.Prefab = null
 
-    private recipes: {[key: string]: string} = {
-        "1_1_2": "1_1_1"
+    private recipes: {[key: string]: string[]} = {
+        '1_1_2': ['01','01','01'],
+        '1_3': ['02', '02', '02'],
+        '1_2_3_3': ['03', '03', '03'],
+        '1_1_2_4': ['04', '04', '04'],
+        '1_2_2_6': ['05', '05', '05'],
+        '1_2_6': ['07', '07', '07'],
+        '1_1_2_2_9_9': ['09', '09', '09'],
+        '1_1_2_2_8_8': ['10', '10', '10']
     }
 
     onLoad() {
         Singleton.Instance.sushichef = this
-
     }
 
     init() {
@@ -36,12 +42,22 @@ export default class SushiChef extends cc.Component {
         // ]
     }
 
+    getRecipe(foodInCurtain: string[]): string[] {
+        //排序
+        const foods = foodInCurtain.sort()
+        let recipe = this.recipes[foods.join('_')];
+
+        // if (!recipe) {
+        //     recipe = [ 'none', 'shit', 'none']
+        // }
+        return recipe || [ 'none', 'shit', 'none'];
+    }
+
     makeSushi(game: Game, foodInCurtain: string[]): cc.Node{
 
         const sushiNode: cc.Node = cc.instantiate(this.sushiPrefab)
 
-        const foods = foodInCurtain.sort()
-        const recipe = this.recipes[foods.join('_')];
+        let recipe = this.getRecipe(foodInCurtain)
 
         
         let sushi: Sushi = sushiNode.getComponent(Sushi).init(game, recipe)

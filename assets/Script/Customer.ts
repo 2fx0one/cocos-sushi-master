@@ -17,7 +17,7 @@ export default class Customer extends cc.Component {
 
     private hasFood = false
 
-    private orderSushi: string = '1_1_1'
+    private orderSushi: string = '01_01_01'
 
     start () {
 

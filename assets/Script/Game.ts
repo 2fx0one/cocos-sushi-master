@@ -24,6 +24,13 @@ export default class Game extends cc.Component {
     @property(cc.Prefab)
     foodPreFab: cc.Prefab = null
 
+    
+    @property([cc.Node])
+    foodContain: cc.Node[] = []
+
+    @property(cc.Node)
+    foodContainer: cc.Node = null
+
     // @property(cc.Node)
     // curtain: cc.Node = null
 
@@ -43,18 +50,26 @@ export default class Game extends cc.Component {
 
         Singleton.Instance.game = this
 
+        // this.foodContainer.getChildByName
+        // console.log(this.foodContainer.getChildByName('0').y)
+
         let data = [
-            { x: 265, y: 260, foodDisPlayName: "rice", foodId: "1" },
-            { x: 265, y: 160, foodDisPlayName: "2", foodId: "2" },
-            { x: 265, y: 60, foodDisPlayName: "3", foodId: "3" },
+            { x: 450, y: 250, foodDisPlayName: "1", foodId: "13" },
+            { x: 350, y: 250, foodDisPlayName: "1", foodId: "1" },
+            { x: 350, y: 150, foodDisPlayName: "2", foodId: "2" },
+            { x: 350, y: 50, foodDisPlayName: "3", foodId: "3" },
 
-            { x: 165, y: 260, foodDisPlayName: "4", foodId: "4" },
-            { x: 165, y: 160, foodDisPlayName: "5", foodId: "5" },
-            { x: 165, y: 60, foodDisPlayName: "6", foodId: "6" },
+            { x: 250, y: 250, foodDisPlayName: "1", foodId: "4" },
+            { x: 250, y: 150, foodDisPlayName: "2", foodId: "5" },
+            { x: 250, y: 50, foodDisPlayName: "3", foodId: "6" },
 
-            { x: 65, y: 260, foodDisPlayName: "7", foodId: "7" },
-            { x: 65, y: 160, foodDisPlayName: "8", foodId: "8" },
-            { x: 65, y: 60, foodDisPlayName: "9", foodId: "9" }
+            { x: 150, y: 250, foodDisPlayName: "4", foodId: "7" },
+            { x: 150, y: 150, foodDisPlayName: "5", foodId: "8" },
+            { x: 150, y: 50, foodDisPlayName: "6", foodId: "9" },
+
+            { x: 50, y: 250, foodDisPlayName: "7", foodId: "10" },
+            { x: 50, y: 150, foodDisPlayName: "8", foodId: '11' },
+            { x: 50, y: 50, foodDisPlayName: "9", foodId: "12" }
         ]
 
 
@@ -71,7 +86,7 @@ export default class Game extends cc.Component {
     createFood(x: number, y: number, foodId: string, foodName: string): Food {
         const foodNode = cc.instantiate(this.foodPreFab)
         foodNode.setPosition(this.getPosition(x, y))
-        this.node.addChild(foodNode)
+        this.foodContainer.addChild(foodNode)
 
         return foodNode.getComponent(Food).init(this, foodId, foodName, 10)
     }
@@ -80,15 +95,15 @@ export default class Game extends cc.Component {
         return cc.v2(x, y);
     }
 
-    clickFood(foodId: string) {
+    clickFood(food: Food) {
         // 点击食物，首先帘子需要有空位，且帘子卷的动画已经结束才行。
         // console.log('Singleton.Instance.curtain.foodIndex', Singleton.Instance.curtain.foodsAmount())
 
         if (Singleton.Instance.curtain.isCanAddFood()) {
             //从格子里面拿食物 拿成功了 返回foodId
-            if (foodId == this.foodsInContainMap[foodId].tackFood()) {
+            if (food.foodId == food.tackFood()) {
                 //放到帘子上
-                Singleton.Instance.curtain.addFood(foodId)
+                Singleton.Instance.curtain.addFood(food.foodId)
             }
         }
 
