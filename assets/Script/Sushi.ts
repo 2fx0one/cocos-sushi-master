@@ -14,22 +14,48 @@ export default class Sushi extends cc.Component {
 
     private game: Game = null
 
-    // onLoad () {}
+    private sushiName: string = null
 
-    start () {
+    // onLoad () {
+    //     // this.node.x = -800
+    // }
 
-    }
+    // start () {
 
-    init(game: Game, sushiImageNameList: string[]): Sushi {
-        console.log(sushiImageNameList)
+    // }
+
+    private isMove = true
+
+    init(game: Game, sushiName: string): Sushi {
+        console.log(sushiName)
+        this.sushiName = sushiName
 
         this.game = game
-        sushiImageNameList.forEach((img, i)=> {
+        sushiName.split('_').forEach((img, i)=> {
             cc.loader.loadRes('sushi/' + img, cc.SpriteFrame, (err, spriteFrame) => {
                 console.log(spriteFrame)
                 this.foods[i].getComponent(cc.Sprite).spriteFrame = spriteFrame
             })
         })
         return this
+    }
+    
+    // onCollisionEnter(other: cc.BoxCollider, self: cc.BoxCollider) {
+    //     // console.log(' Sushi on collision enter');
+    //     // console.log(other)
+
+    //     this.isMove = false
+    // }
+    getName() {
+        return this.sushiName
+    }
+    stopMove() {
+        this.isMove = false
+    }
+
+    update(dt) {
+        if (this.isMove) {
+            this.node.x += 1
+        }
     }
 }

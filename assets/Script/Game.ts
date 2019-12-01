@@ -38,6 +38,9 @@ export default class Game extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
+        cc.director.getCollisionManager().enabled = true
+        cc.director.getCollisionManager().enabledDebugDraw = true
+
         Singleton.Instance.game = this
 
         let data = [
@@ -101,7 +104,9 @@ export default class Game extends cc.Component {
 
     sushiScrollCompleted(foodInCurtain: string[]) {
         // console.log('sushi complete food Curtain => ', foods)
-        Singleton.Instance.sushichef.makeSushi(this, foodInCurtain);
+        let sushiNode: cc.Node = Singleton.Instance.sushichef.makeSushi(this, foodInCurtain);
+
+        Singleton.Instance.conveyor.addSushi(sushiNode)
 
         // let sushiNode:cc.Node = sushi.node.parent;
         // sushiNode.setPosition(cc.v2(200, 200))

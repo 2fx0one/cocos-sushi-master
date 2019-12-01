@@ -18,7 +18,7 @@ const {ccclass, property} = cc._decorator;
 export default class Conveyor extends cc.Component {
 
 
-    private sushiList: Sushi[] = []
+    private sushiList: cc.Node[] = []
 
     private speed :number = 2
     private resetX: number = 110
@@ -33,19 +33,19 @@ export default class Conveyor extends cc.Component {
     }
 
     addSushi(sushiNode: cc.Node){
-        sushiNode.setPosition(cc.v2(0, 0))
+        sushiNode.setPosition(cc.v2(-100, 0))
         // sushiNode.scaleX = 1
         // sushiNode.scaleY = 1
         this.node.addChild(sushiNode)
-        this.sushiList.push(sushiNode.getComponent(Sushi))
+        this.sushiList.push(sushiNode)
         console.log(this.sushiList)
     }
 
-    // update (dt) {
-    //     this.node.x += 1 * this.speed
+    update (dt) {
+        // this.node.x += 1 * this.speed
     //     console.log(this.node.x)
     //     if (this.node.x > this.resetX) {
     //         this.node.x -= this.resetX
     //     }
-    // }
+    }
 }

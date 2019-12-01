@@ -3,7 +3,7 @@
   "_name": "coveyor",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.6666666666666666,
+  "_duration": 0.6,
   "sample": 60,
   "speed": 1,
   "wrapMode": 2,
@@ -12,11 +12,11 @@
       "x": [
         {
           "frame": 0,
-          "value": 0
+          "value": -7.337
         },
         {
-          "frame": 0.6666666666666666,
-          "value": 64
+          "frame": 0.6,
+          "value": 77.778
         }
       ]
     }

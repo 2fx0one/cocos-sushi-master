@@ -36,20 +36,19 @@ export default class SushiChef extends cc.Component {
         // ]
     }
 
-    makeSushi(game: Game, foodInCurtain: string[]): Sushi{
+    makeSushi(game: Game, foodInCurtain: string[]): cc.Node{
 
         const sushiNode: cc.Node = cc.instantiate(this.sushiPrefab)
-        // sushiNode.setPosition(cc.v2(200, 200))
-        // game.node.addChild(sushiNode)
 
         const foods = foodInCurtain.sort()
         const recipe = this.recipes[foods.join('_')];
+
         
-        let sushi: Sushi = sushiNode.getComponent(Sushi).init(game, recipe.split('_'))
+        let sushi: Sushi = sushiNode.getComponent(Sushi).init(game, recipe)
 
-        Singleton.Instance.conveyor.addSushi(sushiNode)
+        // Singleton.Instance.conveyor.addSushi(sushiNode)
 
-        return sushi
+        return sushiNode
 
     }
 
