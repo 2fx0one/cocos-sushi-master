@@ -110,10 +110,10 @@ export default class Curtain extends cc.Component {
     }
 
     onClickFoodBack(event, data) {
-        Singleton.Instance.game.backFood(this)
+        Singleton.Instance.game.backFood(this.popLastFood())
     }
-    
-    backFood(): Food {
+
+    popLastFood(): Food {
         if (this.foodIndex > 0) { //帘子上有食物才能退回
             let t: cc.Node = this.foods[--this.foodIndex]
             t.getComponent(cc.Sprite).spriteFrame = null

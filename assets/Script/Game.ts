@@ -23,15 +23,15 @@ import Curtain from "./Curtain";
 export default class Game extends cc.Component {
 
 
-    @property(cc.Prefab)
-    foodPreFab: cc.Prefab = null
+    // @property(cc.Prefab)
+    // foodPreFab: cc.Prefab = null
 
 
-    @property([cc.Node])
-    foodContain: cc.Node[] = []
+    // @property([cc.Node])
+    // foodContain: cc.Node[] = []
 
-    @property(cc.Node)
-    foodContainer: cc.Node = null
+    // @property(cc.Node)
+    // foodContainer: cc.Node = null
 
     // @property(cc.Node)
     // curtain: cc.Node = null
@@ -53,42 +53,14 @@ export default class Game extends cc.Component {
         Singleton.Instance.game = this
 
         // this.foodContainer.getChildByName
-        console.log(this.foodContainer.children)
-        this.foodContainer.children.forEach((v, i)=> {
-            console.log(v.name)
-        })
-
-        // let data = [
-        //     { x: 450, y: 250, foodDisPlayName: "1", foodId: "13" },
-        //     { x: 350, y: 250, foodDisPlayName: "1", foodId: "1" },
-        //     { x: 350, y: 150, foodDisPlayName: "2", foodId: "2" },
-        //     { x: 350, y: 50, foodDisPlayName: "3", foodId: "3" },
-
-        //     { x: 250, y: 250, foodDisPlayName: "1", foodId: "4" },
-        //     { x: 250, y: 150, foodDisPlayName: "2", foodId: "5" },
-        //     { x: 250, y: 50, foodDisPlayName: "3", foodId: "6" },
-
-        //     { x: 150, y: 250, foodDisPlayName: "4", foodId: "7" },
-        //     { x: 150, y: 150, foodDisPlayName: "5", foodId: "8" },
-        //     { x: 150, y: 50, foodDisPlayName: "6", foodId: "9" },
-
-        //     { x: 50, y: 250, foodDisPlayName: "7", foodId: "10" },
-        //     { x: 50, y: 150, foodDisPlayName: "8", foodId: '11' },
-        //     { x: 50, y: 50, foodDisPlayName: "9", foodId: "12" }
-        // ]
-
-        
+        // console.log(this.foodContainer.children)
+        // this.foodContainer.children.forEach((v, i)=> {
+        //     console.log(v.name)
+        // })
 
         this.init()
-        // this.init(data)
     }
 
-    // init(data) {
-
-    //     data.forEach((v, i) => {
-    //         this.foodsInContainMap[v.foodId] = this.createFood(v.x, v.y, v.foodId, v.foodName)
-    //     })
-    // }
 
     init() {
 
@@ -105,11 +77,14 @@ export default class Game extends cc.Component {
         }
     }
 
-    backFood(curtain: Curtain) {
-        // console.log('game.backFood')
-        if (curtain.foodsAmount() > 0) {
-            curtain.backFood().backFood()
+    backFood(food: Food) {
+        if (food) {
+            food.backFood()
         }
+        // console.log('game.backFood')
+        // if (Singleton.Instance.curtain.foodsAmount() > 0) {
+            // Singleton.Instance.curtain.backFood().backFood()
+        // }
     }
 
     sushiScrollCompleted(foodInCurtain: string[]) {
