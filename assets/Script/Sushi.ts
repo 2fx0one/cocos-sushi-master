@@ -1,4 +1,3 @@
-import Game from "./Game";
 
 const { ccclass, property } = cc._decorator;
 
@@ -6,73 +5,37 @@ const { ccclass, property } = cc._decorator;
 export default class Sushi extends cc.Component {
 
     @property([cc.Node])
-    foods: cc.Node[] = []
-    // label: cc.Label = null;
+    sushiList: cc.Node[] = []
 
-    // @property
-    // text: string = 'hello';
+    public sushiId: string = null
+    public sushiName: string = null
 
-    private game: Game = null
-
-    private sushiName: string = null
-
-    // onLoad () {
-    //     // this.node.x = -800
-    // }
-
-    // start () {
-
-    // }
+    private amount: number = null
 
     private isMove = true
 
     setSpriteFrame(img, index) {
-        console.log(img, index)
+        // console.log(img, index)
         cc.loader.loadRes('sushi/' + img, cc.SpriteFrame, (err, spriteFrame) => {
-            // console.log(spriteFrame)
-            this.foods[index].getComponent(cc.Sprite).spriteFrame = spriteFrame
+            this.sushiList[index].getComponent(cc.Sprite).spriteFrame = spriteFrame
         })
     }
 
-    init(game: Game, sushiName: string[]): Sushi {
-        // console.log(sushiName)
-        this.sushiName = sushiName.join("_")
-        this.game = game
+    init(sushiId: string, sushiName: string, outputPicPathList: string[]): Sushi {
+        this.sushiId = sushiId
+        this.sushiName = sushiName
+        this.amount = outputPicPathList.length
 
-        let sushiList = sushiName
-        console.log(sushiList)
-
-        sushiList.forEach((img, index) => {
+        outputPicPathList.forEach((img, index) => {
             this.setSpriteFrame(img, index)
         })
 
-        // if (sushiList.length == 1) {
-        //     sushiList.forEach((img, index) => {
-        //         this.setSpriteFrame(img, 1)
-        //     })
-        // // } else if (sushiList.length == 2) {
-        // //     sushiList.forEach((img, index) => {
-        // //         this.setSpriteFrame(img, index)
-        // //     })
-        // } else {
-        //     sushiList.forEach((img, index) => {
-        //         this.setSpriteFrame(img, index)
-        //     })
-        // }
         return this
     }
 
-    // onCollisionEnter(other: cc.BoxCollider, self: cc.BoxCollider) {
-    //     // console.log(' Sushi on collision enter');
-    //     // console.log(other)
-
-    //     this.isMove = false
-    // }
-    getName() {
-        return this.sushiName
-    }
     stopMove() {
         this.isMove = false
+        this.node.y += 50
     }
 
     update(dt) {
@@ -80,4 +43,16 @@ export default class Sushi extends cc.Component {
             this.node.x += 1
         }
     }
+
+    takeOne(): boolean {
+        if (this.amount == 0) {
+            return false
+        } else {
+            this.amount--
+            let food: cc.Node = this.sushiList.pop()
+            food.destroy()
+            return true
+        }
+    }
+
 }

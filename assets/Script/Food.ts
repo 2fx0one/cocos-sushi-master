@@ -27,19 +27,21 @@ export default class Food extends cc.Component {
     private foodContainer: FoodContainer = null
     public foodName: string = null
     public foodId: string = null
-    private amount: number = 9
+    public picPath: string = null
+    private amount: number = null
 
     // LIFE-CYCLE CALLBACKS:
 
-    public init(foodContainer: FoodContainer, foodId: string, foodName: string, amount: number) {
+    public init(foodContainer: FoodContainer, foodId: string, foodName: string, picPath: string, amount: number) {
 
         this.foodContainer = foodContainer
-        this.foodName = foodName
         this.foodId = foodId
+        this.foodName = foodName
+        this.picPath = picPath
         this.amount = amount
         this.updateLabelDisplay()
 
-        cc.loader.loadRes('foods/' + foodId, cc.SpriteFrame, (err, spriteFrame) => {
+        cc.loader.loadRes('foods/' + this.picPath, cc.SpriteFrame, (err, spriteFrame) => {
             this.getComponentInChildren(cc.Sprite).spriteFrame = spriteFrame
         })
         return this

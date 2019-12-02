@@ -103,7 +103,7 @@ export default class Curtain extends cc.Component {
         if (this.isCanAddFood()) {
             this.foodInCurtain.push(food)
             let t: cc.Node = this.foods[this.foodIndex++]
-            cc.loader.loadRes('foods-small/' + food.foodId, cc.SpriteFrame, (err, spriteFrame) => {
+            cc.loader.loadRes('foods-small/' + food.picPath, cc.SpriteFrame, (err, spriteFrame) => {
                 t.getComponent(cc.Sprite).spriteFrame = spriteFrame
             })
         }

@@ -10,7 +10,7 @@
 
 import Food from "./Food";
 
-const { ccclass, property } = cc._decorator;
+const {ccclass, property} = cc._decorator;
 
 import Singleton from './Singleton'
 import SpriteFrame = cc.SpriteFrame;
@@ -52,15 +52,9 @@ export default class Game extends cc.Component {
 
         Singleton.Instance.game = this
 
-        // this.foodContainer.getChildByName
-        // console.log(this.foodContainer.children)
-        // this.foodContainer.children.forEach((v, i)=> {
-        //     console.log(v.name)
-        // })
 
         this.init()
     }
-
 
     init() {
 
@@ -83,18 +77,16 @@ export default class Game extends cc.Component {
         }
         // console.log('game.backFood')
         // if (Singleton.Instance.curtain.foodsAmount() > 0) {
-            // Singleton.Instance.curtain.backFood().backFood()
+        // Singleton.Instance.curtain.backFood().backFood()
         // }
     }
 
     sushiScrollCompleted(foodInCurtain: string[]) {
         // console.log('sushi complete food Curtain => ', foods)
-        let sushiNode: cc.Node = Singleton.Instance.sushichef.makeSushi(this, foodInCurtain);
+        let recipe = Singleton.Instance.sushiMenu.getRecipe(foodInCurtain)
+        let sushiNode: cc.Node = Singleton.Instance.sushichef.makeSushi(recipe);
 
         Singleton.Instance.conveyor.addSushi(sushiNode)
 
-        // let sushiNode:cc.Node = sushi.node.parent;
-        // sushiNode.setPosition(cc.v2(200, 200))
-        // this.node.addChild(sushiNode)
     }
 }
