@@ -15,6 +15,8 @@ const { ccclass, property } = cc._decorator;
 import Singleton from './Singleton'
 import SpriteFrame = cc.SpriteFrame;
 import Sushi from "./Sushi";
+import FoodContainer from "./FoodContainer";
+import Curtain from "./Curtain";
 
 
 @ccclass
@@ -24,7 +26,7 @@ export default class Game extends cc.Component {
     @property(cc.Prefab)
     foodPreFab: cc.Prefab = null
 
-    
+
     @property([cc.Node])
     foodContain: cc.Node[] = []
 
@@ -35,7 +37,7 @@ export default class Game extends cc.Component {
     // curtain: cc.Node = null
 
     //拥有的所有食物 放在容器里面
-    private foodsInContainMap: { [key: string]: Food } = {}
+    // private foodsInContainMap: { [key: string]: Food } = {}
 
     //板子上的食物
     // private foodInCurtain: string[] = []
@@ -51,48 +53,46 @@ export default class Game extends cc.Component {
         Singleton.Instance.game = this
 
         // this.foodContainer.getChildByName
-        // console.log(this.foodContainer.getChildByName('0').y)
-
-        let data = [
-            { x: 450, y: 250, foodDisPlayName: "1", foodId: "13" },
-            { x: 350, y: 250, foodDisPlayName: "1", foodId: "1" },
-            { x: 350, y: 150, foodDisPlayName: "2", foodId: "2" },
-            { x: 350, y: 50, foodDisPlayName: "3", foodId: "3" },
-
-            { x: 250, y: 250, foodDisPlayName: "1", foodId: "4" },
-            { x: 250, y: 150, foodDisPlayName: "2", foodId: "5" },
-            { x: 250, y: 50, foodDisPlayName: "3", foodId: "6" },
-
-            { x: 150, y: 250, foodDisPlayName: "4", foodId: "7" },
-            { x: 150, y: 150, foodDisPlayName: "5", foodId: "8" },
-            { x: 150, y: 50, foodDisPlayName: "6", foodId: "9" },
-
-            { x: 50, y: 250, foodDisPlayName: "7", foodId: "10" },
-            { x: 50, y: 150, foodDisPlayName: "8", foodId: '11' },
-            { x: 50, y: 50, foodDisPlayName: "9", foodId: "12" }
-        ]
-
-
-        this.init(data)
-    }
-
-    init(data) {
-
-        data.forEach((v, i) => {
-            this.foodsInContainMap[v.foodId] = this.createFood(v.x, v.y, v.foodId, v.foodName)
+        console.log(this.foodContainer.children)
+        this.foodContainer.children.forEach((v, i)=> {
+            console.log(v.name)
         })
+
+        // let data = [
+        //     { x: 450, y: 250, foodDisPlayName: "1", foodId: "13" },
+        //     { x: 350, y: 250, foodDisPlayName: "1", foodId: "1" },
+        //     { x: 350, y: 150, foodDisPlayName: "2", foodId: "2" },
+        //     { x: 350, y: 50, foodDisPlayName: "3", foodId: "3" },
+
+        //     { x: 250, y: 250, foodDisPlayName: "1", foodId: "4" },
+        //     { x: 250, y: 150, foodDisPlayName: "2", foodId: "5" },
+        //     { x: 250, y: 50, foodDisPlayName: "3", foodId: "6" },
+
+        //     { x: 150, y: 250, foodDisPlayName: "4", foodId: "7" },
+        //     { x: 150, y: 150, foodDisPlayName: "5", foodId: "8" },
+        //     { x: 150, y: 50, foodDisPlayName: "6", foodId: "9" },
+
+        //     { x: 50, y: 250, foodDisPlayName: "7", foodId: "10" },
+        //     { x: 50, y: 150, foodDisPlayName: "8", foodId: '11' },
+        //     { x: 50, y: 50, foodDisPlayName: "9", foodId: "12" }
+        // ]
+
+        
+
+        this.init()
+        // this.init(data)
     }
 
-    createFood(x: number, y: number, foodId: string, foodName: string): Food {
-        const foodNode = cc.instantiate(this.foodPreFab)
-        foodNode.setPosition(this.getPosition(x, y))
-        this.foodContainer.addChild(foodNode)
+    // init(data) {
 
-        return foodNode.getComponent(Food).init(this, foodId, foodName, 10)
-    }
+    //     data.forEach((v, i) => {
+    //         this.foodsInContainMap[v.foodId] = this.createFood(v.x, v.y, v.foodId, v.foodName)
+    //     })
+    // }
 
-    getPosition(x: number, y: number) {
-        return cc.v2(x, y);
+    init() {
+
+
     }
 
     clickFood(food: Food) {
@@ -100,20 +100,15 @@ export default class Game extends cc.Component {
         // console.log('Singleton.Instance.curtain.foodIndex', Singleton.Instance.curtain.foodsAmount())
 
         if (Singleton.Instance.curtain.isCanAddFood()) {
-            //从格子里面拿食物 拿成功了 返回foodId
-            if (food.foodId == food.tackFood()) {
-                //放到帘子上
-                Singleton.Instance.curtain.addFood(food.foodId)
-            }
+            //从格子里面拿食物 拿成功了 返回food 放到帘子上
+            Singleton.Instance.curtain.addFood(food.tackFood())
         }
-
     }
 
-    backFood() {
+    backFood(curtain: Curtain) {
         // console.log('game.backFood')
-        if (Singleton.Instance.curtain.foodsAmount() > 0) {
-            let name = Singleton.Instance.curtain.backFood()
-            this.foodsInContainMap[name].backFood()
+        if (curtain.foodsAmount() > 0) {
+            curtain.backFood().backFood()
         }
     }
 

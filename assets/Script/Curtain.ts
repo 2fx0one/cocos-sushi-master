@@ -1,14 +1,5 @@
 import Singleton from "./Singleton";
-
-// Learn TypeScript:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/typescript.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
+import Food from "./Food";
 
 const {ccclass, property} = cc._decorator;
 
@@ -19,7 +10,7 @@ export default class Curtain extends cc.Component {
     foods: cc.Node[] = [];
 
     //板子上的食物
-    foodInCurtain: string[] = []
+    foodInCurtain: Food[] = []
 
     private foodIndex: number = 0
 
@@ -43,9 +34,7 @@ export default class Curtain extends cc.Component {
 
     }
 
-    onClickFoodBack(event, data) {
-        Singleton.Instance.game.backFood()
-    }
+ 
 
     //开始卷帘子
     onClickCurtain(event, data) {
@@ -93,7 +82,7 @@ export default class Curtain extends cc.Component {
         })
 
         // this.makeSushi()
-        Singleton.Instance.game.sushiScrollCompleted(this.foodInCurtain)
+        Singleton.Instance.game.sushiScrollCompleted(this.foodInCurtain.map((v, i)=>v.foodId))
 
         //制作完成 清空该区域
         this.foodIndex = 0
@@ -106,30 +95,29 @@ export default class Curtain extends cc.Component {
     // }
 
     isCanAddFood(): boolean {
-        //帘子上食物小于9，
+        //帘子上食物小于9, 卷动动画已经结束
         return this.foodIndex < 9 && this.canAddFood
     }
 
-    addFood(foodId: string) {
+    addFood(food: Food) {
         if (this.isCanAddFood()) {
-            this.foodInCurtain.push(foodId)
+            this.foodInCurtain.push(food)
             let t: cc.Node = this.foods[this.foodIndex++]
-            // console.log(t)
-            // console.log(t.getComponent(cc.Sprite))
-            cc.loader.loadRes('foods-small/' + foodId, cc.SpriteFrame, (err, spriteFrame) => {
+            cc.loader.loadRes('foods-small/' + food.foodId, cc.SpriteFrame, (err, spriteFrame) => {
                 t.getComponent(cc.Sprite).spriteFrame = spriteFrame
             })
         }
     }
 
-    backFood(): string {
-        // console.log('curtain.backFood')
+    onClickFoodBack(event, data) {
+        Singleton.Instance.game.backFood(this)
+    }
+    
+    backFood(): Food {
         if (this.foodIndex > 0) { //帘子上有食物才能退回
             let t: cc.Node = this.foods[--this.foodIndex]
-            // console.log(t)
             t.getComponent(cc.Sprite).spriteFrame = null
             return this.foodInCurtain.pop();
         }
-        return ''
     }
 }

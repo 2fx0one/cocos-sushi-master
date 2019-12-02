@@ -9,6 +9,7 @@
 //  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import Game from "./Game";
+import FoodContainer from "./FoodContainer";
 
 const { ccclass, property } = cc._decorator;
 
@@ -23,16 +24,16 @@ export default class Food extends cc.Component {
     // @property
     // text: string = 'hello';
 
-    private game: Game = null
+    private foodContainer: FoodContainer = null
     public foodName: string = null
     public foodId: string = null
     private amount: number = 9
 
     // LIFE-CYCLE CALLBACKS:
 
-    public init(game: Game, foodId: string, foodName: string, amount: number) {
+    public init(foodContainer: FoodContainer, foodId: string, foodName: string, amount: number) {
 
-        this.game = game
+        this.foodContainer = foodContainer
         this.foodName = foodName
         this.foodId = foodId
         this.amount = amount
@@ -42,15 +43,6 @@ export default class Food extends cc.Component {
             this.getComponentInChildren(cc.Sprite).spriteFrame = spriteFrame
         })
         return this
-
-        // console.log(this.node.parent.getComponent(cc.Sprite))
-        // const button = this.getComponent(cc.Button);
-        // console.log(button)
-        // console.log(sf)
-        // const sprite: cc.Sprite = this.getComponentInChildren(cc.Sprite)
-        // sprite.spriteFrame = sf
-        // console.log(sprite.spriteFrame)
-        // console.log(this.getComponentsInChildren(cc.Sprite))
     }
 
     updateLabelDisplay() {
@@ -58,13 +50,10 @@ export default class Food extends cc.Component {
     }
 
     onclick(event, data) {
-        // console.log(this.foodName)
-        // console.log(this.game)
-        // console.log(event)
         console.log(data)
         console.log('this.amount', this.amount)
         if (this.amount > 0) {
-            this.game.clickFood(this)
+            this.foodContainer.clickFood(this)
         }
 
 
@@ -83,14 +72,14 @@ export default class Food extends cc.Component {
     }
 
     // 拿食物
-    tackFood(): string {
+    tackFood(): Food {
         this.subtractAmonut(1)
-        return this.foodId
+        return this
     }
 
     // 退回食物
-    backFood(): string {
+    backFood(): Food {
         this.addAmonut(1)
-        return this.foodId
+        return this
     }
 }
