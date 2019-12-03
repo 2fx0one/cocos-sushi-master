@@ -1,25 +1,22 @@
 import Sushi from "./Sushi";
+import Singleton from "./Singleton";
 
-const { ccclass, property } = cc._decorator;
+const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class Customer extends cc.Component {
 
-    // @property(cc.Label)
-    // label: cc.Label = null;
+    @property(cc.Label)
+    label: cc.Label = null;
 
-    // @property
-    // text: string = 'hello';
-
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {}
-
-    @property(cc.Node)
-    progressNode: cc.Node = null
+    @property(cc.ProgressBar)
+    progressBar: cc.ProgressBar = null
 
 
-    private progressBar: cc.ProgressBar = null
+    @property(cc.Sprite)
+    sushiSprite: cc.Sprite = null
+
+    // private progressBar: cc.ProgressBar = null
 
     private sushi: Sushi = null
 
@@ -28,8 +25,23 @@ export default class Customer extends cc.Component {
     private anim: cc.Animation = null
 
     onLoad() {
-        this.progressBar = this.progressNode.getComponent(cc.ProgressBar)
+        this.init()
+    }
+
+    init() {
+        // this.progressBar = this.progressNode.getComponent(cc.ProgressBar)
         this.anim = this.getComponent(cc.Animation);
+        this.makeOrder()
+    }
+
+    makeOrder() {
+        let recipe = Singleton.Instance.sushiMenu.getRandomRecipe()
+        this.orderSushi = recipe.sushiId
+        this.label.string = recipe.sushiName
+
+        cc.loader.loadRes('sushi/' + recipe.picPath, cc.SpriteFrame, (err, spriteFrame) => {
+            this.sushiSprite.spriteFrame = spriteFrame
+        })
     }
 
     start() {
@@ -41,21 +53,23 @@ export default class Customer extends cc.Component {
         if (this.progressBar.progress > 1) {
             this.progressBar.progress = 0
         }
-        // this.progressBar.progress += dt
+        this.progressBar.progress += dt
     }
+
     isMySushi(sushi: Sushi) {
         return this.orderSushi == sushi.sushiId
     }
 
     // 吃完之后动画
     eatUp() {
-        if (!this.eatSushi()) {
+        if (!this.eatOneSushi()) {
             this.sushi.node.destroy()
             this.sushi = null
+            this.makeOrder()
         }
     }
 
-    eatSushi(): boolean {
+    eatOneSushi(): boolean {
         if (this.sushi.takeOne()) {
             this.anim.play('customerEat')
             return true
@@ -72,7 +86,7 @@ export default class Customer extends cc.Component {
             sushi.stopMove()
 
             this.sushi = sushi
-            this.eatSushi()
+            this.eatOneSushi()
         }
     }
 }
