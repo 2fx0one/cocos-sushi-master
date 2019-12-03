@@ -1,3 +1,5 @@
+import Customer from "./Customer";
+
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -16,9 +18,22 @@ export default class CustomerManager extends cc.Component {
     }
 
     init() {
-        const foodNode = cc.instantiate(this.customerPrefab)
-        foodNode.setPosition(cc.v2())
-        this.node.addChild(foodNode)
+        // let data = [
+        //     -400, -200, 0, 200, 400
+        // ]
+        for (let i = -420; i <= 500 ; i+=150) {
+            const foodNode = cc.instantiate(this.customerPrefab)
+            foodNode.setPosition(cc.v2(i, 180))
+            foodNode.getComponent(Customer).init(this)
+            this.node.addChild(foodNode)
+        }
+        // data.forEach((v,i)=>{
+        //     const foodNode = cc.instantiate(this.customerPrefab)
+        //     foodNode.setPosition(cc.v2(v, 180))
+        //     this.node.addChild(foodNode)
+        // })
+
+
     }
 
     start () {
@@ -26,4 +41,8 @@ export default class CustomerManager extends cc.Component {
     }
 
     // update (dt) {}
+    customerFinished(customer: Customer) {
+        customer.node.destroy()
+
+    }
 }

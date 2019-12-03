@@ -1,5 +1,6 @@
 import Sushi from "./Sushi";
 import Singleton from "./Singleton";
+import CustomerManager from "./CustomerManager";
 
 const {ccclass, property} = cc._decorator;
 
@@ -24,11 +25,13 @@ export default class Customer extends cc.Component {
 
     private anim: cc.Animation = null
 
-    onLoad() {
-        this.init()
-    }
+    private customerManager: CustomerManager = null
+    // onLoad() {
+    //     this.init()
+    // }
 
-    init() {
+    init(customerManager: CustomerManager) {
+        this.customerManager = customerManager
         // this.progressBar = this.progressNode.getComponent(cc.ProgressBar)
         this.anim = this.getComponent(cc.Animation);
         this.makeOrder()
@@ -40,7 +43,7 @@ export default class Customer extends cc.Component {
         this.label.string = recipe.sushiName
 
         cc.loader.loadRes('sushi/' + recipe.picPath, cc.SpriteFrame, (err, spriteFrame) => {
-            this.sushiSprite.spriteFrame = spriteFrame
+             this.sushiSprite.spriteFrame = spriteFrame
         })
     }
 
@@ -63,9 +66,12 @@ export default class Customer extends cc.Component {
     // 吃完之后动画
     eatUp() {
         if (!this.eatOneSushi()) {
+            //盘子空了
             this.sushi.node.destroy()
             this.sushi = null
-            this.makeOrder()
+            // this.makeOrder()
+            // this.node.destroy()
+            this.customerManager.customerFinished(this)
         }
     }
 
