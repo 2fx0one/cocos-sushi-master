@@ -69,9 +69,9 @@ export default class Customer extends cc.Component {
             //盘子空了
             this.sushi.node.destroy()
             this.sushi = null
-            // this.makeOrder()
-            // this.node.destroy()
-            this.customerManager.customerFinished(this)
+            this.makeOrder()
+            this.node.destroy()
+            // this.customerManager.customerFinished(this)
         }
     }
 
