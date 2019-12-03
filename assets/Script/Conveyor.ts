@@ -33,7 +33,7 @@ export default class Conveyor extends cc.Component {
     }
 
     addSushi(sushiNode: cc.Node){
-        sushiNode.setPosition(cc.v2(-100, 0))
+        sushiNode.setPosition(cc.v2(-500, 0))
         // sushiNode.scaleX = 1
         // sushiNode.scaleY = 1
         this.node.addChild(sushiNode)
