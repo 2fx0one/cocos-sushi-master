@@ -1,4 +1,3 @@
-import Singleton from "./Singleton";
 import Recipe from "./Recipe";
 
 const {ccclass, property} = cc._decorator;
@@ -11,10 +10,8 @@ export default class SushiMenu extends cc.Component {
     
     public recipeList: Recipe[] = null
 
-    onLoad() {
-        Singleton.Instance.sushiMenu = this
-        this.init()
-    }
+    // onLoad() {
+    // }
 
     init() {
         // {
@@ -50,6 +47,7 @@ export default class SushiMenu extends cc.Component {
             // this.recipes[i] = v
             this.recipes[v.sushiId] = v
         })
+        return this
     }
 
     getRecipe(foodList: string[]): Recipe {

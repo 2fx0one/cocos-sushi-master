@@ -1,23 +1,28 @@
 import Customer from "./Customer";
+import SushiMenu from "./SushiMenu";
+import Recipe from "./Recipe";
 
 const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class CustomerManager extends cc.Component {
 
+
     @property(cc.Prefab)
     customerPrefab: cc.Prefab = null;
 
     // @property
-    text: string = 'hello';
+    // text: string = 'hello';
 
+    private sushiMenu: SushiMenu = null
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.init()
+        // this.init()
     }
 
-    init() {
+    init(sushiMenu: SushiMenu) {
+        this.sushiMenu = sushiMenu
         // let data = [
         //     -400, -200, 0, 200, 400
         // ]
@@ -36,9 +41,14 @@ export default class CustomerManager extends cc.Component {
 
     }
 
-    start () {
-
+    getRandomRecipe(): Recipe {
+        return this.sushiMenu.getRandomRecipe()
     }
+
+
+    // start () {
+
+    // }
 
     // update (dt) {}
     customerFinished(customer: Customer) {

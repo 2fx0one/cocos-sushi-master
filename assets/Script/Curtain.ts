@@ -23,15 +23,20 @@ export default class Curtain extends cc.Component {
 
     private canAddFood: boolean = true
 
+    private speed: number = 1
+
     foodsAmount() {
         return this.foodIndex;
     }
 
     onLoad() {
-        Singleton.Instance.curtain = this
         this.anim = this.getComponent(cc.Animation);
         // this.label = this.getComponent(cc.Label);
+    }
 
+    init(speed: number){
+        this.speed = 2
+        console.log('Curtain')
     }
 
  
@@ -46,6 +51,8 @@ export default class Curtain extends cc.Component {
 
         if (this.animState == null || this.animState.isPlaying == false) {
             this.animState = this.anim.play('curtain');
+            // console.log(this.animState.speed)
+            this.animState.speed = this.speed
             this.canAddFood = false
         }
     }
@@ -57,22 +64,22 @@ export default class Curtain extends cc.Component {
     }
 
     sushiScrollColumn1() {
-        console.log('1')
+        // console.log('1')
         this.cleanUpCurtain([0, 3, 6])
     }
 
     sushiScrollColumn2() {
-        console.log('2')
+        // console.log('2')
         this.cleanUpCurtain([1, 4, 7])
     }
 
     sushiScrollColumn3() {
-        console.log('3')
+        // console.log('3')
         this.cleanUpCurtain([2, 5, 8])
     }
 
     sushiCompleted() {
-        console.log('sushiCompleted!')
+        // console.log('sushiCompleted!')
 
         //可添加食物状态
         this.canAddFood = true
@@ -88,11 +95,6 @@ export default class Curtain extends cc.Component {
         this.foodIndex = 0
         this.foodInCurtain = []
     }
-
-    // makeSushi() {
-    //     console.log("==== make sushi ====")
-    //     console.log(this.foodInCurtain)
-    // }
 
     isCanAddFood(): boolean {
         //帘子上食物小于9, 卷动动画已经结束

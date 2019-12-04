@@ -1,5 +1,4 @@
 import Sushi from "./Sushi";
-import Singleton from "./Singleton";
 import CustomerManager from "./CustomerManager";
 
 const {ccclass, property} = cc._decorator;
@@ -26,6 +25,8 @@ export default class Customer extends cc.Component {
     private anim: cc.Animation = null
 
     private customerManager: CustomerManager = null
+
+    // private sushiMenu: SushiMenu = null
     // onLoad() {
     //     this.init()
     // }
@@ -38,7 +39,7 @@ export default class Customer extends cc.Component {
     }
 
     makeOrder() {
-        let recipe = Singleton.Instance.sushiMenu.getRandomRecipe()
+        let recipe = this.customerManager.getRandomRecipe()
         this.orderSushi = recipe.sushiId
         this.label.string = recipe.sushiName
 
@@ -70,7 +71,6 @@ export default class Customer extends cc.Component {
             this.sushi.node.destroy()
             this.sushi = null
             this.makeOrder()
-            this.node.destroy()
             // this.customerManager.customerFinished(this)
         }
     }
@@ -92,7 +92,9 @@ export default class Customer extends cc.Component {
             sushi.stopMove()
 
             this.sushi = sushi
-            this.eatOneSushi()
+            setTimeout(()=>{
+                this.eatOneSushi()
+            }, 500)
         }
     }
 }
