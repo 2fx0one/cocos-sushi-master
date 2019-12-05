@@ -463,7 +463,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 8.62,
+      "y": 16.62,
       "z": 0
     },
     "_scale": {
@@ -555,7 +555,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 33.8,
+      "width": 29.58,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -603,7 +603,7 @@
     "_useOriginalSize": false,
     "_string": "label",
     "_N$string": "label",
-    "_fontSize": 16,
+    "_fontSize": 14,
     "_lineHeight": 40,
     "_enableWrapText": true,
     "_N$file": null,
