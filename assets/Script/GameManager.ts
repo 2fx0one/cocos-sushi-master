@@ -19,19 +19,19 @@ export default class GameManager extends cc.Component {
 
 
     @property(Curtain)
-    curtain: Curtain = null
+    curtain: Curtain
 
     //顾客管理员
     @property(CustomerManager)
-    customerManager: CustomerManager = null
+    customerManager: CustomerManager
 
     //菜单
     @property(SushiMenu)
-    sushiMenu: SushiMenu = null
+    sushiMenu: SushiMenu
 
     //主厨
     @property(SushiChef)
-    sushichef: SushiChef = null
+    sushichef: SushiChef
 
     // 传送带
     @property(Conveyor)
@@ -46,7 +46,6 @@ export default class GameManager extends cc.Component {
 
         Singleton.Instance.game = this
 
-
         this.init()
     }
 
@@ -55,7 +54,7 @@ export default class GameManager extends cc.Component {
             this.foodContainer.init()
             this.curtain.init(2)
             this.sushiMenu.init()
-            this.customerManager.init(this.sushiMenu)
+            this.customerManager.init()
         }, 0.5)
     }
 

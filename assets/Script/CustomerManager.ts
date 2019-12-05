@@ -29,24 +29,9 @@ export default class CustomerManager extends cc.Component {
         }
     }
 
-    init(sushiMenu: SushiMenu) {
-        // this.customerPool = new cc.NodePool();
-        // let initCount = 7;
-        // for (let i = 0; i < initCount; ++i) {
-        //     let customer = cc.instantiate(this.customerPrefab) // 创建节点
-        //     this.customerPool.put(customer) // 通过 put 接口放入对象池
-        // }
-        // this.sushiMenu = sushiMenu
-        // let data = [
-        //     -420, -200, 0, 200, 400
-        // ]
-
+    init() {
         for (let i = -420; i <= 500 ; i+=150) {
             this.createCustomer(i, 180)
-            // const foodNode = cc.instantiate(this.customerPrefab)
-            // foodNode.setPosition(cc.v2(i, 180))
-            // foodNode.getComponent(Customer).init(this)
-            // this.node.addChild(foodNode)
         }
 
     }
