@@ -36,7 +36,7 @@ export default class Curtain extends cc.Component {
 
     init(speed: number){
         this.speed = 2
-        console.log('Curtain')
+        // console.log('Curtain')
     }
 
  

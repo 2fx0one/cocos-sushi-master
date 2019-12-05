@@ -19,26 +19,26 @@ export default class GameManager extends cc.Component {
 
 
     @property(Curtain)
-    curtain: Curtain
+    curtain: Curtain = null
 
     //顾客管理员
     @property(CustomerManager)
-    customerManager: CustomerManager
+    customerManager: CustomerManager = null
 
     //菜单
     @property(SushiMenu)
-    sushiMenu: SushiMenu
+    sushiMenu: SushiMenu = null
 
     //主厨
     @property(SushiChef)
-    sushichef: SushiChef
+    sushichef: SushiChef = null
 
     // 传送带
     @property(Conveyor)
-    conveyor: Conveyor
+    conveyor: Conveyor = null
 
     @property(FoodContainer)
-    foodContainer: FoodContainer
+    foodContainer: FoodContainer = null
 
     onLoad() {
         cc.director.getCollisionManager().enabled = true
@@ -56,6 +56,9 @@ export default class GameManager extends cc.Component {
             this.sushiMenu.init()
             this.customerManager.init()
         }, 0.5)
+        this.scheduleOnce(()=>{
+            console.log('close shop')
+        }, 10)
     }
 
     foodContainerTakeFood(food: Food) {
@@ -75,9 +78,8 @@ export default class GameManager extends cc.Component {
     curtainScrollCompleted(foodInCurtain: string[]) {
         // console.log('sushi complete food Curtain => ', foods)
         let recipe = this.sushiMenu.getRecipe(foodInCurtain)
-        let sushiNode: Sushi = this.sushichef.createSushi(recipe);
-
-        this.conveyor.addSushi(sushiNode)
+        let sushi: Sushi = this.sushichef.createSushi(recipe);
+        this.conveyor.addSushi(sushi)
     }
 
     CusmtomerManagerGetRandomRecipe(): Recipe {
