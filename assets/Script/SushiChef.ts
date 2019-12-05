@@ -1,20 +1,10 @@
-import Singleton from "./Singleton";
 import Sushi from "./Sushi";
-import Game from "./Game";
 import Recipe from "./Recipe";
-
-// Learn TypeScript:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/typescript.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
+import Food from "./Food";
 
 const { ccclass, property } = cc._decorator;
 
+// SushiManager
 @ccclass
 export default class SushiChef extends cc.Component {
 
@@ -22,25 +12,35 @@ export default class SushiChef extends cc.Component {
     @property(cc.Prefab)
     sushiPrefab: cc.Prefab = null
 
+    private sushiPool: cc.NodePool
+
     onLoad() {
-        Singleton.Instance.sushichef = this
-        this.init()
+        this.sushiPool = new cc.NodePool()
+        let initCount = 7;
+        for (let i = 0; i < initCount; ++i) {
+            let sushi:cc.Node = cc.instantiate(this.sushiPrefab) // 创建节点
+            this.sushiPool.put(sushi) // 通过 put 接口放入对象池
+        }
     }
 
     init() {
 
     }
 
-    makeSushi(recipe: Recipe): cc.Node {
+    createSushi(recipe: Recipe): Sushi {
 
-        const sushiNode: cc.Node = cc.instantiate(this.sushiPrefab)
+        const sushiNode: cc.Node = this.sushiPool.size()>0 ? this.sushiPool.get() : cc.instantiate(this.sushiPrefab)
 
-        let sushi: Sushi = sushiNode.getComponent(Sushi).init(recipe.sushiId, recipe.sushiName, recipe.outputPicPathList)
+        return sushiNode.getComponent(Sushi).init(recipe.sushiId, recipe.sushiName, recipe.outputPicPathList)
+        //
+        // console.log('Chef 做好了 ==>> ' , sushi.sushiId, sushi.sushiName)
+        //
+        // return sushiNode
 
-        console.log('Chef 做好了 ==>> ' , sushi.sushiId, sushi.sushiName)
+    }
 
-        return sushiNode
-
+    putSushiNodeToPool(node: cc.Node) {
+        this.sushiPool.put(node)
     }
 
 }

@@ -3,11 +3,15 @@ import Food from "./Food";
 const {ccclass, property} = cc._decorator;
 
 import Singleton from './Singleton'
-import SpriteFrame = cc.SpriteFrame;
 import Curtain from "./Curtain";
 import CustomerManager from "./CustomerManager";
 import SushiMenu from "./SushiMenu";
 import SushiChef from "./SushiChef";
+import Conveyor from "./Conveyor";
+import FoodContainer from "./FoodContainer";
+import Sushi from "./Sushi";
+import Customer from "./Customer";
+import Recipe from "./Recipe";
 
 
 @ccclass
@@ -16,15 +20,25 @@ export default class GameManager extends cc.Component {
 
     @property(Curtain)
     curtain: Curtain = null
-    
+
+    //顾客管理员
     @property(CustomerManager)
     customerManager: CustomerManager = null
-    
+
+    //菜单
     @property(SushiMenu)
     sushiMenu: SushiMenu = null
-    
+
+    //主厨
     @property(SushiChef)
     sushichef: SushiChef = null
+
+    // 传送带
+    @property(Conveyor)
+    conveyor: Conveyor
+
+    @property(FoodContainer)
+    foodContainer: FoodContainer
 
     onLoad() {
         cc.director.getCollisionManager().enabled = true
@@ -37,12 +51,15 @@ export default class GameManager extends cc.Component {
     }
 
     init() {
-        this.curtain.init(2)
-        this.sushiMenu.init()
-        this.customerManager.init(this.sushiMenu)
+        this.scheduleOnce(()=>{
+            this.foodContainer.init()
+            this.curtain.init(2)
+            this.sushiMenu.init()
+            this.customerManager.init(this.sushiMenu)
+        }, 0.5)
     }
 
-    clickFood(food: Food) {
+    foodContainerTakeFood(food: Food) {
         // 点击食物，首先帘子需要有空位，且帘子卷的动画已经结束才行。
         // console.log('Singleton.Instance.curtain.foodIndex', Singleton.Instance.curtain.foodsAmount())
 
@@ -52,22 +69,29 @@ export default class GameManager extends cc.Component {
         }
     }
 
-    backFood(food: Food) {
-        if (food) {
-            food.backFood()
-        }
-        // console.log('game.backFood')
-        // if (Singleton.Instance.curtain.foodsAmount() > 0) {
-        // Singleton.Instance.curtain.backFood().backFood()
-        // }
+    curtainBackFood(food: Food) {
+            this.foodContainer.backFood(food)
     }
 
-    sushiScrollCompleted(foodInCurtain: string[]) {
+    curtainScrollCompleted(foodInCurtain: string[]) {
         // console.log('sushi complete food Curtain => ', foods)
         let recipe = this.sushiMenu.getRecipe(foodInCurtain)
-        let sushiNode: cc.Node = this.sushichef.makeSushi(recipe);
+        let sushiNode: Sushi = this.sushichef.createSushi(recipe);
 
-        Singleton.Instance.conveyor.addSushi(sushiNode)
-
+        this.conveyor.addSushi(sushiNode)
     }
+
+    CusmtomerManagerGetRandomRecipe(): Recipe {
+        return this.sushiMenu.getRandomRecipe();
+    }
+    customerFinished(customer: Customer) {
+        let x = customer.node.x
+        let y = customer.node.y
+        this.scheduleOnce(()=>{
+            this.customerManager.createCustomer(x, y)
+        }, 1)
+        // customer.node.destroy()
+    }
+
+
 }

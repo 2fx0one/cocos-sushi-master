@@ -4,6 +4,7 @@ export default class Recipe {
     sushiId: string = null
     sushiName: string = null
     picPath: string = null
+    sushiTips: string = null
 
     //foodId List 
     inputFoodId: string[] = null 
@@ -11,8 +12,9 @@ export default class Recipe {
     //sushiId List
     outputPicPathList: string[] = null
 
-    constructor(sushiName: string, picPath: string, inputFoodId: string[], outputPicPathList: string[]) {
+    constructor(sushiName: string, sushiTips:string, picPath: string, inputFoodId: string[], outputPicPathList: string[]) {
         this.sushiName = sushiName
+        this.sushiTips = sushiTips
         this.picPath = picPath
         this.inputFoodId = inputFoodId
         this.outputPicPathList = outputPicPathList
