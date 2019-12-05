@@ -36,12 +36,13 @@ export default class Customer extends cc.Component {
         // this.progressBar = this.progressNode.getComponent(cc.ProgressBar)
         this.anim = this.getComponent(cc.Animation);
         this.makeOrder()
+        return this
     }
 
     makeOrder() {
         let recipe = this.customerManager.getRandomRecipe()
         this.orderSushi = recipe.sushiId
-        this.label.string = recipe.sushiName
+        this.label.string = recipe.sushiTips
 
         cc.loader.loadRes('sushi/' + recipe.picPath, cc.SpriteFrame, (err, spriteFrame) => {
              this.sushiSprite.spriteFrame = spriteFrame
@@ -70,8 +71,8 @@ export default class Customer extends cc.Component {
             //盘子空了
             this.sushi.node.destroy()
             this.sushi = null
-            this.makeOrder()
-            // this.customerManager.customerFinished(this)
+            // this.makeOrder()
+            this.customerManager.customerFinished(this)
         }
     }
 
@@ -92,9 +93,11 @@ export default class Customer extends cc.Component {
             sushi.stopMove()
 
             this.sushi = sushi
-            setTimeout(()=>{
+            this.scheduleOnce(()=> {
                 this.eatOneSushi()
-            }, 500)
+            }, 1)
+            // setTimeout(()=>{
+            // }, 500)
         }
     }
 }

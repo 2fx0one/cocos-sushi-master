@@ -36,7 +36,7 @@ export default class Curtain extends cc.Component {
 
     init(speed: number){
         this.speed = 2
-        console.log('Curtain')
+        // console.log('Curtain')
     }
 
  
@@ -89,7 +89,7 @@ export default class Curtain extends cc.Component {
         })
 
         // this.makeSushi()
-        Singleton.Instance.game.sushiScrollCompleted(this.foodInCurtain.map((v, i)=>v.foodId))
+        Singleton.Instance.game.curtainScrollCompleted(this.foodInCurtain.map((v, i)=>v.foodId))
 
         //制作完成 清空该区域
         this.foodIndex = 0
@@ -112,7 +112,7 @@ export default class Curtain extends cc.Component {
     }
 
     onClickFoodBack(event, data) {
-        Singleton.Instance.game.backFood(this.popLastFood())
+        Singleton.Instance.game.curtainBackFood(this.popLastFood())
     }
 
     popLastFood(): Food {
