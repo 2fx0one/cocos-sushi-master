@@ -1864,7 +1864,7 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 45.499,
+      "x": 111.503,
       "y": -163.49200000000002,
       "z": 0
     },
@@ -2093,7 +2093,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 40,
+      "width": 100,
       "height": 40
     },
     "_anchorPoint": {
@@ -2154,7 +2154,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 40,
+      "width": 100,
       "height": 40
     },
     "_anchorPoint": {
@@ -3375,7 +3375,7 @@
     "_top": 0,
     "_bottom": 56.50799999999998,
     "_verticalCenter": 0,
-    "_horizontalCenter": 45.499,
+    "_horizontalCenter": 111.503,
     "_isAbsLeft": true,
     "_isAbsRight": true,
     "_isAbsTop": true,
@@ -3673,7 +3673,7 @@
     "layoutNode": {
       "__id__": 86
     },
-    "deliveryFood": {
+    "deliveryFoodPrefab": {
       "__uuid__": "a625b9e7-1073-402b-a9ce-e49f72c79669"
     },
     "confirmNode": {
@@ -3699,7 +3699,7 @@
         "__id__": 99
       }
     ],
-    "_active": true,
+    "_active": false,
     "_level": 2,
     "_components": [
       {
@@ -3781,7 +3781,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 960,
+      "width": 800,
       "height": 500
     },
     "_anchorPoint": {
@@ -4309,7 +4309,7 @@
         "__id__": 118
       }
     ],
-    "_active": true,
+    "_active": false,
     "_level": 3,
     "_components": [],
     "_prefab": null,
@@ -4810,7 +4810,7 @@
     },
     "component": "",
     "_componentId": "5e0e4BFWUFJsY2X7cr7l9xx",
-    "handler": "clickConfrim",
+    "handler": "clickConfirm",
     "customEventData": "free"
   },
   {
@@ -5178,7 +5178,7 @@
     },
     "component": "",
     "_componentId": "5e0e4BFWUFJsY2X7cr7l9xx",
-    "handler": "clickConfrim",
+    "handler": "clickConfirm",
     "customEventData": "express"
   },
   {
@@ -5546,7 +5546,7 @@
     },
     "component": "",
     "_componentId": "5e0e4BFWUFJsY2X7cr7l9xx",
-    "handler": "clickConfrim",
+    "handler": "clickConfirm",
     "customEventData": "close"
   },
   {

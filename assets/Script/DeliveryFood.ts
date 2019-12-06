@@ -1,13 +1,14 @@
 import DeliveryManager from "./DeliveryManager";
 import Food from "./Food";
+import Singleton from "./Singleton";
 
 const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class DeliveryFood extends cc.Component {
-    
+
     private deliveryManager: DeliveryManager = null
-    
+
     @property(cc.Sprite)
     bg: cc.Sprite = null
 
@@ -31,8 +32,15 @@ export default class DeliveryFood extends cc.Component {
     }
 
     onclick(event, data) {
-        console.log('onclick')
         this.deliveryManager.clickDeliveryFood(this)
     }
 
+    notify() {
+        this.food.deliveryNotify()
+    }
+    delivery() {
+        console.log('delivery')
+        this.food.deliveryFood(10)
+
+    }
 }

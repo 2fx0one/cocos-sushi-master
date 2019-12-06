@@ -10,7 +10,8 @@ export default class Food extends cc.Component {
     @property(cc.Label)
     label: cc.Label = null;
 
-
+    @property(cc.ProgressBar)
+    progressBar: cc.ProgressBar = null
     // @property
     // text: string = 'hello';
 
@@ -24,6 +25,7 @@ export default class Food extends cc.Component {
     public foodCostPrice: number //食物购买价格
 
     // LIFE-CYCLE CALLBACKS:
+    // private coolDowning = false
 
     public init(foodContainer: FoodContainer, foodEntity: FoodEntity) {
 
@@ -51,8 +53,6 @@ export default class Food extends cc.Component {
         if (this.amount > 0) {
             this.foodContainer.clickFood(this)
         }
-
-
     }
 
     addAmonut(amount: number) {
@@ -78,4 +78,26 @@ export default class Food extends cc.Component {
         this.addAmonut(1)
         return this
     }
+
+    //外卖通知
+    deliveryNotify() {
+        this.progressBar.node.active = true
+        this.progressBar.progress = 1
+    }
+
+    // 外卖食物
+    deliveryFood(amount: number) {
+        this.addAmonut(amount)
+        this.progressBar.node.active = false
+        return this
+
+    }
+
+    update(dt: number) {
+        if (this.progressBar.node.active) {
+            this.progressBar.progress -= dt * 0.1
+        }
+    }
+
+
 }

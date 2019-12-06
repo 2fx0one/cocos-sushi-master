@@ -1,6 +1,7 @@
 import DeliveryFood from "./DeliveryFood";
 import FoodEntity from "./entity/FoodEntity";
 import Food from "./Food";
+import Singleton from "./Singleton";
 
 const {ccclass, property} = cc._decorator;
 
@@ -11,10 +12,12 @@ export default class DeliveryManager extends cc.Component {
     layoutNode: cc.Node = null;
 
     @property(cc.Prefab)
-    deliveryFood: cc.Prefab = null;
+    deliveryFoodPrefab: cc.Prefab = null;
 
     @property(cc.Node)
     confirmNode: cc.Node = null
+
+    private currentDeliveryFood: DeliveryFood = null
 
     onLoad() {
         // [0,1].forEach(()=>{
@@ -30,13 +33,14 @@ export default class DeliveryManager extends cc.Component {
     }
 
     private createDeliveryFood(food: Food) {
-        let deliveryFood: cc.Node = cc.instantiate(this.deliveryFood)
+        let deliveryFood: cc.Node = cc.instantiate(this.deliveryFoodPrefab)
 
         deliveryFood.parent = this.layoutNode
         return deliveryFood.getComponent(DeliveryFood).init(this, food)
     }
 
     clickDeliveryFood(deliveryFood: DeliveryFood) {
+        this.currentDeliveryFood = deliveryFood
         this.showConfirmWin(deliveryFood.node.position)
     }
 
@@ -44,23 +48,40 @@ export default class DeliveryManager extends cc.Component {
         this.closeDeliveryWin()
     }
 
-    private clickConfrim(event, data) {
-        console.log(data)
+    clickConfirm(event, data) {
+        // console.log(data)
+        this.closeConfirmWin()
         switch (data) {
             case 'free':
-                return this.closeConfirmWin()
+                Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, data)
+                return this.closeDeliveryWin()
             case 'express':
-                return this.closeConfirmWin()
+                Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, data)
+                return this.closeDeliveryWin()
             case 'close':
-                return this.closeConfirmWin()
+                return
             default:
                 return
         }
     }
 
+    //
+    // freeDelivery (){
+    //     this.currentDeliveryFood.delivery()
+    // }
+    //
+    // expressDelivery() {
+    //     this.currentDeliveryFood.delivery()
+    // }
+
+    reset() {
+        this.closeConfirmWin()
+        this.currentDeliveryFood = null
+    }
+
     showDeliveryWin() {
         this.node.active = true
-        this.closeConfirmWin()
+        this.reset()
     }
 
     closeDeliveryWin() {

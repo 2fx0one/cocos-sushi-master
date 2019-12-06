@@ -14,6 +14,8 @@ import Customer from "./Customer";
 import RecipeEntity from "./entity/RecipeEntity";
 import FoodEntity from "./entity/FoodEntity";
 import DeliveryManager from "./DeliveryManager";
+import Utils from "./Utils";
+import DeliveryFood from "./DeliveryFood";
 
 
 @ccclass
@@ -47,7 +49,7 @@ export default class GameManager extends cc.Component {
 
     onLoad() {
         cc.director.getCollisionManager().enabled = true
-        cc.director.getCollisionManager().enabledDebugDraw = true
+        // cc.director.getCollisionManager().enabledDebugDraw = true
 
         Singleton.Instance.game = this
 
@@ -117,7 +119,7 @@ export default class GameManager extends cc.Component {
         let y = customer.node.y
         this.scheduleOnce(() => {
             this.customerManager.createCustomer(x, y)
-        }, 1)
+        }, Utils.getRandomInt(1, 4))
         // customer.node.destroy()
     }
 
@@ -126,4 +128,16 @@ export default class GameManager extends cc.Component {
         this.deliveryManager.showDeliveryWin()
     }
 
+    deliveryFood(deliveryFood: DeliveryFood, type: string) {
+        deliveryFood.notify()
+        if (type == 'free') {
+            this.scheduleOnce(() => {
+                deliveryFood.delivery()
+            }, 2)
+        } else if (type == 'express') {
+            this.scheduleOnce(() => {
+                deliveryFood.delivery()
+            }, 2)
+        }
+    }
 }

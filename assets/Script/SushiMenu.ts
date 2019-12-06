@@ -1,5 +1,6 @@
 import RecipeEntity from "./entity/RecipeEntity";
 import Singleton from "./Singleton";
+import Utils from "./Utils";
 
 const {ccclass, property} = cc._decorator;
 
@@ -36,7 +37,7 @@ export default class SushiMenu extends cc.Component {
             new RecipeEntity('寿司', ' 1饭+2海苔+1虾', '06', ['1', '2', '2', '13'], ['06', '06', '06']),
             new RecipeEntity('卷寿司', ' 1饭+1海苔+1黄瓜', '07', ['1', '2', '6'], ['07', '07', '07']),
 
-            new RecipeEntity('anago 鳗鱼寿司', ' 1饭+1海苔+2鱼', '08', ['1', '2', '12', '12'], ['08', '08', '08']),
+            new RecipeEntity('anago 鳗鱼寿司', ' 1饭+1海苔+2鳗鱼', '08', ['1', '2', '12', '12'], ['08', '08', '08']),
             new RecipeEntity('章鱼寿司', ' 2饭+2海苔+2章鱼', '09', ['1', '1', '2', '2', '9', '9'], ['09', '09', '09']),
             new RecipeEntity('扁口鱼寿司', ' 2饭+1海苔+1扁口鱼', '10', ['1', '1', '2', '7'], ['10', '10', '10']),
             new RecipeEntity('hamachi 鰤鱼寿司', ' 2饭+1海苔+1鰤鱼', '11', ['1', '1', '2', '10'], ['11', '11', '11']),
@@ -60,7 +61,7 @@ export default class SushiMenu extends cc.Component {
     }
 
     getRandomRecipe(): RecipeEntity {
-        let i = Singleton.Instance.utils.getRandomInt(0, this.recipeList.length)
+        let i = Utils.getRandomInt(0, this.recipeList.length)
         console.log(i)
 
         return this.recipeList[i]
