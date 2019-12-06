@@ -2,6 +2,7 @@ import DeliveryFood from "./DeliveryFood";
 import FoodData from "./entity/FoodData";
 import Food from "./Food";
 import Singleton from "./Singleton";
+import GlobalConstant from "./common/GlobalConstant";
 
 const {ccclass, property} = cc._decorator;
 
@@ -52,10 +53,10 @@ export default class DeliveryManager extends cc.Component {
         // console.log(data)
         this.closeConfirmWin()
         switch (data) {
-            case 'free':
+            case GlobalConstant.DELIVERY_TYPE_FREE:
                 Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, data)
                 return this.closeDeliveryWin()
-            case 'express':
+            case GlobalConstant.DELIVERY_TYPE_EXPRESS:
                 Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, data)
                 return this.closeDeliveryWin()
             case 'close':

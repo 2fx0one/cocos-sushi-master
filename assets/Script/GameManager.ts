@@ -17,6 +17,7 @@ import DeliveryManager from "./DeliveryManager";
 import Utils from "./common/Utils";
 import DeliveryFood from "./DeliveryFood";
 import GameUserData from "./entity/GameUserData";
+import GlobalConstant from "./common/GlobalConstant";
 
 
 @ccclass
@@ -58,7 +59,8 @@ export default class GameManager extends cc.Component {
 
         Singleton.Instance.game = this
 
-        this.userData = Utils.loadGameUserData()
+        this.userData = new GameUserData()
+        // Utils.loadGameUserData()
 
         this.init()
     }
@@ -93,12 +95,17 @@ export default class GameManager extends cc.Component {
         }, 0.5)
         this.scheduleOnce(() => {
             console.log('close shop')
-            this.closeRestaurant()
+            this.restaurantClosed()
         }, 10)
     }
 
-    closeRestaurant() {
+    //打烊
+    restaurantClosed() {
         this.restaurantOpen = false
+    }
+
+    shutdown() {
+        console.log('shutdown')
     }
 
     foodContainerTakeFood(food: Food) {
@@ -127,9 +134,11 @@ export default class GameManager extends cc.Component {
     }
 
     customerFinished(customer: Customer) {
+
+        //积分
         this.userData.gold += customer.sushiPrice
 
-        //没门就继续
+        //是否打烊就继续
         if (Singleton.Instance.game.restaurantOpen) {
             let x = customer.node.x
             let y = customer.node.y
@@ -137,9 +146,11 @@ export default class GameManager extends cc.Component {
                 this.customerManager.createCustomer(x, y)
             }, Utils.getRandomInt(1, 4))
         } else {
-            //关门了，查看用户是否都走了
+            //若打烊了，查看用户是否都走了
             if (this.customerManager.customerAmount == 0) {
+                //都走了
                 Utils.saveGameUserData(this.userData)
+                this.shutdown()
             }
         }
         // customer.node.destroy()
@@ -152,11 +163,11 @@ export default class GameManager extends cc.Component {
 
     deliveryFood(deliveryFood: DeliveryFood, type: string) {
         deliveryFood.notify()
-        if (type == 'free') {
+        if (type == GlobalConstant.DELIVERY_TYPE_FREE) {
             this.scheduleOnce(() => {
                 deliveryFood.delivery()
             }, 5)
-        } else if (type == 'express') {
+        } else if (type == GlobalConstant.DELIVERY_TYPE_EXPRESS) {
             this.scheduleOnce(() => {
                 deliveryFood.delivery()
             }, 1)
