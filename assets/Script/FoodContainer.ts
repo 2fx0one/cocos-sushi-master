@@ -12,6 +12,9 @@ export default class FoodContainer extends cc.Component {
     @property(cc.Prefab)
     foodPreFab: cc.Prefab = null
 
+    @property(cc.Node)
+    layoutNode: cc.Node = null
+
     //拥有的所有食物 放在容器里面
     public foodsInContainMap: { [key: string]: Food } = {}
 
@@ -33,11 +36,11 @@ export default class FoodContainer extends cc.Component {
         })
     }
 
-    createFood(foodEntity: FoodData): Food {
+    createFood(foodData: FoodData): Food {
         let food: cc.Node = this.foodPool.size()>0 ? this.foodPool.get() : cc.instantiate(this.foodPreFab)
-        food.parent = this.node
-        food.setPosition(cc.v2(foodEntity.x, foodEntity.y))
-        return food.getComponent(Food).init(this, foodEntity)
+        food.parent = this.layoutNode
+        // food.setPosition(cc.v2(foodData.x, foodData.y))
+        return food.getComponent(Food).init(this, foodData)
     }
 
     // putFoodNodeToPool(node: cc.Node) {

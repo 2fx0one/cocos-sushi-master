@@ -1,3 +1,4 @@
+import RecipeData from "./entity/RecipeData";
 
 const { ccclass, property } = cc._decorator;
 
@@ -21,12 +22,12 @@ export default class Sushi extends cc.Component {
         })
     }
 
-    init(sushiId: string, sushiName: string, outputPicPathList: string[]): Sushi {
-        this.sushiId = sushiId
-        this.sushiName = sushiName
-        this.amount = outputPicPathList.length
+    init(recipeData: RecipeData): Sushi {
+        this.sushiId = recipeData.sushiId
+        this.sushiName = recipeData.sushiName
+        this.amount = recipeData.outputPicPathList.length
 
-        outputPicPathList.forEach((img, index) => {
+        recipeData.outputPicPathList.forEach((img, index) => {
             this.setSpriteFrame(img, index)
         })
 
