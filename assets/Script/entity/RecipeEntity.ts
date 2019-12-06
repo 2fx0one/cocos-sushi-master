@@ -1,5 +1,5 @@
 
-export default class Recipe {
+export default class RecipeEntity {
 
     sushiId: string = null
     sushiName: string = null

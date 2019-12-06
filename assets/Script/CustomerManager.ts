@@ -1,6 +1,6 @@
 import Customer from "./Customer";
 import SushiMenu from "./SushiMenu";
-import Recipe from "./Recipe";
+import RecipeEntity from "./entity/RecipeEntity";
 import Singleton from "./Singleton";
 
 const {ccclass, property} = cc._decorator;
@@ -52,7 +52,7 @@ export default class CustomerManager extends cc.Component {
         this.customerPool.put(customer)
     }
 
-    getRandomRecipe(): Recipe {
+    getRandomRecipe(): RecipeEntity {
         return Singleton.Instance.game.CusmtomerManagerGetRandomRecipe()
     }
 

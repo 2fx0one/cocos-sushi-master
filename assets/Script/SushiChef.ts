@@ -1,5 +1,5 @@
 import Sushi from "./Sushi";
-import Recipe from "./Recipe";
+import RecipeEntity from "./entity/RecipeEntity";
 import Food from "./Food";
 
 const { ccclass, property } = cc._decorator;
@@ -27,7 +27,7 @@ export default class SushiChef extends cc.Component {
 
     }
 
-    createSushi(recipe: Recipe): Sushi {
+    createSushi(recipe: RecipeEntity): Sushi {
 
         const sushiNode: cc.Node = this.sushiPool.size()>0 ? this.sushiPool.get() : cc.instantiate(this.sushiPrefab)
 

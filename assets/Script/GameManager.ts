@@ -11,7 +11,8 @@ import Conveyor from "./Conveyor";
 import FoodContainer from "./FoodContainer";
 import Sushi from "./Sushi";
 import Customer from "./Customer";
-import Recipe from "./Recipe";
+import RecipeEntity from "./entity/RecipeEntity";
+import FoodEntity from "./entity/FoodEntity";
 
 
 @ccclass
@@ -50,13 +51,33 @@ export default class GameManager extends cc.Component {
     }
 
     init() {
-        this.scheduleOnce(()=>{
-            this.foodContainer.init()
+        let foodDataList: FoodEntity[] = [
+            new FoodEntity(450, 250, "虾", "13", '13', 10),
+
+            new FoodEntity(350, 250, "饭", '1', '1', 10),
+            new FoodEntity(350, 150, "海苔", '2', '2', 10),
+            new FoodEntity(350, 50, "鲑鱼子", '3', '3', 10),
+
+            new FoodEntity(250, 250, "鲑鱼", '4', '4', 10),
+            new FoodEntity(250, 150, "5", '5', '5', 10),
+            new FoodEntity(250, 50, "黄瓜", '6', '6', 10),
+
+            new FoodEntity(150, 250, "扁口鱼", '7', '7', 10),
+            new FoodEntity(150, 150, "8", '8', '8', 10),
+            new FoodEntity(150, 50, "章鱼", '9', '9', 10),
+
+            new FoodEntity(50, 250, "10", '10', '10', 10),
+            new FoodEntity(50, 150, "11", '11', '11', 10),
+            new FoodEntity(50, 50, "12", '12', '12', 10)
+        ]
+
+        this.scheduleOnce(() => {
+            this.foodContainer.init(foodDataList)
             this.curtain.init(2)
             this.sushiMenu.init()
             this.customerManager.init()
         }, 0.5)
-        this.scheduleOnce(()=>{
+        this.scheduleOnce(() => {
             console.log('close shop')
         }, 10)
     }
@@ -72,7 +93,7 @@ export default class GameManager extends cc.Component {
     }
 
     curtainBackFood(food: Food) {
-            this.foodContainer.backFood(food)
+        this.foodContainer.backFood(food)
     }
 
     curtainScrollCompleted(foodInCurtain: string[]) {
@@ -82,13 +103,14 @@ export default class GameManager extends cc.Component {
         this.conveyor.addSushi(sushi)
     }
 
-    CusmtomerManagerGetRandomRecipe(): Recipe {
+    CusmtomerManagerGetRandomRecipe(): RecipeEntity {
         return this.sushiMenu.getRandomRecipe();
     }
+
     customerFinished(customer: Customer) {
         let x = customer.node.x
         let y = customer.node.y
-        this.scheduleOnce(()=>{
+        this.scheduleOnce(() => {
             this.customerManager.createCustomer(x, y)
         }, 1)
         // customer.node.destroy()

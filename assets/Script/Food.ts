@@ -30,7 +30,7 @@ export default class Food extends cc.Component {
         this.amount = amount
         this.updateLabelDisplay()
 
-        cc.loader.loadRes('foods/' + this.picPath, cc.SpriteFrame, (err, spriteFrame) => {
+        cc.loader.loadRes('foods-in-container/' + this.picPath, cc.SpriteFrame, (err, spriteFrame) => {
             this.getComponentInChildren(cc.Sprite).spriteFrame = spriteFrame
         })
         return this
