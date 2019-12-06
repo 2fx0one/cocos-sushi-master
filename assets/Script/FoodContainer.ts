@@ -13,7 +13,7 @@ export default class FoodContainer extends cc.Component {
     foodPreFab: cc.Prefab = null
 
     //拥有的所有食物 放在容器里面
-    private foodsInContainMap: { [key: string]: Food } = {}
+    public foodsInContainMap: { [key: string]: Food } = {}
 
     private  foodPool: cc.NodePool
 
@@ -28,21 +28,21 @@ export default class FoodContainer extends cc.Component {
     }
 
     init(foodDataList: FoodEntity[]) {
-        foodDataList.forEach((v, i) => {
-            this.foodsInContainMap[v.foodId] = this.createFood(v.x, v.y, v.foodId, v.foodName, v.picPath, v.amount)
+        foodDataList.forEach((foodEntity, i) => {
+            this.foodsInContainMap[foodEntity.foodId] = this.createFood(foodEntity)
         })
     }
 
-    createFood(x: number, y: number, foodId: string, foodName: string, picPath: string, amount: number): Food {
+    createFood(foodEntity: FoodEntity): Food {
         let food: cc.Node = this.foodPool.size()>0 ? this.foodPool.get() : cc.instantiate(this.foodPreFab)
         food.parent = this.node
-        food.setPosition(cc.v2(x, y))
-        return food.getComponent(Food).init(this, foodId, foodName, picPath, amount)
+        food.setPosition(cc.v2(foodEntity.x, foodEntity.y))
+        return food.getComponent(Food).init(this, foodEntity)
     }
 
-    putFoodNodeToPool(node: cc.Node) {
-            this.foodPool.put(node)
-    }
+    // putFoodNodeToPool(node: cc.Node) {
+    //         this.foodPool.put(node)
+    // }
 
     clickFood(food: Food) {
         Singleton.Instance.game.foodContainerTakeFood(food)
@@ -50,7 +50,7 @@ export default class FoodContainer extends cc.Component {
 
     backFood(food: Food) {
         if (food) {
-            this.putFoodNodeToPool(food.node)
+            // this.putFoodNodeToPool(food.node)
             food.backFood()
         }
     }

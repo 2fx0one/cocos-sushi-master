@@ -1,4 +1,5 @@
 import DeliveryManager from "./DeliveryManager";
+import Food from "./Food";
 
 const {ccclass, property} = cc._decorator;
 
@@ -13,10 +14,19 @@ export default class DeliveryFood extends cc.Component {
     @property(cc.Label)
     label: cc.Label = null
 
-    private price: number = null
+    // private price: number = null
+    private food: Food = null
 
-    init(deliveryManager: DeliveryManager, foodName, price) {
-        this.deliveryManager = deliveryManager
+    init(deliveryManager: DeliveryManager, food: Food) {
+        this.deliveryManager = deliveryManager;
+        this.food = food
+        // this.price = food.foodCostPrice
+        this.label.string = this.food.foodCostPrice.toString()
+
+        cc.loader.loadRes('foods-small/' + food.picPath, cc.SpriteFrame, (err, spriteFrame) => {
+            this.bg.spriteFrame = spriteFrame
+        })
+
         return this;
     }
 

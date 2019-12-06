@@ -1,5 +1,6 @@
 import DeliveryFood from "./DeliveryFood";
 import FoodEntity from "./entity/FoodEntity";
+import Food from "./Food";
 
 const {ccclass, property} = cc._decorator;
 
@@ -18,18 +19,19 @@ export default class DeliveryManager extends cc.Component {
         // })
     }
 
-    init(foodDataList: FoodEntity[]) {
-        foodDataList.forEach((v, i)=>{
-            this.createDeliveryFood(v)
-        })
+    init(foodsInContainMap: { [key: string]: Food }) {
+
+        let data = Object.keys(foodsInContainMap).map(k => foodsInContainMap[k]).concat()
+
+        data.forEach((v,i)=>this.createDeliveryFood(v))
     }
 
-    createDeliveryFood(foodData: FoodEntity) {
-        let food:cc.Node = cc.instantiate(this.deliveryFood)
+    createDeliveryFood(food: Food) {
+        let deliveryFood: cc.Node = cc.instantiate(this.deliveryFood)
 
-        food.parent = this.layoutNode
-        return food.getComponent(DeliveryFood).init(this, foodData.foodName, foodData.foodCostPrice)
+        deliveryFood.parent = this.layoutNode
+        return deliveryFood.getComponent(DeliveryFood).init(this, food)
     }
-    
+
 
 }

@@ -80,7 +80,7 @@ export default class GameManager extends cc.Component {
             this.curtain.init(2)
             this.sushiMenu.init()
             this.customerManager.init()
-            this.deliveryManager.init(foodDataList)
+            this.deliveryManager.init(this.foodContainer.foodsInContainMap)
         }, 0.5)
         this.scheduleOnce(() => {
             console.log('close shop')
@@ -121,5 +121,9 @@ export default class GameManager extends cc.Component {
         // customer.node.destroy()
     }
 
+    callDelivery() {
+        console.log('call')
+        this.deliveryManager.node.active = !this.deliveryManager.node.active
+    }
 
 }

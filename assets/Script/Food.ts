@@ -1,4 +1,5 @@
 import FoodContainer from "./FoodContainer";
+import FoodEntity from "./entity/FoodEntity";
 
 const { ccclass, property } = cc._decorator;
 
@@ -14,20 +15,24 @@ export default class Food extends cc.Component {
     // text: string = 'hello';
 
     private foodContainer: FoodContainer = null
+    private amount: number = null
+
     public foodName: string = null
     public foodId: string = null
     public picPath: string = null
-    private amount: number = null
+
+    public foodCostPrice: number //食物购买价格
 
     // LIFE-CYCLE CALLBACKS:
 
-    public init(foodContainer: FoodContainer, foodId: string, foodName: string, picPath: string, amount: number) {
+    public init(foodContainer: FoodContainer, foodEntity: FoodEntity) {
 
         this.foodContainer = foodContainer
-        this.foodId = foodId
-        this.foodName = foodName
-        this.picPath = picPath
-        this.amount = amount
+        this.foodId = foodEntity.foodId
+        this.foodName = foodEntity.foodName
+        this.picPath = foodEntity.picPath
+        this.amount = foodEntity.amount
+        this.foodCostPrice = foodEntity.foodCostPrice
         this.updateLabelDisplay()
 
         cc.loader.loadRes('foods-in-container/' + this.picPath, cc.SpriteFrame, (err, spriteFrame) => {
