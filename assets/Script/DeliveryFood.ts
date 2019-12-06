@@ -30,8 +30,9 @@ export default class DeliveryFood extends cc.Component {
         return this;
     }
 
-    onclick() {
+    onclick(event, data) {
         console.log('onclick')
+        this.deliveryManager.clickDeliveryFood(this)
     }
 
 }

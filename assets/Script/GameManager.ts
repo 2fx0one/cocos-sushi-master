@@ -123,7 +123,7 @@ export default class GameManager extends cc.Component {
 
     callDelivery() {
         console.log('call')
-        this.deliveryManager.node.active = !this.deliveryManager.node.active
+        this.deliveryManager.showDeliveryWin()
     }
 
 }

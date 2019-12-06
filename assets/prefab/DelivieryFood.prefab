@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "DeliveryFood",
+    "_name": "DelivieryFood",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -22,7 +22,7 @@
       }
     ],
     "_active": true,
-    "_level": 1,
+    "_level": 4,
     "_components": [
       {
         "__id__": 9
@@ -54,8 +54,8 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": -230,
-      "y": 130,
+      "x": -330,
+      "y": 230,
       "z": 0
     },
     "_scale": {
