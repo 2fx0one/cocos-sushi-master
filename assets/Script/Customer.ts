@@ -20,7 +20,9 @@ export default class Customer extends cc.Component {
 
     private sushi: Sushi = null
 
-    private orderSushi: string = '1_1_2'
+    private orderSushi: string
+
+    sushiPrice: number
 
     private anim: cc.Animation = null
 
@@ -42,6 +44,7 @@ export default class Customer extends cc.Component {
     makeOrder() {
         let recipe = this.customerManager.getRandomRecipe()
         this.orderSushi = recipe.sushiId
+        this.sushiPrice = recipe.sushiPrice
         this.label.string = recipe.sushiTips
 
         cc.loader.loadRes('sushi/' + recipe.picPath, cc.SpriteFrame, (err, spriteFrame) => {

@@ -1,5 +1,5 @@
 import DeliveryFood from "./DeliveryFood";
-import FoodEntity from "./entity/FoodEntity";
+import FoodData from "./entity/FoodData";
 import Food from "./Food";
 import Singleton from "./Singleton";
 

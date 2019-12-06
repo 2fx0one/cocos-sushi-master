@@ -1,6 +1,6 @@
 import Customer from "./Customer";
 import SushiMenu from "./SushiMenu";
-import RecipeEntity from "./entity/RecipeEntity";
+import RecipeData from "./entity/RecipeData";
 import Singleton from "./Singleton";
 
 const {ccclass, property} = cc._decorator;
@@ -19,7 +19,9 @@ export default class CustomerManager extends cc.Component {
 
     private customerPool: cc.NodePool
 
-    onLoad () {
+    public customerAmount: number = 0 //客户总数
+
+    onLoad() {
         // this.init()
         this.customerPool = new cc.NodePool();
         let initCount = 7;
@@ -30,14 +32,15 @@ export default class CustomerManager extends cc.Component {
     }
 
     init() {
-        for (let i = -420; i <= 500 ; i+=150) {
+        for (let i = -420; i <= 500; i += 150) {
             this.createCustomer(i, 180)
         }
 
     }
 
     createCustomer(x, y) {
-        let customer:cc.Node = this.customerPool.size() > 0 ? this.customerPool.get() : cc.instantiate(this.customerPrefab)
+        this.customerAmount += 1
+        let customer: cc.Node = this.customerPool.size() > 0 ? this.customerPool.get() : cc.instantiate(this.customerPrefab)
         // if (this.customerPool.size() > 0) {
         //     customer = this.customerPool.get()
         // } else {
@@ -49,10 +52,11 @@ export default class CustomerManager extends cc.Component {
     }
 
     putCustomerNodeToPool(customer: cc.Node) {
+        this.customerAmount -= 1
         this.customerPool.put(customer)
     }
 
-    getRandomRecipe(): RecipeEntity {
+    getRandomRecipe(): RecipeData {
         return Singleton.Instance.game.CusmtomerManagerGetRandomRecipe()
     }
 

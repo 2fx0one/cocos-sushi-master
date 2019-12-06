@@ -1,4 +1,4 @@
-export default class FoodEntity {
+export default class FoodData {
     x: number
     y: number
     foodName: string

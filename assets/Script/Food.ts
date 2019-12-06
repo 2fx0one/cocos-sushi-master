@@ -1,5 +1,5 @@
 import FoodContainer from "./FoodContainer";
-import FoodEntity from "./entity/FoodEntity";
+import FoodData from "./entity/FoodData";
 
 const { ccclass, property } = cc._decorator;
 
@@ -27,7 +27,7 @@ export default class Food extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
     // private coolDowning = false
 
-    public init(foodContainer: FoodContainer, foodEntity: FoodEntity) {
+    public init(foodContainer: FoodContainer, foodEntity: FoodData) {
 
         this.foodContainer = foodContainer
         this.foodId = foodEntity.foodId

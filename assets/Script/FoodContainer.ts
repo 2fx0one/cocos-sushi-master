@@ -1,6 +1,6 @@
 import Singleton from "./Singleton";
 import Food from "./Food";
-import FoodEntity from "./entity/FoodEntity";
+import FoodData from "./entity/FoodData";
 
 const { ccclass, property } = cc._decorator;
 
@@ -27,13 +27,13 @@ export default class FoodContainer extends cc.Component {
         }
     }
 
-    init(foodDataList: FoodEntity[]) {
+    init(foodDataList: FoodData[]) {
         foodDataList.forEach((foodEntity, i) => {
             this.foodsInContainMap[foodEntity.foodId] = this.createFood(foodEntity)
         })
     }
 
-    createFood(foodEntity: FoodEntity): Food {
+    createFood(foodEntity: FoodData): Food {
         let food: cc.Node = this.foodPool.size()>0 ? this.foodPool.get() : cc.instantiate(this.foodPreFab)
         food.parent = this.node
         food.setPosition(cc.v2(foodEntity.x, foodEntity.y))

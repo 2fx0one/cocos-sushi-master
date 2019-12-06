@@ -11,11 +11,12 @@ import Conveyor from "./Conveyor";
 import FoodContainer from "./FoodContainer";
 import Sushi from "./Sushi";
 import Customer from "./Customer";
-import RecipeEntity from "./entity/RecipeEntity";
-import FoodEntity from "./entity/FoodEntity";
+import RecipeData from "./entity/RecipeData";
+import FoodData from "./entity/FoodData";
 import DeliveryManager from "./DeliveryManager";
-import Utils from "./Utils";
+import Utils from "./common/Utils";
 import DeliveryFood from "./DeliveryFood";
+import GameUserData from "./entity/GameUserData";
 
 
 @ccclass
@@ -47,34 +48,40 @@ export default class GameManager extends cc.Component {
     @property(DeliveryManager)
     deliveryManager: DeliveryManager = null
 
+    public restaurantOpen: boolean = true
+
+    private userData: GameUserData = null
+
     onLoad() {
         cc.director.getCollisionManager().enabled = true
         // cc.director.getCollisionManager().enabledDebugDraw = true
 
         Singleton.Instance.game = this
 
+        this.userData = Utils.loadGameUserData()
+
         this.init()
     }
 
     init() {
-        let foodDataList: FoodEntity[] = [
-            new FoodEntity(450, 250, "虾", "13", '13', 10, 10),
+        let foodDataList: FoodData[] = [
+            new FoodData(450, 250, "虾", "13", '13', 10, 10),
 
-            new FoodEntity(350, 250, "饭", '1', '1', 10, 10),
-            new FoodEntity(350, 150, "海苔", '2', '2', 10, 10),
-            new FoodEntity(350, 50, "鲑鱼子", '3', '3', 10, 10),
+            new FoodData(350, 250, "饭", '1', '1', 10, 10),
+            new FoodData(350, 150, "海苔", '2', '2', 10, 10),
+            new FoodData(350, 50, "鲑鱼子", '3', '3', 10, 10),
 
-            new FoodEntity(250, 250, "鲑鱼", '4', '4', 10, 10),
-            new FoodEntity(250, 150, "5", '5', '5', 10, 10),
-            new FoodEntity(250, 50, "黄瓜", '6', '6', 10, 10),
+            new FoodData(250, 250, "鲑鱼", '4', '4', 10, 10),
+            new FoodData(250, 150, "5", '5', '5', 10, 10),
+            new FoodData(250, 50, "黄瓜", '6', '6', 10, 10),
 
-            new FoodEntity(150, 250, "扁口鱼", '7', '7', 10, 10),
-            new FoodEntity(150, 150, "8", '8', '8', 10, 10),
-            new FoodEntity(150, 50, "章鱼", '9', '9', 10, 10),
+            new FoodData(150, 250, "扁口鱼", '7', '7', 10, 10),
+            new FoodData(150, 150, "8", '8', '8', 10, 10),
+            new FoodData(150, 50, "章鱼", '9', '9', 10, 10),
 
-            new FoodEntity(50, 250, "10", '10', '10', 10, 10),
-            new FoodEntity(50, 150, "11", '11', '11', 10, 10),
-            new FoodEntity(50, 50, "12", '12', '12', 10, 10),
+            new FoodData(50, 250, "10", '10', '10', 10, 10),
+            new FoodData(50, 150, "11", '11', '11', 10, 10),
+            new FoodData(50, 50, "12", '12', '12', 10, 10),
         ]
 
         this.scheduleOnce(() => {
@@ -86,7 +93,12 @@ export default class GameManager extends cc.Component {
         }, 0.5)
         this.scheduleOnce(() => {
             console.log('close shop')
+            this.closeRestaurant()
         }, 10)
+    }
+
+    closeRestaurant() {
+        this.restaurantOpen = false
     }
 
     foodContainerTakeFood(food: Food) {
@@ -110,16 +122,26 @@ export default class GameManager extends cc.Component {
         this.conveyor.addSushi(sushi)
     }
 
-    CusmtomerManagerGetRandomRecipe(): RecipeEntity {
+    CusmtomerManagerGetRandomRecipe(): RecipeData {
         return this.sushiMenu.getRandomRecipe();
     }
 
     customerFinished(customer: Customer) {
-        let x = customer.node.x
-        let y = customer.node.y
-        this.scheduleOnce(() => {
-            this.customerManager.createCustomer(x, y)
-        }, Utils.getRandomInt(1, 4))
+        this.userData.gold += customer.sushiPrice
+
+        //没门就继续
+        if (Singleton.Instance.game.restaurantOpen) {
+            let x = customer.node.x
+            let y = customer.node.y
+            this.scheduleOnce(() => {
+                this.customerManager.createCustomer(x, y)
+            }, Utils.getRandomInt(1, 4))
+        } else {
+            //关门了，查看用户是否都走了
+            if (this.customerManager.customerAmount == 0) {
+                Utils.saveGameUserData(this.userData)
+            }
+        }
         // customer.node.destroy()
     }
 
@@ -133,11 +155,11 @@ export default class GameManager extends cc.Component {
         if (type == 'free') {
             this.scheduleOnce(() => {
                 deliveryFood.delivery()
-            }, 2)
+            }, 5)
         } else if (type == 'express') {
             this.scheduleOnce(() => {
                 deliveryFood.delivery()
-            }, 2)
+            }, 1)
         }
     }
 }

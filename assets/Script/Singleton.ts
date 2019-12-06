@@ -1,5 +1,5 @@
 import GameManager from "./GameManager";
-import Utils from "./Utils";
+import Utils from "./common/Utils";
 
 export default class Singleton {
     public static readonly Instance: Singleton = new Singleton();
