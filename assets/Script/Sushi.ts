@@ -1,4 +1,5 @@
 import RecipeData from "./entity/RecipeData";
+import Utils from "./common/Utils";
 
 const { ccclass, property } = cc._decorator;
 
@@ -16,9 +17,8 @@ export default class Sushi extends cc.Component {
     private isMove = true
 
     setSpriteFrame(img, index) {
-        // console.log(img, index)
-        cc.loader.loadRes('sushi/' + img, cc.SpriteFrame, (err, spriteFrame) => {
-            this.sushiList[index].getComponent(cc.Sprite).spriteFrame = spriteFrame
+        Utils.loadResImage(img, (err, spriteFrame: cc.SpriteFrame) => {
+            this.getComponentInChildren(cc.Sprite).spriteFrame = spriteFrame
         })
     }
 

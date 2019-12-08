@@ -1,5 +1,4 @@
 import RecipeData from "./entity/RecipeData";
-import Singleton from "./Singleton";
 import Utils from "./common/Utils";
 
 const {ccclass, property} = cc._decorator;
@@ -16,19 +15,9 @@ export default class SushiMenu extends cc.Component {
     // }
 
     init() {
-        // {
-        //     '1_1_2': ['01', '01', '01'],
-        //     '1_3': ['02', '02', '02'],
-        //     '1_2_3_3': ['03', '03', '03'],
-        //     '1_1_2_4': ['04', '04', '04'],
-        //     '1_2_2_6': ['05', '05', '05'],
-        //     '1_2_6': ['07', '07', '07'],
-        //     '1_1_2_2_9_9': ['09', '09', '09'],
-        //     '1_1_2_2_8_8': ['10', '10', '10']
-        // }
+
         //寿司菜单
         this.recipeList = [
-            // { sushiName: 'basic', picPath: '01', inputFoodId: ['1', '1', '2'], outputSushiId: ['01', '01', '01'] }
             new RecipeData('饭团', '2饭+1苔', '01', ['1', '1', '2'], ['01', '01', '01']),
             new RecipeData('军舰', '1饭+1鲑鱼子', '02', ['1', '3'], ['02', '02', '02']),
             new RecipeData('军舰', '1饭+2苔+1鲑鱼子', '03', ['1', '2', '2', '3'], ['03', '03', '03']),
@@ -46,8 +35,8 @@ export default class SushiMenu extends cc.Component {
             new RecipeData('SPECIAL', ' 4饭+3苔+1鲷+1瓜', '14', ['1', '1', '1', '1', '2', '2', '2', '6', '11'], ['01', '07', '12']),
             new RecipeData('蟹棒寿司', ' 2饭+2苔+1蟹', '15', ['1', '1', '2', '2', '14'], ['15', '15', '15']),
             new RecipeData('玉子烧寿司', ' 1饭+2苔+1玉', '16', ['1', '2', '2', '15'], ['16', '16', '16']),
-            new RecipeData('卷寿司', ' 1饭+1苔+1玉', '17', ['1', '2', '15'], ['17', '17', '17']),
-            new RecipeData('手卷寿司', ' 3饭+2苔+1鯖+1瓜', '18', ['1', '1', '1', '2', '2', '12', '6'], ['none', '18', 'none']),
+            new RecipeData('玉子卷寿司', ' 1饭+1苔+1玉', '17', ['1', '2', '15'], ['17', '17', '17']),
+            new RecipeData('手卷寿司', ' 3饭+2苔+1鳗+1瓜', '18', ['1', '1', '1', '2', '2', '12', '6'], ['none', '18', 'none']),
         ]
 
         this.recipeList.forEach((v, i) => {

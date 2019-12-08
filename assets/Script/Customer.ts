@@ -1,5 +1,6 @@
 import Sushi from "./Sushi";
 import CustomerManager from "./CustomerManager";
+import Utils from "./common/Utils";
 
 const {ccclass, property} = cc._decorator;
 
@@ -47,7 +48,8 @@ export default class Customer extends cc.Component {
         this.sushiPrice = recipe.sushiPrice
         this.label.string = recipe.sushiTips
 
-        cc.loader.loadRes('sushi/' + recipe.picPath, cc.SpriteFrame, (err, spriteFrame) => {
+        Utils.loadResImage(recipe.sushiPicPath, (err, spriteFrame: cc.SpriteFrame) => {
+            console.log(err, spriteFrame)
              this.sushiSprite.spriteFrame = spriteFrame
         })
     }

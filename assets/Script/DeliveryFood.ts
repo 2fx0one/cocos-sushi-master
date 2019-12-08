@@ -1,6 +1,7 @@
 import DeliveryManager from "./DeliveryManager";
 import Food from "./Food";
 import Singleton from "./Singleton";
+import Utils from "./common/Utils";
 
 const {ccclass, property} = cc._decorator;
 
@@ -24,7 +25,7 @@ export default class DeliveryFood extends cc.Component {
         // this.price = food.foodCostPrice
         this.label.string = this.food.foodCostPrice.toString()
 
-        cc.loader.loadRes('foods-small/' + food.picPath, cc.SpriteFrame, (err, spriteFrame) => {
+        Utils.loadResImage(food.foodSmallPicPath, (err, spriteFrame: cc.SpriteFrame) => {
             this.bg.spriteFrame = spriteFrame
         })
 

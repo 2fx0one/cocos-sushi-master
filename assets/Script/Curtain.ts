@@ -1,5 +1,6 @@
 import Singleton from "./Singleton";
 import Food from "./Food";
+import Utils from "./common/Utils";
 
 const {ccclass, property} = cc._decorator;
 
@@ -105,7 +106,7 @@ export default class Curtain extends cc.Component {
         if (this.isCanAddFood()) {
             this.foodInCurtain.push(food)
             let t: cc.Node = this.foods[this.foodIndex++]
-            cc.loader.loadRes('foods-small/' + food.picPath, cc.SpriteFrame, (err, spriteFrame) => {
+            Utils.loadResImage(food.foodSmallPicPath, (err, spriteFrame: cc.SpriteFrame) => {
                 t.getComponent(cc.Sprite).spriteFrame = spriteFrame
             })
         }

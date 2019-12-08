@@ -48,6 +48,7 @@ export default class FoodContainer extends cc.Component {
     // }
 
     clickFood(food: Food) {
+
         Singleton.Instance.game.foodContainerTakeFood(food)
     }
 

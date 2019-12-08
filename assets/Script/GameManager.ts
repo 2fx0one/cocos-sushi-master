@@ -96,10 +96,10 @@ export default class GameManager extends cc.Component {
             this.customerManager.init()
             this.deliveryManager.init(this.foodContainer.foodsInContainMap)
         }, 0.5)
-        this.scheduleOnce(() => {
-            console.log('close shop')
-            this.restaurantClosed()
-        }, 10)
+        // this.scheduleOnce(() => {
+        //     console.log('close shop')
+        //     this.restaurantClosed()
+        // }, 60)
     }
 
     //打烊
@@ -116,7 +116,9 @@ export default class GameManager extends cc.Component {
         // console.log('Singleton.Instance.curtain.foodIndex', Singleton.Instance.curtain.foodsAmount())
 
         if (this.curtain.isCanAddFood()) {
-            //从格子里面拿食物 拿成功了 返回food 放到帘子上
+            cc.loader.loadRes('audio/click', cc.AudioClip, function (err, clip) {
+                var audioID = cc.audioEngine.play(clip, false, 0.5);
+            });            //从格子里面拿食物 拿成功了 返回food 放到帘子上
             this.curtain.addFood(food.tackFood())
         }
     }

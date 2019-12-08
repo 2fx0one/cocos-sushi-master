@@ -1,5 +1,6 @@
 import FoodContainer from "./FoodContainer";
 import FoodData from "./entity/FoodData";
+import Utils from "./common/Utils";
 
 const { ccclass, property } = cc._decorator;
 
@@ -20,28 +21,31 @@ export default class Food extends cc.Component {
 
     public foodName: string = null
     public foodId: string = null
-    public picPath: string = null
+    public foodSmallPicPath: string = null
+    public foodInContainerPicPath: string = null
 
     public foodCostPrice: number //食物购买价格
 
     // LIFE-CYCLE CALLBACKS:
     // private coolDowning = false
 
-    public init(foodContainer: FoodContainer, foodEntity: FoodData) {
+    public init(foodContainer: FoodContainer, foodData: FoodData) {
 
         this.foodContainer = foodContainer
-        this.foodId = foodEntity.foodId
-        this.foodName = foodEntity.foodName
-        this.picPath = foodEntity.picPath
-        this.amount = foodEntity.amount
-        this.foodCostPrice = foodEntity.foodCostPrice
+        this.foodId = foodData.foodId
+        this.foodName = foodData.foodName
+        this.foodSmallPicPath = foodData.foodSmallPicPath
+        this.foodInContainerPicPath = foodData.foodInContainerPicPath
+        this.amount = foodData.amount
+        this.foodCostPrice = foodData.foodCostPrice
         this.updateLabelDisplay()
 
-        cc.loader.loadRes('foods-in-container/' + this.picPath, cc.SpriteFrame, (err, spriteFrame) => {
+        Utils.loadResImage(this.foodInContainerPicPath, (err, spriteFrame: cc.SpriteFrame) => {
             this.getComponentInChildren(cc.Sprite).spriteFrame = spriteFrame
         })
+
         return this
-    }
+    }image
 
     updateLabelDisplay() {
         this.label.string = '' + this.amount
