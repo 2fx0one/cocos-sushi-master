@@ -19,13 +19,15 @@ export default class Sushi extends cc.Component {
     private isMove = true
 
     private conveyor: SushiConveyor = null
-    private sushiIndexInConveyor: string
+    // private sushiIndexInConveyor: string
 
     private speed: number
     private resetX: number
     private resetY: number
 
     setSpriteFrame(img, index) {
+        console.log(this.sushiList)
+        this.sushiList[index].active = true
         Utils.loadResImage(img, (err, spriteFrame: cc.SpriteFrame) => {
             this.sushiList[index].getComponent(cc.Sprite).spriteFrame = spriteFrame
         })
@@ -40,11 +42,15 @@ export default class Sushi extends cc.Component {
         this.sushiName = recipeData.sushiName
         this.amount = recipeData.outputPicPathList.length
 
+        console.log(recipeData.outputPicPathList)
+
         recipeData.outputPicPathList.forEach((img, index) => {
             this.setSpriteFrame(img, index)
         })
 
-        return this
+        this.isMove = true
+
+        return this.resetPosition(-resetX, resetY)
     }
 
     // init(conveyor: Conveyor, index, x, y) {
@@ -86,9 +92,9 @@ export default class Sushi extends cc.Component {
         if (this.amount == 0) {
             return false
         } else {
-            this.amount--
-            let food: cc.Node = this.sushiList.pop()
-            food.destroy()
+            // this.amount--
+            let food: cc.Node = this.sushiList[--this.amount]
+            food.active = false
             return true
         }
     }

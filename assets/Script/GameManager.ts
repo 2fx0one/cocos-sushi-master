@@ -55,7 +55,7 @@ export default class GameManager extends cc.Component {
 
     private userData: GameUserData = null
 
-    private closedCountSecond = 10 //倒计时300秒
+    private closedCountSecond = 300 //倒计时300秒
     onLoad() {
         cc.director.getCollisionManager().enabled = true
         // cc.director.getCollisionManager().enabledDebugDraw = true
