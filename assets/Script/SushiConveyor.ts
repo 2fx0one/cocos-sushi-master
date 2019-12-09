@@ -47,7 +47,9 @@ export default class SushiConveyor extends cc.Component {
 
         sushiNode.parent = this.node
 
-        return sushiNode.getComponent(Sushi).createSushi(this, recipeData, this.speed, this.resetX, 0)
+        let begin = cc.v2(-this.resetX, 0)
+        let end = cc.v2(this.resetX, 0)
+        return sushiNode.getComponent(Sushi).createSushi(this, recipeData, this.speed, begin, end)
 
         // console.log('Chef 做好了 ==>> ' , sushi.sushiId, sushi.sushiName)
         //

@@ -22,8 +22,8 @@ export default class Sushi extends cc.Component {
     // private sushiIndexInConveyor: string
 
     private speed: number
-    private resetX: number
-    private resetY: number
+    private begin: cc.Vec2
+    private end: cc.Vec2
 
     setSpriteFrame(img, index) {
         console.log(this.sushiList)
@@ -33,11 +33,11 @@ export default class Sushi extends cc.Component {
         })
     }
 
-    createSushi(conveyor: SushiConveyor, recipeData: RecipeData, speed, resetX, resetY): Sushi {
+    createSushi(conveyor: SushiConveyor, recipeData: RecipeData, speed, begin: cc.Vec2, end: cc.Vec2): Sushi {
         this.conveyor = conveyor
         this.speed = speed
-        this.resetX = resetX
-        this.resetY = resetY
+        this.begin = begin
+        this.end = end
         this.sushiId = recipeData.sushiId
         this.sushiName = recipeData.sushiName
         this.amount = recipeData.outputPicPathList.length
@@ -49,8 +49,9 @@ export default class Sushi extends cc.Component {
         })
 
         this.isMove = true
+        this.node.setPosition(begin)
 
-        return this.resetPosition(-resetX, resetY)
+        return this
     }
 
     // init(conveyor: Conveyor, index, x, y) {
@@ -61,10 +62,10 @@ export default class Sushi extends cc.Component {
     // }
 
 
-    resetPosition(x, y) {
-        this.node.setPosition(cc.v2(x, y))
-        return this
-    }
+    // resetPosition(x, y) {
+    //     this.node.setPosition(cc.v2(x, y))
+    //     return this
+    // }
 
     takenByCustomer() {
         this.isMove = false
@@ -82,8 +83,8 @@ export default class Sushi extends cc.Component {
     update(dt) {
         if (this.isMove) {
             this.node.x += this.speed
-            if (this.node.x > this.resetX) {
-                this.node.x = -this.resetX
+            if (this.node.x > this.end.x) {
+                this.node.x = this.begin.x
             }
         }
     }
