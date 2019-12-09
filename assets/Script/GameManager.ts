@@ -3,11 +3,9 @@ import Food from "./Food";
 const {ccclass, property} = cc._decorator;
 
 import Singleton from './Singleton'
-import Curtain from "./Curtain";
 import CustomerManager from "./CustomerManager";
 import SushiMenu from "./SushiMenu";
 import SushiChef from "./SushiChef";
-import Conveyor from "./Conveyor";
 import FoodContainer from "./FoodContainer";
 import Sushi from "./Sushi";
 import Customer from "./Customer";
@@ -18,6 +16,8 @@ import Utils from "./common/Utils";
 import DeliveryFood from "./DeliveryFood";
 import GameUserData from "./entity/GameUserData";
 import GlobalConstant from "./common/GlobalConstant";
+import SushiCurtain from "./SushiCurtain";
+import SushiConveyor from "./SushiConveyor";
 
 
 @ccclass
@@ -26,8 +26,8 @@ export default class GameManager extends cc.Component {
     @property(cc.ProgressBar)
     progressBar: cc.ProgressBar = null
 
-    @property(Curtain)
-    curtain: Curtain = null
+    @property(SushiCurtain)
+    curtain: SushiCurtain = null
 
     //顾客管理员
     @property(CustomerManager)
@@ -42,8 +42,8 @@ export default class GameManager extends cc.Component {
     sushichef: SushiChef = null
 
     // 传送带
-    @property(Conveyor)
-    conveyor: Conveyor = null
+    @property(SushiConveyor)
+    conveyor: SushiConveyor = null
 
     @property(FoodContainer)
     foodContainer: FoodContainer = null
@@ -144,12 +144,13 @@ export default class GameManager extends cc.Component {
 
     curtainScrollCompleted(foodInCurtain: string[]) {
         // console.log('sushi complete food Curtain => ', foods)
-        let recipe = this.sushiMenu.getRecipe(foodInCurtain)
-        let sushi: Sushi = this.sushichef.createSushi(recipe);
-        this.conveyor.addSushi(sushi)
+        let recipeData = this.sushiMenu.getRecipe(foodInCurtain)
+
+        this.conveyor.createSushi(this.sushichef.createSushi(recipeData))
+        // this.conveyor.addSushi(sushi)
     }
 
-    CusmtomerManagerGetRandomRecipe(): RecipeData {
+    customerManagerGetRandomRecipe(): RecipeData {
         return this.sushiMenu.getRandomRecipe();
     }
 

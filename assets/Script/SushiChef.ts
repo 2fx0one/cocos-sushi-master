@@ -15,32 +15,33 @@ export default class SushiChef extends cc.Component {
     private sushiPool: cc.NodePool
 
     onLoad() {
-        this.sushiPool = new cc.NodePool()
-        let initCount = 7;
-        for (let i = 0; i < initCount; ++i) {
-            let sushi:cc.Node = cc.instantiate(this.sushiPrefab) // 创建节点
-            this.sushiPool.put(sushi) // 通过 put 接口放入对象池
-        }
+        // this.sushiPool = new cc.NodePool()
+        // let initCount = 7;
+        // for (let i = 0; i < initCount; ++i) {
+        //     let sushi:cc.Node = cc.instantiate(this.sushiPrefab) // 创建节点
+        //     this.sushiPool.put(sushi) // 通过 put 接口放入对象池
+        // }
     }
 
     init() {
 
     }
 
-    createSushi(recipeData: RecipeData): Sushi {
+    createSushi(recipeData: RecipeData): RecipeData {
 
-        const sushiNode: cc.Node = this.sushiPool.size()>0 ? this.sushiPool.get() : cc.instantiate(this.sushiPrefab)
-
-        return sushiNode.getComponent(Sushi).create(recipeData)
+        // const sushiNode: cc.Node = this.sushiPool.size()>0 ? this.sushiPool.get() : cc.instantiate(this.sushiPrefab)
         //
+        // return sushiNode.getComponent(Sushi).create(recipeData)
+
         // console.log('Chef 做好了 ==>> ' , sushi.sushiId, sushi.sushiName)
         //
         // return sushiNode
+        return recipeData
 
     }
 
-    putSushiNodeToPool(node: cc.Node) {
-        this.sushiPool.put(node)
-    }
+    // putSushiNodeToPool(node: cc.Node) {
+    //     this.sushiPool.put(node)
+    // }
 
 }

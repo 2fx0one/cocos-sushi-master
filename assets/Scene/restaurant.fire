@@ -3980,6 +3980,9 @@
       "__id__": 86
     },
     "_enabled": true,
+    "sushiPrefab": {
+      "__uuid__": "07428857-7992-4622-a374-4bd2a4c3b37a"
+    },
     "_id": "08yo5gIBBItot48F1FKBw1"
   },
   {

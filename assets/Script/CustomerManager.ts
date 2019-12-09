@@ -57,9 +57,8 @@ export default class CustomerManager extends cc.Component {
     }
 
     getRandomRecipe(): RecipeData {
-        return Singleton.Instance.game.CusmtomerManagerGetRandomRecipe()
+        return Singleton.Instance.game.customerManagerGetRandomRecipe()
     }
-
 
     // start () {
 

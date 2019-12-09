@@ -5,7 +5,7 @@ import Utils from "./common/Utils";
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class Curtain extends cc.Component {
+export default class SushiCurtain extends cc.Component {
 
     @property([cc.Node])
     foods: cc.Node[] = [];

@@ -1,8 +1,8 @@
 import RecipeData from "./entity/RecipeData";
 import Utils from "./common/Utils";
-import Conveyor from "./Conveyor";
+import SushiConveyor from "./SushiConveyor";
 
-const { ccclass, property } = cc._decorator;
+const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class Sushi extends cc.Component {
@@ -17,8 +17,13 @@ export default class Sushi extends cc.Component {
     private amount: number = null
 
     private isMove = true
-    private conveyor: Conveyor = null
+
+    private conveyor: SushiConveyor = null
     private sushiIndexInConveyor: string
+
+    private speed: number
+    private resetX: number
+    private resetY: number
 
     setSpriteFrame(img, index) {
         Utils.loadResImage(img, (err, spriteFrame: cc.SpriteFrame) => {
@@ -26,8 +31,11 @@ export default class Sushi extends cc.Component {
         })
     }
 
-    create(recipeData: RecipeData): Sushi {
-        console.log(recipeData.outputPicPathList)
+    createSushi(conveyor: SushiConveyor, recipeData: RecipeData, speed, resetX, resetY): Sushi {
+        this.conveyor = conveyor
+        this.speed = speed
+        this.resetX = resetX
+        this.resetY = resetY
         this.sushiId = recipeData.sushiId
         this.sushiName = recipeData.sushiName
         this.amount = recipeData.outputPicPathList.length
@@ -39,11 +47,17 @@ export default class Sushi extends cc.Component {
         return this
     }
 
-    init(conveyor: Conveyor, index, x, y) {
-        this.conveyor = conveyor
-        this.node.parent = conveyor.node
-        this.sushiIndexInConveyor = index
-        return this.resetPosition(x, y)
+    // init(conveyor: Conveyor, index, x, y) {
+    //     this.conveyor = conveyor
+    //     this.node.parent = conveyor.node
+    //     this.sushiIndexInConveyor = index
+    //     return this.resetPosition(x, y)
+    // }
+
+
+    resetPosition(x, y) {
+        this.node.setPosition(cc.v2(x, y))
+        return this
     }
 
     takenByCustomer() {
@@ -52,23 +66,21 @@ export default class Sushi extends cc.Component {
         return this
     }
 
-    resetPosition(x, y) {
-        this.node.setPosition(cc.v2(x, y))
-        return this
-    }
-
-    step(x: number): number {
-        if (this.isMove) {
-            this.node.x += x
-        }
-        return this.node.x
-    }
-
-    // update(dt) {
+    // step(x: number): number {
     //     if (this.isMove) {
-    //         this.node.x += 2
+    //         this.node.x += x
     //     }
+    //     return this.node.x
     // }
+
+    update(dt) {
+        if (this.isMove) {
+            this.node.x += this.speed
+            if (this.node.x > this.resetX) {
+                this.node.x = -this.resetX
+            }
+        }
+    }
 
     takeOne(): boolean {
         if (this.amount == 0) {
@@ -82,8 +94,8 @@ export default class Sushi extends cc.Component {
     }
 
     finished() {
-        this.conveyor.removeSushi(this.sushiIndexInConveyor)
-        this.node.destroy()
+        this.conveyor.removeSushi(this)
+        // this.node.destroy()
     }
 
 }
