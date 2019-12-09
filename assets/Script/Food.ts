@@ -52,10 +52,20 @@ export default class Food extends cc.Component {
     }
 
     onclick(event, data) {
-        console.log(data)
-        console.log('this.amount', this.amount)
+        // console.log(data)
+        // console.log('this.amount', this.amount)
+        // cc.loader.loadRes('audio/clickFoodInContainer', cc.AudioClip, function (err, clip) {
+        //     cc.audioEngine.play(clip, false, 1);
+        // });
         if (this.amount > 0) {
+            cc.loader.loadRes('audio/clickFoodInContainer', cc.AudioClip, function (err, clip) {
+                cc.audioEngine.play(clip, false, 1);
+            });
             this.foodContainer.clickFood(this)
+        } else {
+            cc.loader.loadRes('audio/noFood', cc.AudioClip, function (err, clip) {
+                cc.audioEngine.play(clip, false, 1);
+            });
         }
     }
 

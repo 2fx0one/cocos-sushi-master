@@ -26,7 +26,7 @@ export default class Sushi extends cc.Component {
     private end: cc.Vec2
 
     setSpriteFrame(img, index) {
-        console.log(this.sushiList)
+        // console.log(this.sushiList)
         this.sushiList[index].active = true
         Utils.loadResImage(img, (err, spriteFrame: cc.SpriteFrame) => {
             this.sushiList[index].getComponent(cc.Sprite).spriteFrame = spriteFrame

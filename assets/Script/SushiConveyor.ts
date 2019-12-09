@@ -36,9 +36,9 @@ export default class SushiConveyor extends cc.Component {
 
     init(speed: number) {
         this.speed = speed
-        this.animation = this.node.getComponentInChildren(cc.Animation)
-        this.animState = this.animation.play('conveyor');
-        this.animState.speed = this.speed * 0.5
+        // this.animation = this.node.getComponentInChildren(cc.Animation)
+        // this.animState = this.animation.play('conveyor');
+        // this.animState.speed = this.speed * 0.5
     }
 
     createSushi(recipeData: RecipeData): Sushi {

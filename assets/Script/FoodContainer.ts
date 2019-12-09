@@ -47,9 +47,7 @@ export default class FoodContainer extends cc.Component {
     // }
 
     clickFood(food: Food) {
-        cc.loader.loadRes('audio/clickFoodInContainer', cc.AudioClip, function (err, clip) {
-            cc.audioEngine.play(clip, false, 1);
-        });
+
         Singleton.Instance.game.foodContainerTakeFood(food)
     }
 

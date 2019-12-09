@@ -94,7 +94,7 @@ export default class GameManager extends cc.Component {
 
         this.scheduleOnce(() => {
             this.foodContainer.init(foodDataList)
-            this.curtain.init(2)
+            this.curtain.init(3)
             this.sushiMenu.init()
             this.customerManager.init()
             this.conveyor.init(2)
@@ -105,10 +105,13 @@ export default class GameManager extends cc.Component {
     }
 
     restaurantOpening() {
+        // cc.loader.loadRes('audio/fair', cc.AudioClip, function (err, clip) {
+        //     cc.audioEngine.play(clip, true, 0.4)
+        // })
         let closedCount = 0
         let progressInterval = 1 / this.closedCountSecond
         let callback = () => {
-            console.log('tik tak')
+            // console.log('tik tak')
             if (closedCount == this.closedCountSecond) {
                 this.unschedule(callback)
                 this.restaurantClosed()
