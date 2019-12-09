@@ -119,6 +119,9 @@ export default class SushiCurtain extends cc.Component {
     }
 
     onClickFoodBack(event, data) {
+        cc.loader.loadRes('audio/returnFood', cc.AudioClip, function (err, clip) {
+            cc.audioEngine.play(clip, false, 1);
+        });
         Singleton.Instance.game.curtainBackFood(this.popLastFood())
     }
 
