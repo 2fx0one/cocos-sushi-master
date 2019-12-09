@@ -74,9 +74,8 @@ export default class Customer extends cc.Component {
     eatUp() {
         if (!this.eatOneSushi()) {
             //盘子空了
-            this.sushi.node.destroy()
+            this.sushi.finished()
             this.sushi = null
-            // this.makeOrder()
             this.customerManager.customerFinished(this)
         }
     }
@@ -90,14 +89,14 @@ export default class Customer extends cc.Component {
         }
     }
 
+    //从传送带上拿去食物
     onCollisionEnter(other: cc.BoxCollider, self: cc.BoxCollider) {
         console.log('Customer on collision enter', this.sushi);
         let sushi: Sushi = other.node.getComponent(Sushi)
         if (!this.sushi && this.isMySushi(sushi)) {
 
-            sushi.stopMove()
+            this.sushi = sushi.takenByCustomer()
 
-            this.sushi = sushi
             this.scheduleOnce(()=> {
                 this.eatOneSushi()
             }, 1)

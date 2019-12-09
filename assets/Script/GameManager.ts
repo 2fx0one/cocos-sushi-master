@@ -97,14 +97,16 @@ export default class GameManager extends cc.Component {
             this.curtain.init(2)
             this.sushiMenu.init()
             this.customerManager.init()
+            this.conveyor.init(2)
             this.deliveryManager.init(this.foodContainer.foodsInContainMap)
             this.restaurantOpening()
         }, 1)
 
     }
+
     restaurantOpening() {
         let closedCount = 0
-        let progressInterval = 1/this.closedCountSecond
+        let progressInterval = 1 / this.closedCountSecond
         let callback = () => {
             console.log('tik tak')
             if (closedCount == this.closedCountSecond) {
@@ -112,10 +114,11 @@ export default class GameManager extends cc.Component {
                 this.restaurantClosed()
             }
             this.progressBar.progress += progressInterval
-            closedCount ++
+            closedCount++
         }
         this.schedule(callback, 1)
     }
+
     //打烊
     restaurantClosed() {
         console.log('restaurantClosed')
@@ -128,13 +131,10 @@ export default class GameManager extends cc.Component {
 
     foodContainerTakeFood(food: Food) {
         // 点击食物，首先帘子需要有空位，且帘子卷的动画已经结束才行。
-        // console.log('Singleton.Instance.curtain.foodIndex', Singleton.Instance.curtain.foodsAmount())
-
         if (this.curtain.isCanAddFood()) {
-            cc.loader.loadRes('audio/click', cc.AudioClip, function (err, clip) {
-                var audioID = cc.audioEngine.play(clip, false, 0.5);
-            });            //从格子里面拿食物 拿成功了 返回food 放到帘子上
-            this.curtain.addFood(food.tackFood())
+            //从格子里面拿食物 拿成功了 返回food 放到帘子上
+            let foodTaken = food.tackFood();
+            this.curtain.addFood(foodTaken)
         }
     }
 

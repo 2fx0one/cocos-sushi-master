@@ -31,7 +31,7 @@ export default class SushiChef extends cc.Component {
 
         const sushiNode: cc.Node = this.sushiPool.size()>0 ? this.sushiPool.get() : cc.instantiate(this.sushiPrefab)
 
-        return sushiNode.getComponent(Sushi).init(recipeData)
+        return sushiNode.getComponent(Sushi).create(recipeData)
         //
         // console.log('Chef 做好了 ==>> ' , sushi.sushiId, sushi.sushiName)
         //

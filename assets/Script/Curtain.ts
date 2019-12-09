@@ -22,7 +22,7 @@ export default class Curtain extends cc.Component {
     private anim: cc.Animation = null
     private animState: cc.AnimationState = null
 
-    private canAddFood: boolean = true
+    private sushiCurtainScrollToTail: boolean = true
 
     private speed: number = 1
 
@@ -51,10 +51,13 @@ export default class Curtain extends cc.Component {
         }
 
         if (this.animState == null || this.animState.isPlaying == false) {
+            cc.loader.loadRes('audio/CurtainScroll', cc.AudioClip, function (err, clip) {
+                cc.audioEngine.play(clip, false, 1);
+            });
             this.animState = this.anim.play('curtain');
             // console.log(this.animState.speed)
             this.animState.speed = this.speed
-            this.canAddFood = false
+            this.sushiCurtainScrollToTail = false
         }
     }
 
@@ -83,7 +86,7 @@ export default class Curtain extends cc.Component {
         // console.log('sushiCompleted!')
 
         //可添加食物状态
-        this.canAddFood = true
+        this.sushiCurtainScrollToTail = true
 
         this.foods.forEach((v, i) => {
             v.getComponent(cc.Sprite).spriteFrame = null
@@ -98,12 +101,15 @@ export default class Curtain extends cc.Component {
     }
 
     isCanAddFood(): boolean {
-        //帘子上食物小于9, 卷动动画已经结束
-        return this.foodIndex < 9 && this.canAddFood
+        //帘子上食物小于9, 卷动动画已经到末尾
+        return this.foodIndex < 9 && this.sushiCurtainScrollToTail
     }
 
     addFood(food: Food) {
         if (this.isCanAddFood()) {
+            cc.loader.loadRes('audio/addFoodToCurtain', cc.AudioClip, function (err, clip) {
+                cc.audioEngine.play(clip, false, 1);
+            });
             this.foodInCurtain.push(food)
             let t: cc.Node = this.foods[this.foodIndex++]
             Utils.loadResImage(food.foodSmallPicPath, (err, spriteFrame: cc.SpriteFrame) => {

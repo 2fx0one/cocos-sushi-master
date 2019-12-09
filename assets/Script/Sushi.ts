@@ -1,5 +1,6 @@
 import RecipeData from "./entity/RecipeData";
 import Utils from "./common/Utils";
+import Conveyor from "./Conveyor";
 
 const { ccclass, property } = cc._decorator;
 
@@ -10,19 +11,23 @@ export default class Sushi extends cc.Component {
     sushiList: cc.Node[] = []
 
     public sushiId: string = null
+
     public sushiName: string = null
 
     private amount: number = null
 
     private isMove = true
+    private conveyor: Conveyor = null
+    private sushiIndexInConveyor: string
 
     setSpriteFrame(img, index) {
         Utils.loadResImage(img, (err, spriteFrame: cc.SpriteFrame) => {
-            this.getComponentInChildren(cc.Sprite).spriteFrame = spriteFrame
+            this.sushiList[index].getComponent(cc.Sprite).spriteFrame = spriteFrame
         })
     }
 
-    init(recipeData: RecipeData): Sushi {
+    create(recipeData: RecipeData): Sushi {
+        console.log(recipeData.outputPicPathList)
         this.sushiId = recipeData.sushiId
         this.sushiName = recipeData.sushiName
         this.amount = recipeData.outputPicPathList.length
@@ -34,16 +39,36 @@ export default class Sushi extends cc.Component {
         return this
     }
 
-    stopMove() {
-        this.isMove = false
-        this.node.y += 50
+    init(conveyor: Conveyor, index, x, y) {
+        this.conveyor = conveyor
+        this.node.parent = conveyor.node
+        this.sushiIndexInConveyor = index
+        return this.resetPosition(x, y)
     }
 
-    update(dt) {
-        if (this.isMove) {
-            this.node.x += 1
-        }
+    takenByCustomer() {
+        this.isMove = false
+        this.node.y += 50
+        return this
     }
+
+    resetPosition(x, y) {
+        this.node.setPosition(cc.v2(x, y))
+        return this
+    }
+
+    step(x: number): number {
+        if (this.isMove) {
+            this.node.x += x
+        }
+        return this.node.x
+    }
+
+    // update(dt) {
+    //     if (this.isMove) {
+    //         this.node.x += 2
+    //     }
+    // }
 
     takeOne(): boolean {
         if (this.amount == 0) {
@@ -54,6 +79,11 @@ export default class Sushi extends cc.Component {
             food.destroy()
             return true
         }
+    }
+
+    finished() {
+        this.conveyor.removeSushi(this.sushiIndexInConveyor)
+        this.node.destroy()
     }
 
 }
