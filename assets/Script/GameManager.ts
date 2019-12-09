@@ -23,6 +23,8 @@ import GlobalConstant from "./common/GlobalConstant";
 @ccclass
 export default class GameManager extends cc.Component {
 
+    @property(cc.ProgressBar)
+    progressBar: cc.ProgressBar = null
 
     @property(Curtain)
     curtain: Curtain = null
@@ -53,6 +55,7 @@ export default class GameManager extends cc.Component {
 
     private userData: GameUserData = null
 
+    private closedCountSecond = 10 //倒计时300秒
     onLoad() {
         cc.director.getCollisionManager().enabled = true
         // cc.director.getCollisionManager().enabledDebugDraw = true
@@ -95,15 +98,27 @@ export default class GameManager extends cc.Component {
             this.sushiMenu.init()
             this.customerManager.init()
             this.deliveryManager.init(this.foodContainer.foodsInContainMap)
-        }, 0.5)
-        // this.scheduleOnce(() => {
-        //     console.log('close shop')
-        //     this.restaurantClosed()
-        // }, 60)
-    }
+            this.restaurantOpening()
+        }, 1)
 
+    }
+    restaurantOpening() {
+        let closedCount = 0
+        let progressInterval = 1/this.closedCountSecond
+        let callback = () => {
+            console.log('tik tak')
+            if (closedCount == this.closedCountSecond) {
+                this.unschedule(callback)
+                this.restaurantClosed()
+            }
+            this.progressBar.progress += progressInterval
+            closedCount ++
+        }
+        this.schedule(callback, 1)
+    }
     //打烊
     restaurantClosed() {
+        console.log('restaurantClosed')
         this.restaurantOpen = false
     }
 
