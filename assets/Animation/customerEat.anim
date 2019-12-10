@@ -9,36 +9,9 @@
   "wrapMode": 0,
   "curveData": {
     "paths": {
-      "eatSprite": {
+      "Customer/bg": {
         "props": {
-          "scaleX": [
-            {
-              "frame": 0,
-              "value": 0.248
-            },
-            {
-              "frame": 0.5,
-              "value": 0.364
-            },
-            {
-              "frame": 1,
-              "value": 0.312
-            }
-          ],
-          "scaleY": [
-            {
-              "frame": 0,
-              "value": 0.103
-            },
-            {
-              "frame": 0.5,
-              "value": 0.162
-            },
-            {
-              "frame": 1,
-              "value": 0.144
-            }
-          ]
+          "scaleX": []
         }
       }
     }

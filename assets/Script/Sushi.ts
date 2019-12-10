@@ -67,9 +67,9 @@ export default class Sushi extends cc.Component {
     //     return this
     // }
 
-    takenByCustomer() {
+    takenByCustomer(position: cc.Vec2) {
         this.isMove = false
-        this.node.y += 50
+        this.node.position = position
         return this
     }
 

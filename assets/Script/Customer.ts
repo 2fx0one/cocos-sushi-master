@@ -17,6 +17,12 @@ export default class Customer extends cc.Component {
     @property(cc.Sprite)
     sushiSprite: cc.Sprite = null
 
+    @property(cc.Node)
+    customerNode: cc.Node = null
+
+    @property(cc.Node)
+    goldNode: cc.Node = null
+
     // private progressBar: cc.ProgressBar = null
 
     private sushi: Sushi = null
@@ -25,20 +31,23 @@ export default class Customer extends cc.Component {
 
     sushiPrice: number
 
-    private anim: cc.Animation = null
+    private eatAnim: cc.Animation = null
+    // private eatAnimState: cc.AnimationState = null
 
     private customerManager: CustomerManager = null
 
-    // private sushiMenu: SushiMenu = null
-    // onLoad() {
-    //     this.init()
-    // }
 
     init(customerManager: CustomerManager) {
         this.customerManager = customerManager
         // this.progressBar = this.progressNode.getComponent(cc.ProgressBar)
-        this.anim = this.getComponent(cc.Animation);
-        this.makeOrder()
+        this.eatAnim = this.getComponent(cc.Animation);
+
+        return this.resetState().makeOrder()
+    }
+
+    resetState() {
+        this.goldNode.active = false
+        this.customerNode.active = true
         return this
     }
 
@@ -50,8 +59,9 @@ export default class Customer extends cc.Component {
 
         Utils.loadResImage(recipe.sushiPicPath, (err, spriteFrame: cc.SpriteFrame) => {
             console.log(err, spriteFrame)
-             this.sushiSprite.spriteFrame = spriteFrame
+            this.sushiSprite.spriteFrame = spriteFrame
         })
+        return this;
     }
 
     start() {
@@ -60,10 +70,10 @@ export default class Customer extends cc.Component {
     update(dt) {
         // console.log(dt)
         // console.log(this.progressBar.progress)
-        if (this.progressBar.progress > 1) {
-            this.progressBar.progress = 0
-        }
-        this.progressBar.progress += dt
+        // if (this.progressBar.progress > 1) {
+        //     this.progressBar.progress = 0
+        // }
+        // this.progressBar.progress += dt
     }
 
     isMySushi(sushi: Sushi) {
@@ -76,13 +86,24 @@ export default class Customer extends cc.Component {
             //盘子空了
             this.sushi.finished()
             this.sushi = null
-            this.customerManager.customerFinished(this)
+            this.payGold()
         }
+    }
+
+    payGold() {
+        this.goldNode.active = true
+        this.customerNode.active = false
+
+    }
+
+    clickGold() {
+        console.log('clickGold')
+        this.customerManager.customerFinished(this)
     }
 
     eatOneSushi(): boolean {
         if (this.sushi.takeOne()) {
-            this.anim.play('customerEat')
+            this.eatAnim.play('customerEat')
             return true
         } else {
             return false
@@ -91,13 +112,15 @@ export default class Customer extends cc.Component {
 
     //从传送带上拿去食物
     onCollisionEnter(other: cc.BoxCollider, self: cc.BoxCollider) {
-        console.log('Customer on collision enter', this.sushi);
+        // console.log('Customer on collision enter', this.sushi);
         let sushi: Sushi = other.node.getComponent(Sushi)
-        if (!this.sushi && this.isMySushi(sushi)) {
+        if (this.customerNode.active && !this.sushi && this.isMySushi(sushi)) {
 
-            this.sushi = sushi.takenByCustomer()
+            let pos = cc.v2(this.node.position.x, this.node.position.y - 70)
 
-            this.scheduleOnce(()=> {
+            this.sushi = sushi.takenByCustomer(pos)
+
+            this.scheduleOnce(() => {
                 this.eatOneSushi()
             }, 1)
             // setTimeout(()=>{

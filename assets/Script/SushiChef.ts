@@ -12,7 +12,7 @@ export default class SushiChef extends cc.Component {
     @property(cc.Prefab)
     sushiPrefab: cc.Prefab = null
 
-    private sushiPool: cc.NodePool
+    // private sushiPool: cc.NodePool
 
     onLoad() {
         // this.sushiPool = new cc.NodePool()

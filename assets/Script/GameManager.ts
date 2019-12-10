@@ -56,7 +56,13 @@ export default class GameManager extends cc.Component {
     private userData: GameUserData = null
 
     private closedCountSecond = 300 //倒计时300秒
+
+    private currentBgAudio = null
+
     onLoad() {
+
+        console.log(cc.director.getWinSize())
+        // cc.director.getWinSize().height
         cc.director.getCollisionManager().enabled = true
         // cc.director.getCollisionManager().enabledDebugDraw = true
 
@@ -105,9 +111,9 @@ export default class GameManager extends cc.Component {
     }
 
     restaurantOpening() {
-        // cc.loader.loadRes('audio/fair', cc.AudioClip, function (err, clip) {
-        //     cc.audioEngine.play(clip, true, 0.4)
-        // })
+        cc.loader.loadRes('audio/fair', cc.AudioClip,  (err, clip) => {
+            this.currentBgAudio = cc.audioEngine.play(clip, true, 0.4)
+        })
         let closedCount = 0
         let progressInterval = 1 / this.closedCountSecond
         let callback = () => {
@@ -168,7 +174,7 @@ export default class GameManager extends cc.Component {
             let y = customer.node.y
             this.scheduleOnce(() => {
                 this.customerManager.createCustomer(x, y)
-            }, Utils.getRandomInt(1, 4))
+            }, Utils.getRandomInt(1, 5))
         } else {
             //若打烊了，查看用户是否都走了
             if (this.customerManager.customerAmount == 0) {
