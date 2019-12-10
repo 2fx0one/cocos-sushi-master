@@ -32,7 +32,7 @@ export default class CustomerManager extends cc.Component {
     }
 
     init() {
-        for (let i = -420; i <= 500; i += 150) {
+        for (let i = -490; i <= 500; i += 140) {
             this.createCustomer(i, 180)
         }
 

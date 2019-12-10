@@ -51,6 +51,11 @@ export default class GameManager extends cc.Component {
     @property(DeliveryManager)
     deliveryManager: DeliveryManager = null
 
+    @property(cc.Label)
+    scoreLabel: cc.Label = null
+
+    private score: number = 0
+
     public restaurantOpen: boolean = true
 
     private userData: GameUserData = null
@@ -58,6 +63,8 @@ export default class GameManager extends cc.Component {
     private closedCountSecond = 300 //倒计时300秒
 
     private currentBgAudio = null
+
+
 
     onLoad() {
 
@@ -96,6 +103,8 @@ export default class GameManager extends cc.Component {
             new FoodData(450, 250, "虾", "13", '13', 10, 10),
             new FoodData(450, 150, "蟹棒", "14", '14', 10, 10),
             new FoodData(450, 50, "玉子", "15", '15', 10, 10),
+            new FoodData(450, 50, "玉子", "16", '16', 10, 10),
+            new FoodData(450, 50, "玉子", "17", '17', 10, 10),
         ]
 
         this.scheduleOnce(() => {
@@ -112,7 +121,7 @@ export default class GameManager extends cc.Component {
 
     restaurantOpening() {
         cc.loader.loadRes('audio/fair', cc.AudioClip,  (err, clip) => {
-            this.currentBgAudio = cc.audioEngine.play(clip, true, 0.4)
+            // this.currentBgAudio = cc.audioEngine.play(clip, true, 0.4)
         })
         let closedCount = 0
         let progressInterval = 1 / this.closedCountSecond
@@ -163,10 +172,19 @@ export default class GameManager extends cc.Component {
         return this.sushiMenu.getRandomRecipe();
     }
 
+    updateScore(gold: number) {
+        this.score += gold
+        this.scoreLabel.string = 'Score: '+ this.score.toString()
+    }
+
     customerFinished(customer: Customer) {
 
+        cc.loader.loadRes('audio/getGold', cc.AudioClip,  (err, clip) => {
+            cc.audioEngine.play(clip, false, 0.4)
+        })
         //积分
-        this.userData.gold += customer.sushiPrice
+        this.updateScore(customer.sushiPrice)
+        // this.userData.gold += customer.sushiPrice
 
         //是否打烊就继续
         if (Singleton.Instance.game.restaurantOpen) {
@@ -188,11 +206,17 @@ export default class GameManager extends cc.Component {
 
     callDelivery() {
         console.log('call')
-        this.deliveryManager.showDeliveryWin()
+        this.deliveryManager.showDeliveryWin(this.score)
     }
 
     deliveryFood(deliveryFood: DeliveryFood, type: string) {
         deliveryFood.notify()
+        cc.loader.loadRes('audio/call', cc.AudioClip,  (err, clip) => {
+            cc.audioEngine.play(clip, false, 0.4)
+        })
+
+        this.score -= deliveryFood.foodCostPrice
+
         if (type == GlobalConstant.DELIVERY_TYPE_FREE) {
             this.scheduleOnce(() => {
                 deliveryFood.delivery()

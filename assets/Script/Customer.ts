@@ -122,7 +122,7 @@ export default class Customer extends cc.Component {
 
             this.scheduleOnce(() => {
                 this.eatOneSushi()
-            }, 1)
+            }, 0.5)
             // setTimeout(()=>{
             // }, 500)
         }

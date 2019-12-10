@@ -14,7 +14,7 @@ export default class Sushi extends cc.Component {
 
     public sushiName: string = null
 
-    private amount: number = null
+    // private foodAmount: number = 0
 
     private isMove = true
 
@@ -25,12 +25,16 @@ export default class Sushi extends cc.Component {
     private begin: cc.Vec2
     private end: cc.Vec2
 
-    setSpriteFrame(img, index) {
-        // console.log(this.sushiList)
-        this.sushiList[index].active = true
-        Utils.loadResImage(img, (err, spriteFrame: cc.SpriteFrame) => {
-            this.sushiList[index].getComponent(cc.Sprite).spriteFrame = spriteFrame
-        })
+    createOnePieceSushi(img, index) {
+        if (img) {
+            // this.foodAmount++
+            this.sushiList[index].active = true
+            Utils.loadResImage(img, (err, spriteFrame: cc.SpriteFrame) => {
+                this.sushiList[index].getComponent(cc.Sprite).spriteFrame = spriteFrame
+            })
+        } else {
+            this.sushiList[index].active = false
+        }
     }
 
     createSushi(conveyor: SushiConveyor, recipeData: RecipeData, speed, begin: cc.Vec2, end: cc.Vec2): Sushi {
@@ -40,12 +44,14 @@ export default class Sushi extends cc.Component {
         this.end = end
         this.sushiId = recipeData.sushiId
         this.sushiName = recipeData.sushiName
-        this.amount = recipeData.outputPicPathList.length
 
+        // this.foodAmount = 0
+
+        // let outputPicPathList = recipeData.outputPicPathList.filter(v => v);
         console.log(recipeData.outputPicPathList)
 
         recipeData.outputPicPathList.forEach((img, index) => {
-            this.setSpriteFrame(img, index)
+            this.createOnePieceSushi(img, index)
         })
 
         this.isMove = true
@@ -90,14 +96,25 @@ export default class Sushi extends cc.Component {
     }
 
     takeOne(): boolean {
-        if (this.amount == 0) {
-            return false
-        } else {
-            // this.amount--
-            let food: cc.Node = this.sushiList[--this.amount]
-            food.active = false
-            return true
+
+        for (let i = 0; i < this.sushiList.length; i++) {
+            let food: cc.Node = this.sushiList[i]
+            if (food.active == true) {
+                food.active = false
+                return true
+            }
         }
+
+        return false
+
+        // if (this.foodAmount == 0) {
+        //     return false
+        // } else {
+        //     // this.foodAmount--
+        //     let food: cc.Node = this.sushiList[--this.foodAmount]
+        //     food.active = false
+        //     return true
+        // }
     }
 
     finished() {

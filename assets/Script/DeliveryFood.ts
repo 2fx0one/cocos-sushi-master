@@ -11,7 +11,10 @@ export default class DeliveryFood extends cc.Component {
     private deliveryManager: DeliveryManager = null
 
     @property(cc.Sprite)
-    bg: cc.Sprite = null
+    foodSprite: cc.Sprite = null
+
+    @property(cc.Button)
+    button: cc.Button = null
 
     @property(cc.Label)
     label: cc.Label = null
@@ -19,16 +22,21 @@ export default class DeliveryFood extends cc.Component {
     // private price: number = null
     private food: Food = null
 
+    foodCostPrice: number = null
+
+
+
     init(deliveryManager: DeliveryManager, food: Food) {
         this.deliveryManager = deliveryManager;
         this.food = food
+        this.foodCostPrice = food.foodCostPrice
         // this.price = food.foodCostPrice
-        this.label.string = this.food.foodCostPrice.toString()
+        this.label.string = '$ ' + this.food.foodCostPrice.toString()
 
         Utils.loadResImage(food.foodSmallPicPath, (err, spriteFrame: cc.SpriteFrame) => {
-            this.bg.spriteFrame = spriteFrame
+            this.foodSprite.spriteFrame = spriteFrame
         })
-
+        this.button.interactable = true
         return this;
     }
 
@@ -40,8 +48,15 @@ export default class DeliveryFood extends cc.Component {
         this.food.deliveryNotify()
     }
     delivery() {
-        console.log('delivery')
+        // console.log('delivery')
+        cc.loader.loadRes('audio/deliveryArrival', cc.AudioClip,  (err, clip) => {
+            cc.audioEngine.play(clip, false, 0.4)
+        })
         this.food.deliveryFood(10)
 
+    }
+
+    checkBtnInteractable(score: number) {
+        this.button.interactable = score >= this.food.foodCostPrice
     }
 }

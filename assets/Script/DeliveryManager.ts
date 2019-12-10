@@ -19,6 +19,7 @@ export default class DeliveryManager extends cc.Component {
     confirmNode: cc.Node = null
 
     private currentDeliveryFood: DeliveryFood = null
+    private deliveryFoodList: DeliveryFood[] = []
 
     onLoad() {
         // [0,1].forEach(()=>{
@@ -30,7 +31,7 @@ export default class DeliveryManager extends cc.Component {
 
         let data = Object.keys(foodsInContainMap).map(k => foodsInContainMap[k]).concat()
 
-        data.forEach((v, i) => this.createDeliveryFood(v))
+        this.deliveryFoodList = data.map(v => this.createDeliveryFood(v))
     }
 
     private createDeliveryFood(food: Food) {
@@ -46,24 +47,24 @@ export default class DeliveryManager extends cc.Component {
     }
 
     clickClose() {
-        this.closeDeliveryWin()
+        this.closeDeliveryWin(null)
     }
 
     clickConfirm(event, data) {
         // console.log(data)
         this.closeConfirmWin()
-        switch (data) {
-            case GlobalConstant.DELIVERY_TYPE_FREE:
-                Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, data)
-                return this.closeDeliveryWin()
-            case GlobalConstant.DELIVERY_TYPE_EXPRESS:
-                Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, data)
-                return this.closeDeliveryWin()
-            case 'close':
-                return
-            default:
-                return
-        }
+        return this.closeDeliveryWin(data)
+        // switch (data) {
+        //     case GlobalConstant.DELIVERY_TYPE_FREE:
+        //         Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, data)
+        //     case GlobalConstant.DELIVERY_TYPE_EXPRESS:
+        //         Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, data)
+        //         return this.closeDeliveryWin()
+        //     case 'close':
+        //         return
+        //     default:
+        //         return
+        // }
     }
 
     //
@@ -80,13 +81,17 @@ export default class DeliveryManager extends cc.Component {
         this.currentDeliveryFood = null
     }
 
-    showDeliveryWin() {
+    showDeliveryWin(score: number) {
         this.node.active = true
+        this.deliveryFoodList.forEach(v => v.checkBtnInteractable(score))
         this.reset()
     }
 
-    closeDeliveryWin() {
+    closeDeliveryWin(data) {
         this.node.active = false
+        if (data) {
+            Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, data)
+        }
     }
 
     showConfirmWin(position) {
