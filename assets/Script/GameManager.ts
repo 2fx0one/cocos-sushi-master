@@ -172,7 +172,7 @@ export default class GameManager extends cc.Component {
         return this.sushiMenu.getRandomRecipe();
     }
 
-    updateScore(gold: number) {
+    plusScore(gold: number) {
         this.score += gold
         this.scoreLabel.string = 'Score: '+ this.score.toString()
     }
@@ -183,7 +183,7 @@ export default class GameManager extends cc.Component {
             cc.audioEngine.play(clip, false, 0.4)
         })
         //积分
-        this.updateScore(customer.sushiPrice)
+        this.plusScore(customer.sushiPrice)
         // this.userData.gold += customer.sushiPrice
 
         //是否打烊就继续
@@ -215,7 +215,7 @@ export default class GameManager extends cc.Component {
             cc.audioEngine.play(clip, false, 0.4)
         })
 
-        this.score -= deliveryFood.foodCostPrice
+        this.plusScore(-deliveryFood.foodCostPrice)
 
         if (type == GlobalConstant.DELIVERY_TYPE_FREE) {
             this.scheduleOnce(() => {

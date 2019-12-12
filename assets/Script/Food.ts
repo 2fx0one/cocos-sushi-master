@@ -2,7 +2,7 @@ import FoodContainer from "./FoodContainer";
 import FoodData from "./entity/FoodData";
 import Utils from "./common/Utils";
 
-const { ccclass, property } = cc._decorator;
+const {ccclass, property} = cc._decorator;
 
 
 @ccclass
@@ -11,10 +11,12 @@ export default class Food extends cc.Component {
     @property(cc.Label)
     label: cc.Label = null;
 
+
     @property(cc.ProgressBar)
     progressBar: cc.ProgressBar = null
-    // @property
-    // text: string = 'hello';
+
+    // @property(cc.Button)
+    // button: cc.Button = null;
 
     private foodContainer: FoodContainer = null
     private amount: number = null
@@ -45,7 +47,9 @@ export default class Food extends cc.Component {
         })
 
         return this
-    }image
+    }
+
+    image
 
     updateLabelDisplay() {
         this.label.string = '' + this.amount
@@ -77,8 +81,11 @@ export default class Food extends cc.Component {
 
     subtractAmonut(amount: number) {
         this.amount -= amount
-        // console.log('subtract', this.amount)
         this.updateLabelDisplay()
+        // if(this.amount == 0) {
+        //     this.button.interactable = false
+        // }
+        // console.log('subtract', this.amount)
     }
 
     // 拿食物
@@ -99,10 +106,11 @@ export default class Food extends cc.Component {
         this.progressBar.progress = 1
     }
 
-    // 外卖食物
+    // 外卖食物送到
     deliveryFood(amount: number) {
         this.addAmonut(amount)
         this.progressBar.node.active = false
+        // this.node.color = cc.Color.GRAY
         return this
 
     }
