@@ -217,11 +217,13 @@ export default class GameManager extends cc.Component {
 
         this.plusScore(-deliveryFood.foodCostPrice)
 
+        let deliveryCost = -5
         if (type == GlobalConstant.DELIVERY_TYPE_FREE) {
             this.scheduleOnce(() => {
                 deliveryFood.delivery()
             }, 5)
         } else if (type == GlobalConstant.DELIVERY_TYPE_EXPRESS) {
+            this.plusScore(deliveryCost)
             this.scheduleOnce(() => {
                 deliveryFood.delivery()
             }, 1)
