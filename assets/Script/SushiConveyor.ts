@@ -8,8 +8,8 @@ const {ccclass, property} = cc._decorator;
 export default class SushiConveyor extends cc.Component {
 
 
-    private sushiMap: { [key: number]: Sushi } = {}
-    private sushiAmount: number = 0
+    // private sushiMap: { [key: number]: Sushi } = {}
+    private sushiAmount: number = 10
 
     private speed: number
     private resetX: number = 700

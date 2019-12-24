@@ -65,7 +65,6 @@ export default class GameManager extends cc.Component {
     private currentBgAudio = null
 
 
-
     onLoad() {
 
         console.log(cc.director.getWinSize())
@@ -120,7 +119,7 @@ export default class GameManager extends cc.Component {
     }
 
     restaurantOpening() {
-        cc.loader.loadRes('audio/fair', cc.AudioClip,  (err, clip) => {
+        cc.loader.loadRes('audio/fair', cc.AudioClip, (err, clip) => {
             // this.currentBgAudio = cc.audioEngine.play(clip, true, 0.4)
         })
         let closedCount = 0
@@ -172,14 +171,18 @@ export default class GameManager extends cc.Component {
         return this.sushiMenu.getRandomRecipe();
     }
 
+    enoughScore(gold: number): boolean {
+        return this.score >= gold
+    }
+
     plusScore(gold: number) {
         this.score += gold
-        this.scoreLabel.string = 'Score: '+ this.score.toString()
+        this.scoreLabel.string = 'Score: ' + this.score.toString()
     }
 
     customerFinished(customer: Customer) {
 
-        cc.loader.loadRes('audio/getGold', cc.AudioClip,  (err, clip) => {
+        cc.loader.loadRes('audio/getGold', cc.AudioClip, (err, clip) => {
             cc.audioEngine.play(clip, false, 0.4)
         })
         //积分
@@ -209,24 +212,13 @@ export default class GameManager extends cc.Component {
         this.deliveryManager.showDeliveryWin(this.score)
     }
 
-    deliveryFood(deliveryFood: DeliveryFood, type: string) {
-        deliveryFood.notify()
-        cc.loader.loadRes('audio/call', cc.AudioClip,  (err, clip) => {
-            cc.audioEngine.play(clip, false, 0.4)
-        })
+    deliveryFood(deliveryFood: DeliveryFood, deliveryCost: number, deliveryFoodDelay: number) {
 
-        this.plusScore(-deliveryFood.foodCostPrice)
 
-        let deliveryCost = -5
-        if (type == GlobalConstant.DELIVERY_TYPE_FREE) {
-            this.scheduleOnce(() => {
-                deliveryFood.delivery()
-            }, 5)
-        } else if (type == GlobalConstant.DELIVERY_TYPE_EXPRESS) {
-            this.plusScore(deliveryCost)
-            this.scheduleOnce(() => {
-                deliveryFood.delivery()
-            }, 1)
-        }
+        this.plusScore(-deliveryFood.foodCostPrice - deliveryCost)
+
+        this.scheduleOnce(() => {
+            deliveryFood.delivery()
+        }, deliveryFoodDelay)
     }
 }

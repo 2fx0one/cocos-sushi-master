@@ -1,5 +1,4 @@
 import DeliveryFood from "./DeliveryFood";
-import FoodData from "./entity/FoodData";
 import Food from "./Food";
 import Singleton from "./Singleton";
 import GlobalConstant from "./common/GlobalConstant";
@@ -16,10 +15,25 @@ export default class DeliveryManager extends cc.Component {
     deliveryFoodPrefab: cc.Prefab = null;
 
     @property(cc.Node)
-    confirmNode: cc.Node = null
+    confirmWinNode: cc.Node = null
+
+    //需要快递按钮
+    @property(cc.Button)
+    confirmExpressButton: cc.Button = null
 
     private currentDeliveryFood: DeliveryFood = null
     private deliveryFoodList: DeliveryFood[] = []
+
+    private deliveryTypeMap: { [key: string]: { cost: number, delay: number } } = {
+        free: {
+            cost: 0,
+            delay: 5
+        },
+        express: {
+            cost: 5,
+            delay: 1
+        }
+    }
 
     onLoad() {
         // [0,1].forEach(()=>{
@@ -47,13 +61,39 @@ export default class DeliveryManager extends cc.Component {
     }
 
     clickClose() {
-        this.closeDeliveryWin(null)
+        this.closeDeliveryWin()
     }
 
-    clickConfirm(event, data) {
+    costPrice(deliveryType): number {
+        return this.deliveryTypeMap[deliveryType].cost + this.currentDeliveryFood.foodCostPrice
+    }
+
+    deliveryDelay(deliveryType): number {
+        return this.deliveryTypeMap[deliveryType].delay
+    }
+
+    clickConfirm(event, deliveryType) {
+
+        let cost = this.costPrice(deliveryType);
+        let deliveryFoodDelay = this.deliveryDelay(deliveryType);
+
+        if (Singleton.Instance.game.enoughScore(cost)) {
+
+            this.currentDeliveryFood.notify()
+
+            cc.loader.loadRes('audio/call', cc.AudioClip, (err, clip) => {
+                cc.audioEngine.play(clip, false, 0.4)
+            })
+
+            Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, cost, deliveryFoodDelay)
+
+            this.closeConfirmWin()
+
+            this.closeDeliveryWin()
+
+        }
+
         // console.log(data)
-        this.closeConfirmWin()
-        return this.closeDeliveryWin(data)
         // switch (data) {
         //     case GlobalConstant.DELIVERY_TYPE_FREE:
         //         Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, data)
@@ -87,21 +127,19 @@ export default class DeliveryManager extends cc.Component {
         this.reset()
     }
 
-    closeDeliveryWin(data) {
+
+    closeDeliveryWin() {
         this.node.active = false
-        if (data) {
-            Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, data)
-        }
     }
 
     showConfirmWin(position) {
         position.y -= 100
-        this.confirmNode.position = position
-        this.confirmNode.active = true
+        this.confirmWinNode.position = position
+        this.confirmWinNode.active = true
     }
 
     closeConfirmWin() {
-        this.confirmNode.active = false
+        this.confirmWinNode.active = false
     }
 
 }
