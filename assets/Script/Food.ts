@@ -100,8 +100,8 @@ export default class Food extends cc.Component {
         return this
     }
 
-    //外卖通知
-    deliveryNotify() {
+    //外卖通知倒计时
+    resetDeliveryProgressBar() {
         this.progressBar.node.active = true
         this.progressBar.progress = 1
     }

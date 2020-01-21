@@ -1,6 +1,5 @@
 import DeliveryManager from "./DeliveryManager";
 import Food from "./Food";
-import Singleton from "./Singleton";
 import Utils from "./common/Utils";
 
 const {ccclass, property} = cc._decorator;
@@ -45,7 +44,7 @@ export default class DeliveryFood extends cc.Component {
     }
 
     notify() {
-        this.food.deliveryNotify()
+        this.food.resetDeliveryProgressBar()
     }
     delivery() {
         // console.log('delivery')

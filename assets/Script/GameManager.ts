@@ -54,7 +54,7 @@ export default class GameManager extends cc.Component {
     @property(cc.Label)
     scoreLabel: cc.Label = null
 
-    private score: number = 0
+    private score: number = 100
 
     public restaurantOpen: boolean = true
 
@@ -81,6 +81,8 @@ export default class GameManager extends cc.Component {
     }
 
     init() {
+        this.updateScoreLabel()
+
         let foodDataList: FoodData[] = [
 
 
@@ -175,8 +177,16 @@ export default class GameManager extends cc.Component {
         return this.score >= gold
     }
 
+    getScore(): number {
+        return this.score;
+    }
+
     plusScore(gold: number) {
         this.score += gold
+        this.updateScoreLabel()
+    }
+
+    updateScoreLabel() {
         this.scoreLabel.string = 'Score: ' + this.score.toString()
     }
 
@@ -209,13 +219,13 @@ export default class GameManager extends cc.Component {
 
     callDelivery() {
         console.log('call')
-        this.deliveryManager.showDeliveryWin(this.score)
+        this.deliveryManager.showDeliveryWin()
     }
 
-    deliveryFood(deliveryFood: DeliveryFood, deliveryCost: number, deliveryFoodDelay: number) {
+    deliveryFood(deliveryFood: DeliveryFood, cost: number, deliveryFoodDelay: number) {
 
 
-        this.plusScore(-deliveryFood.foodCostPrice - deliveryCost)
+        this.plusScore(-cost)
 
         this.scheduleOnce(() => {
             deliveryFood.delivery()

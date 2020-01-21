@@ -18,8 +18,8 @@ export default class DeliveryManager extends cc.Component {
     confirmWinNode: cc.Node = null
 
     //需要快递按钮
-    @property(cc.Button)
-    confirmExpressButton: cc.Button = null
+    // @property(cc.Button)
+    // confirmExpressButton: cc.Button = null
 
     private currentDeliveryFood: DeliveryFood = null
     private deliveryFoodList: DeliveryFood[] = []
@@ -72,6 +72,7 @@ export default class DeliveryManager extends cc.Component {
         return this.deliveryTypeMap[deliveryType].delay
     }
 
+    //点击确认购买按钮
     clickConfirm(event, deliveryType) {
 
         let cost = this.costPrice(deliveryType);
@@ -84,7 +85,7 @@ export default class DeliveryManager extends cc.Component {
             cc.loader.loadRes('audio/call', cc.AudioClip, (err, clip) => {
                 cc.audioEngine.play(clip, false, 0.4)
             })
-
+            console.log('deliveryCost', cost)
             Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, cost, deliveryFoodDelay)
 
             this.closeConfirmWin()
@@ -121,9 +122,9 @@ export default class DeliveryManager extends cc.Component {
         this.currentDeliveryFood = null
     }
 
-    showDeliveryWin(score: number) {
+    showDeliveryWin() {
         this.node.active = true
-        this.deliveryFoodList.forEach(v => v.checkBtnInteractable(score))
+        this.deliveryFoodList.forEach(v => v.checkBtnInteractable(Singleton.Instance.game.getScore()))
         this.reset()
     }
 
