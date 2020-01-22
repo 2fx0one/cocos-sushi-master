@@ -824,7 +824,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 0,
+      "width": 32,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -835,7 +835,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 87.272,
+      "y": 93.272,
       "z": 0
     },
     "_scale": {
@@ -870,8 +870,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "",
-    "_N$string": "",
+    "_string": "菜单",
+    "_N$string": "菜单",
     "_fontSize": 16,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -936,7 +936,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 61.045,
+      "y": -27.955,
       "z": 0
     },
     "_scale": {
