@@ -135,6 +135,7 @@ export default class DeliveryManager extends cc.Component {
 
     showConfirmWin(position) {
         position.y -= 100
+        position.x += 100
         this.confirmWinNode.position = position
         this.confirmWinNode.active = true
     }
