@@ -36,7 +36,7 @@ export default class SushiCurtain extends cc.Component {
     }
 
     init(speed: number){
-        this.speed = speed
+        this.speed *= speed
         // console.log('Curtain')
     }
 

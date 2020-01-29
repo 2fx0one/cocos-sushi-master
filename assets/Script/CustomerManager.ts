@@ -2,6 +2,7 @@ import Customer from "./Customer";
 import SushiMenu from "./SushiMenu";
 import RecipeData from "./entity/RecipeData";
 import Singleton from "./Singleton";
+import Utils from "./common/Utils";
 
 const {ccclass, property} = cc._decorator;
 
@@ -33,7 +34,9 @@ export default class CustomerManager extends cc.Component {
 
     init(customerAmount: number) {
         for (let i = -490; i <= 500; i += 140) {
-            this.createCustomer(i, 180)
+            this.scheduleOnce(()=>{
+                this.createCustomer(i, 180)
+            }, Utils.getRandomInt(3, 7))
         }
 
     }
@@ -41,11 +44,6 @@ export default class CustomerManager extends cc.Component {
     createCustomer(x, y) {
         this.customerAmount += 1
         let customer: cc.Node = this.customerPool.size() > 0 ? this.customerPool.get() : cc.instantiate(this.customerPrefab)
-        // if (this.customerPool.size() > 0) {
-        //     customer = this.customerPool.get()
-        // } else {
-        //     customer =  cc.instantiate(this.customerPrefab)
-        // }
         customer.parent = this.node
         customer.setPosition(cc.v2(x, y))
         return customer.getComponent(Customer).init(this)

@@ -39,7 +39,6 @@ export default class Customer extends cc.Component {
 
     init(customerManager: CustomerManager) {
         this.customerManager = customerManager
-        // this.progressBar = this.progressNode.getComponent(cc.ProgressBar)
         this.eatAnim = this.getComponent(cc.Animation);
 
         return this.resetState().makeOrder()

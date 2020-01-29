@@ -69,7 +69,8 @@ export default class GameManager extends cc.Component {
 
     onLoad() {
 
-        console.log(cc.director.getWinSize())
+        // console.log(cc.director.getWinSize())
+        console.log(cc.winSize)
         // cc.director.getWinSize().height
         cc.director.getCollisionManager().enabled = true
         // cc.director.getCollisionManager().enabledDebugDraw = true
@@ -89,26 +90,26 @@ export default class GameManager extends cc.Component {
         let guankaData: GuankaData = new GuankaData()
         guankaData.foodDataList = [
 
-            new FoodData(350, 250, "饭", 'id1', '1', 10, 10),
-            new FoodData(350, 150, "海苔", 'id2', '2', 10, 10),
-            new FoodData(350, 50, "鲑鱼子", 'id3', '3', 10, 10),
+            new FoodData(350, 250, "饭", '1', '1', 10, 10),
+            new FoodData(350, 150, "海苔", '2', '2', 10, 10),
+            new FoodData(350, 50, "鲑鱼子", '3', '3', 10, 10),
 
-            new FoodData(250, 250, "鲑鱼", 'id4', '4', 10, 10),
-            new FoodData(250, 150, "5", 'id5', '5', 10, 10),
-            new FoodData(250, 50, "黄瓜", 'id6', '6', 10, 10),
+            new FoodData(250, 250, "鲑鱼", '4', '4', 10, 10),
+            new FoodData(250, 150, "5", '5', '5', 10, 10),
+            new FoodData(250, 50, "黄瓜", '6', '6', 10, 10),
 
-            new FoodData(150, 250, "扁口鱼", 'id7', '7', 10, 10),
-            new FoodData(150, 150, "8", 'id8', '8', 10, 10),
-            new FoodData(150, 50, "章鱼", 'id9', '9', 10, 10),
+            new FoodData(150, 250, "扁口鱼", '7', '7', 10, 10),
+            new FoodData(150, 150, "8", '8', '8', 10, 10),
+            new FoodData(150, 50, "章鱼", '9', '9', 10, 10),
 
-            new FoodData(50, 250, "10", 'id10', '10', 10, 10),
-            new FoodData(50, 150, "11", 'id11', '11', 10, 10),
-            new FoodData(50, 50, "12", 'id12', '12', 10, 10),
-            new FoodData(450, 250, "虾", "id13", '13', 10, 10),
-            new FoodData(450, 150, "蟹棒", "id14", '14', 10, 10),
-            new FoodData(450, 50, "玉子", "id15", '15', 10, 10),
-            new FoodData(450, 50, "玉子", "id16", '16', 10, 10),
-            new FoodData(450, 50, "玉子", "id17", '17', 10, 10),
+            new FoodData(50, 250, "10", '10', '10', 10, 10),
+            new FoodData(50, 150, "11", '11', '11', 10, 10),
+            new FoodData(50, 50, "12", '12', '12', 10, 10),
+            new FoodData(450, 250, "虾", "13", '13', 10, 10),
+            new FoodData(450, 150, "蟹棒", "14", '14', 10, 10),
+            new FoodData(450, 50, "玉子", "15", '15', 10, 10),
+            new FoodData(450, 50, "玉子", "16", '16', 10, 10),
+            new FoodData(450, 50, "玉子", "17", '17', 10, 10),
         ]
 
         guankaData.recipeList = [
@@ -133,22 +134,16 @@ export default class GameManager extends cc.Component {
             new RecipeData('手卷寿司', ' 3饭+2苔+1鳗+1瓜', '18', ['1', '1', '1', '2', '2', '12', '6'], ['none', '18', 'none']),
         ]
 
-        let curtainSpeed = 3
-        let conveyorSpeed = 2
-        let customerAmount = 8
-
-        let closedCountSecond = 300 //倒计时300秒
-
         this.scheduleOnce(() => {
             this.foodContainer.init(guankaData.foodDataList)
             this.sushiMenu.init(guankaData.recipeList)
 
+            this.curtain.init(this.userData.curtainSpeed)
+            this.conveyor.init(this.userData.conveyorSpeed)
+            this.customerManager.init(this.userData.customerAmount)
+
             //配送系统中的食物需要持有foodContainer中的食物
             this.deliveryManager.init(guankaData.foodDataList)
-
-            this.curtain.init(this.userData.curtainSpeed)
-            this.customerManager.init(this.userData.customerAmount)
-            this.conveyor.init(this.userData.conveyorSpeed)
             
             this.restaurantOpening(this.userData.closedCountSecond)
         }, 1)
@@ -198,7 +193,7 @@ export default class GameManager extends cc.Component {
     }
 
     curtainScrollCompleted(foodInCurtain: string[]) {
-        // console.log('sushi complete food Curtain => ', foods)
+        console.log('sushi complete food Curtain => ', foodInCurtain)
         let recipeData = this.sushiMenu.getRecipe(foodInCurtain)
 
         this.conveyor.createSushi(this.sushichef.createSushi(recipeData))

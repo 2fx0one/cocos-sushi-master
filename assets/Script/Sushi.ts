@@ -21,7 +21,7 @@ export default class Sushi extends cc.Component {
     private conveyor: SushiConveyor = null
     // private sushiIndexInConveyor: string
 
-    private speed: number
+    private speed: number = 1
     private begin: cc.Vec2
     private end: cc.Vec2
 
@@ -87,6 +87,7 @@ export default class Sushi extends cc.Component {
     // }
 
     update(dt) {
+        // console.log(this.isMove)
         if (this.isMove) {
             this.node.x += this.speed
             if (this.node.x > this.end.x) {

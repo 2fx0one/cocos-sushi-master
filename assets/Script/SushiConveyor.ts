@@ -11,7 +11,7 @@ export default class SushiConveyor extends cc.Component {
     // private sushiMap: { [key: number]: Sushi } = {}
     private sushiAmount: number = 10
 
-    private speed: number
+    private speed: number = 1
     private resetX: number = 700
 
     private animation: cc.Animation = null
@@ -35,7 +35,7 @@ export default class SushiConveyor extends cc.Component {
     // }
 
     init(speed: number) {
-        this.speed = speed
+        this.speed *= speed
         // this.animation = this.node.getComponentInChildren(cc.Animation)
         // this.animState = this.animation.play('conveyor');
         // this.animState.speed = this.speed * 0.5
@@ -67,22 +67,22 @@ export default class SushiConveyor extends cc.Component {
     // }
 
     // update(dt) {
-        // Object.keys(this.sushiMap).forEach(v => {
-        //     let sushi: Sushi = this.sushiMap[v]
-        //     if (sushi && sushi.step(this.speed) > this.resetX) {
-        //         sushi.resetPosition(-this.resetX, 0)
-        //     }
-        // })
-        // this.sushiList.forEach((v, i) => {
-        //     if (v.step(this.speed) > this.resetX) {
-        //         v.resetPosition(-this.resetX, 0)
-        //     }
-        // })
-        // this.node.x += 1 * this.speed
-        // console.log(this.node.x)
-        // if (this.node.x > this.resetX) {
-        //     this.node.x -= this.resetX
-        // }
+    //     Object.keys(this.sushiMap).forEach(v => {
+    //         let sushi: Sushi = this.sushiMap[v]
+    //         if (sushi && sushi.step(this.speed) > this.resetX) {
+    //             sushi.resetPosition(-this.resetX, 0)
+    //         }
+    //     })
+    //     this.sushiList.forEach((v, i) => {
+    //         if (v.step(this.speed) > this.resetX) {
+    //             v.resetPosition(-this.resetX, 0)
+    //         }
+    //     })
+    //     this.node.x += 1 * this.speed
+    //     console.log(this.node.x)
+    //     if (this.node.x > this.resetX) {
+    //         this.node.x -= this.resetX
+    //     }
     // }
 
     removeSushi(sushi: Sushi) {
