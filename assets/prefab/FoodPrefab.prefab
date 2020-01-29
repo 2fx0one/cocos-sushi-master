@@ -404,9 +404,9 @@
     "_opacity": 200,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 122,
+      "g": 118,
+      "b": 118,
       "a": 255
     },
     "_contentSize": {
@@ -470,7 +470,7 @@
       "y": 0.5
     },
     "_fillStart": 0.25,
-    "_fillRange": 0.6,
+    "_fillRange": 0,
     "_isTrimmedMode": true,
     "_atlas": null,
     "_id": ""
@@ -496,7 +496,7 @@
     "_enabled": true,
     "_materials": [
       {
-        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+        "__uuid__": "3a7bb79f-32fd-422e-ada2-96f518fed422"
       }
     ],
     "_srcBlendFactor": 770,
@@ -529,7 +529,7 @@
       "__id__": 11
     },
     "_N$mode": 2,
-    "_N$progress": 0.6,
+    "_N$progress": 0,
     "_N$reverse": false,
     "_id": ""
   },

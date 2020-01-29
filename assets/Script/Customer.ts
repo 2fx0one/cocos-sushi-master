@@ -52,7 +52,7 @@ export default class Customer extends cc.Component {
     }
 
     makeOrder() {
-        let recipe = this.customerManager.getRandomRecipe()
+        let recipe = this.customerManager.customerGetRandomRecipe()
         this.orderSushi = recipe.sushiId
         this.sushiPrice = recipe.sushiPrice
         this.label.string = recipe.sushiTips
@@ -67,14 +67,14 @@ export default class Customer extends cc.Component {
     start() {
     }
 
-    update(dt) {
+    // update(dt) {
         // console.log(dt)
         // console.log(this.progressBar.progress)
         // if (this.progressBar.progress > 1) {
         //     this.progressBar.progress = 0
         // }
         // this.progressBar.progress += dt
-    }
+    // }
 
     isMySushi(sushi: Sushi) {
         return this.orderSushi == sushi.sushiId

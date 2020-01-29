@@ -31,7 +31,7 @@ export default class CustomerManager extends cc.Component {
         }
     }
 
-    init() {
+    init(customerAmount: number) {
         for (let i = -490; i <= 500; i += 140) {
             this.createCustomer(i, 180)
         }
@@ -56,7 +56,8 @@ export default class CustomerManager extends cc.Component {
         this.customerPool.put(customer)
     }
 
-    getRandomRecipe(): RecipeData {
+    //customer get 
+    customerGetRandomRecipe(): RecipeData {
         return Singleton.Instance.game.customerManagerGetRandomRecipe()
     }
 

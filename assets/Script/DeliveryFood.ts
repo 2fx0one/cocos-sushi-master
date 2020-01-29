@@ -1,6 +1,7 @@
 import DeliveryManager from "./DeliveryManager";
 import Food from "./Food";
 import Utils from "./common/Utils";
+import FoodData from "./entity/FoodData";
 
 const {ccclass, property} = cc._decorator;
 
@@ -19,43 +20,35 @@ export default class DeliveryFood extends cc.Component {
     label: cc.Label = null
 
     // private price: number = null
-    private food: Food = null
+    foodData: FoodData = null
 
     foodCostPrice: number = null
 
 
 
-    init(deliveryManager: DeliveryManager, food: Food) {
+    init(deliveryManager: DeliveryManager, foodData: FoodData) {
         this.deliveryManager = deliveryManager;
-        this.food = food
-        this.foodCostPrice = food.foodCostPrice
+        this.foodData = foodData
+        this.foodCostPrice = foodData.foodCostPrice
         // this.price = food.foodCostPrice
-        this.label.string = '$ ' + this.food.foodCostPrice.toString()
+        this.updateFoodCostPriceLabel()
 
-        Utils.loadResImage(food.foodSmallPicPath, (err, spriteFrame: cc.SpriteFrame) => {
+        Utils.loadResImage(this.foodData.foodSmallPicPath, (err, spriteFrame: cc.SpriteFrame) => {
             this.foodSprite.spriteFrame = spriteFrame
         })
         this.button.interactable = true
         return this;
     }
 
+    updateFoodCostPriceLabel() {
+        this.label.string = '$ ' + this.foodData.foodCostPrice.toString()
+    }
+
     onclick(event, data) {
         this.deliveryManager.clickDeliveryFood(this)
     }
 
-    notify() {
-        this.food.resetDeliveryProgressBar()
-    }
-    delivery() {
-        // console.log('delivery')
-        cc.loader.loadRes('audio/deliveryArrival', cc.AudioClip,  (err, clip) => {
-            cc.audioEngine.play(clip, false, 0.4)
-        })
-        this.food.deliveryFood(10)
-
-    }
-
     checkBtnInteractable(score: number) {
-        this.button.interactable = score >= this.food.foodCostPrice
+        this.button.interactable = score >= this.foodData.foodCostPrice
     }
 }

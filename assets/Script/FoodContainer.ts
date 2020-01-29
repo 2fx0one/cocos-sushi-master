@@ -6,7 +6,13 @@ const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class FoodContainer extends cc.Component {
-
+    notifyFood(foodData: FoodData) {
+        this.foodsInContainMap[foodData.foodId].resetDeliveryProgressBar()
+    }
+   
+    deliveryFood(foodData: FoodData) {
+        this.foodsInContainMap[foodData.foodId].deliveryFood(foodData.amount)
+    }
 
     @property(cc.Prefab)
     foodPreFab: cc.Prefab = null
@@ -15,7 +21,7 @@ export default class FoodContainer extends cc.Component {
     layoutNode: cc.Node = null
 
     //拥有的所有食物 放在容器里面
-    public foodsInContainMap: { [key: string]: Food } = {}
+    foodsInContainMap: { [key: string]: Food } = {}
 
     private foodPool: cc.NodePool
 
@@ -30,9 +36,10 @@ export default class FoodContainer extends cc.Component {
     }
 
     init(foodDataList: FoodData[]) {
-        foodDataList.forEach((foodEntity, i) => {
-            this.foodsInContainMap[foodEntity.foodId] = this.createFood(foodEntity)
+        foodDataList.forEach((foodData, i) => {
+            this.foodsInContainMap[foodData.foodId] = this.createFood(foodData)
         })
+        return this
     }
 
     createFood(foodData: FoodData): Food {
@@ -42,12 +49,7 @@ export default class FoodContainer extends cc.Component {
         return food.getComponent(Food).init(this, foodData)
     }
 
-    // putFoodNodeToPool(node: cc.Node) {
-    //         this.foodPool.put(node)
-    // }
-
     clickFood(food: Food) {
-
         Singleton.Instance.game.foodContainerTakeFood(food)
     }
 

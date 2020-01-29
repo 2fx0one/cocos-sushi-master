@@ -2,6 +2,7 @@ import DeliveryFood from "./DeliveryFood";
 import Food from "./Food";
 import Singleton from "./Singleton";
 import GlobalConstant from "./common/GlobalConstant";
+import FoodData from "./entity/FoodData";
 
 const {ccclass, property} = cc._decorator;
 
@@ -41,18 +42,18 @@ export default class DeliveryManager extends cc.Component {
         // })
     }
 
-    init(foodsInContainMap: { [key: string]: Food }) {
+    init( foodDataList: FoodData[]) {
 
-        let data = Object.keys(foodsInContainMap).map(k => foodsInContainMap[k]).concat()
+        // let data = Object.keys(foodsInContainMap).map(k => foodsInContainMap[k]).concat()
 
-        this.deliveryFoodList = data.map(v => this.createDeliveryFood(v))
+        this.deliveryFoodList = foodDataList.map(foodData => this.createDeliveryFood(foodData))
     }
 
-    private createDeliveryFood(food: Food) {
+    private createDeliveryFood(foodData: FoodData) {
         let deliveryFood: cc.Node = cc.instantiate(this.deliveryFoodPrefab)
 
         deliveryFood.parent = this.layoutNode
-        return deliveryFood.getComponent(DeliveryFood).init(this, food)
+        return deliveryFood.getComponent(DeliveryFood).init(this, foodData)
     }
 
     clickDeliveryFood(deliveryFood: DeliveryFood) {
@@ -80,42 +81,19 @@ export default class DeliveryManager extends cc.Component {
 
         if (Singleton.Instance.game.enoughScore(cost)) {
 
-            this.currentDeliveryFood.notify()
-
+            
             cc.loader.loadRes('audio/call', cc.AudioClip, (err, clip) => {
                 cc.audioEngine.play(clip, false, 0.4)
+                Singleton.Instance.game.startDeliveryFoodCall(this.currentDeliveryFood.foodData, cost, deliveryFoodDelay)
             })
-            console.log('deliveryCost', cost)
-            Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, cost, deliveryFoodDelay)
+            // console.log('deliveryCost', cost)
 
             this.closeConfirmWin()
 
             this.closeDeliveryWin()
-
         }
-
-        // console.log(data)
-        // switch (data) {
-        //     case GlobalConstant.DELIVERY_TYPE_FREE:
-        //         Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, data)
-        //     case GlobalConstant.DELIVERY_TYPE_EXPRESS:
-        //         Singleton.Instance.game.deliveryFood(this.currentDeliveryFood, data)
-        //         return this.closeDeliveryWin()
-        //     case 'close':
-        //         return
-        //     default:
-        //         return
-        // }
     }
 
-    //
-    // freeDelivery (){
-    //     this.currentDeliveryFood.delivery()
-    // }
-    //
-    // expressDelivery() {
-    //     this.currentDeliveryFood.delivery()
-    // }
 
     reset() {
         this.closeConfirmWin()
