@@ -1,5 +1,5 @@
 {
-  "ver": "2.3.3",
+  "ver": "2.3.4",
   "uuid": "f3ed9ea8-fd37-40c2-867f-42a4d231d2d7",
   "type": "sprite",
   "wrapMode": "clamp",
@@ -7,6 +7,8 @@
   "premultiplyAlpha": false,
   "genMipmaps": false,
   "packable": true,
+  "width": 512,
+  "height": 256,
   "platformSettings": {},
   "subMetas": {
     "mikado_outline_shadow": {
