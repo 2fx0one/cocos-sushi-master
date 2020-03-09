@@ -17,7 +17,8 @@ export default class FoodData {
         this.foodId = foodId
         // this.picPath = picPath
         this.foodSmallPicPath =  `image/foods-small/${picPath}`
-        this.foodInContainerPicPath = `image/foods-in-container/${picPath}`
+        // this.foodInContainerPicPath = `image/foods-in-container/${picPath}`
+        this.foodInContainerPicPath = `image/foods-small/${picPath}`
         this.amount = amount
         this.foodCostPrice = foodCostPrice
     }

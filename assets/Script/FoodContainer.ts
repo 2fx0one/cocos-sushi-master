@@ -23,16 +23,16 @@ export default class FoodContainer extends cc.Component {
     //拥有的所有食物 放在容器里面
     foodsInContainMap: { [key: string]: Food } = {}
 
-    private foodPool: cc.NodePool
+    // private foodPool: cc.NodePool
 
     onLoad() {
         // this.init()
-        this.foodPool = new cc.NodePool();
-        let initCount = 20;
-        for (let i = 0; i < initCount; ++i) {
-            let food: cc.Node = cc.instantiate(this.foodPreFab) // 创建节点
-            this.foodPool.put(food) // 通过 put 接口放入对象池
-        }
+        // this.foodPool = new cc.NodePool();
+        // let initCount = 9;
+        // for (let i = 0; i < initCount; ++i) {
+        //     let food: cc.Node = cc.instantiate(this.foodPreFab) // 创建节点
+        //     this.foodPool.put(food) // 通过 put 接口放入对象池
+        // }
     }
 
     init(foodDataList: FoodData[]) {
@@ -43,7 +43,8 @@ export default class FoodContainer extends cc.Component {
     }
 
     createFood(foodData: FoodData): Food {
-        let food: cc.Node = this.foodPool.size() > 0 ? this.foodPool.get() : cc.instantiate(this.foodPreFab)
+        // let food: cc.Node = this.foodPool.size() > 0 ? this.foodPool.get() : cc.instantiate(this.foodPreFab)
+        let food: cc.Node = cc.instantiate(this.foodPreFab)
         food.parent = this.layoutNode
         // food.setPosition(cc.v2(foodData.x, foodData.y))
         return food.getComponent(Food).init(this, foodData)
