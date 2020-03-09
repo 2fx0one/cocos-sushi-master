@@ -42,9 +42,9 @@ export default class CustomerManager extends cc.Component {
         let total = customerSeat * seatWidth + (customerSeat - 1) * seatInterval
 
         for (let i = 0; i < customerSeat; i++) {
-            let x = i*(seatWidth+seatInterval) - total/2 + seatInterval
-            this.createCustomer(x, 150)
+            let x = i * (seatWidth + seatInterval) - total / 2 + seatInterval
             this.scheduleOnce(() => {
+                this.createCustomer(x, 150)
             }, Utils.getRandomInt(1, 5))
         }
     }
