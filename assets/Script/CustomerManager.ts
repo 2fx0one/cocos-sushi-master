@@ -22,6 +22,8 @@ export default class CustomerManager extends cc.Component {
 
     public customerAmount: number = 0 //客户总数
 
+    private customerList: Customer[] = []
+
     onLoad() {
         // this.init()
         this.customerPool = new cc.NodePool();
@@ -32,13 +34,19 @@ export default class CustomerManager extends cc.Component {
         }
     }
 
-    init(customerAmount: number) {
-        for (let i = -490; i <= 500; i += 140) {
-            this.scheduleOnce(()=>{
-                this.createCustomer(i, 180)
-            }, Utils.getRandomInt(3, 7))
-        }
+    init(customerSeat: number) {
+        let seatWidth = 100
+        let seatInterval = 40
 
+        //座位大小加间隔 总宽度
+        let total = customerSeat * seatWidth + (customerSeat - 1) * seatInterval
+
+        for (let i = 0; i < customerSeat; i++) {
+            let x = i*(seatWidth+seatInterval) - total/2 + seatInterval
+            this.createCustomer(x, 150)
+            this.scheduleOnce(() => {
+            }, Utils.getRandomInt(1, 5))
+        }
     }
 
     createCustomer(x, y) {

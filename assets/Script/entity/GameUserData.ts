@@ -5,7 +5,7 @@ export default class GameUserData {
 
     curtainSpeed:number = 1
     conveyorSpeed:number = 1
-    customerAmount:number = 8
+    // customerAmount:number = 8
 
-    closedCountSecond:number = 300 //倒计时300秒
+    // closedCountSecond:number = 300 //倒计时300秒
 }

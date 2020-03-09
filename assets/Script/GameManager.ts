@@ -18,8 +18,8 @@ import GameUserData from "./entity/GameUserData";
 import GlobalConstant from "./common/GlobalConstant";
 import SushiCurtain from "./SushiCurtain";
 import SushiConveyor from "./SushiConveyor";
-import Guanka from "./entity/GuankaData";
-import GuankaData from "./entity/GuankaData";
+import Guanka from "./entity/StageData";
+import StageData from "./entity/StageData";
 import GameData from "./data/GameData";
 
 
@@ -71,7 +71,7 @@ export default class GameManager extends cc.Component {
     onLoad() {
 
         // console.log(cc.director.getWinSize())
-        console.log(cc.winSize)
+        // console.log(cc.winSize)
         // cc.director.getWinSize().height
         cc.director.getCollisionManager().enabled = true
         // cc.director.getCollisionManager().enabledDebugDraw = true
@@ -88,20 +88,20 @@ export default class GameManager extends cc.Component {
         this.updateScoreLabel()
 
         
-        let guankaData: GuankaData = GameData.guankaData[1]
+        let stageData: StageData = GameData.ALL_STAGE_DATA[1]
 
         this.scheduleOnce(() => {
-            this.foodContainer.init(guankaData.foodDataList)
-            this.sushiMenu.init(guankaData.recipeList)
+            this.foodContainer.init(stageData.foodDataList)
+            this.sushiMenu.init(stageData.recipeList)
 
             this.curtain.init(this.userData.curtainSpeed)
             this.conveyor.init(this.userData.conveyorSpeed)
-            this.customerManager.init(this.userData.customerAmount)
+            this.customerManager.init(stageData.customerSeat)
 
             //配送系统中的食物需要持有foodContainer中的食物
-            this.deliveryManager.init(guankaData.foodDataList)
+            this.deliveryManager.init(stageData.foodDataList)
             
-            this.restaurantOpening(guankaData.closedCountSecond)
+            this.restaurantOpening(stageData.closedCountSecond)
         }, 1)
 
     }

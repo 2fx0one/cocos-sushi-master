@@ -36,7 +36,7 @@ export default class SushiMenu extends cc.Component {
     getRandomRecipe(): RecipeData {
         // let i = Utils.getRandomInt(0, 2)
         let i = Utils.getRandomInt(0, this.recipeList.length)
-        console.log(i)
+        // console.log(i)
 
         return this.recipeList[i]
     }

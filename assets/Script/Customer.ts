@@ -31,6 +31,9 @@ export default class Customer extends cc.Component {
 
     sushiPrice: number
 
+    waitTime: number = 15
+
+
     private eatAnim: cc.Animation = null
     // private eatAnimState: cc.AnimationState = null
 
@@ -47,6 +50,11 @@ export default class Customer extends cc.Component {
     resetState() {
         this.goldNode.active = false
         this.customerNode.active = true
+        this.orderSushi = null
+        this.sushiPrice = null
+        this.label.string = null
+        this.progressBar.progress = 1
+        this.waitTime = 15
         return this
     }
 
@@ -63,17 +71,21 @@ export default class Customer extends cc.Component {
         return this;
     }
 
+    onLoad() {
+        console.log('customer on load')
+    }
+
     start() {
     }
 
-    // update(dt) {
+    update(dt) {
         // console.log(dt)
         // console.log(this.progressBar.progress)
-        // if (this.progressBar.progress > 1) {
-        //     this.progressBar.progress = 0
-        // }
-        // this.progressBar.progress += dt
-    // }
+        if (this.progressBar.progress < 0) {
+            this.progressBar.progress = 1
+        }
+        this.progressBar.progress -= dt / 20
+    }
 
     isMySushi(sushi: Sushi) {
         return this.orderSushi == sushi.sushiId
@@ -96,7 +108,7 @@ export default class Customer extends cc.Component {
     }
 
     clickGold() {
-        console.log('clickGold')
+        // console.log('clickGold')
         this.customerManager.customerFinished(this)
     }
 
@@ -109,7 +121,7 @@ export default class Customer extends cc.Component {
         }
     }
 
-    //从传送带上拿去食物
+    //从传送带上碰到食物 表示拿食物
     onCollisionEnter(other: cc.BoxCollider, self: cc.BoxCollider) {
         // console.log('Customer on collision enter', this.sushi);
         let sushi: Sushi = other.node.getComponent(Sushi)
