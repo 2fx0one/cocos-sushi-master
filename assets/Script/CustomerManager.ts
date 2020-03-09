@@ -34,17 +34,17 @@ export default class CustomerManager extends cc.Component {
         }
     }
 
-    init(customerSeat: number) {
+    init(seatAmount: number, seatInterval: number) {
         let seatWidth = 100
-        let seatInterval = 40
+        // let seatInterval = customerSeatInterval
 
         //座位大小加间隔 总宽度
-        let total = customerSeat * seatWidth + (customerSeat - 1) * seatInterval
+        let total = seatAmount * seatWidth + (seatAmount - 1) * seatInterval
 
-        for (let i = 0; i < customerSeat; i++) {
+        for (let i = 0; i < seatAmount; i++) {
             let x = i * (seatWidth + seatInterval) - total / 2 + seatInterval
             this.scheduleOnce(() => {
-                this.createCustomer(x, 150)
+                this.createCustomer(x, 0)
             }, Utils.getRandomInt(1, 5))
         }
     }

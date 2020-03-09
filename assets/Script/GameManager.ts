@@ -96,7 +96,7 @@ export default class GameManager extends cc.Component {
 
             this.curtain.init(this.userData.curtainSpeed)
             this.conveyor.init(this.userData.conveyorSpeed)
-            this.customerManager.init(stageData.customerSeat)
+            this.customerManager.init(stageData.customerSeatAmount, stageData.customerSeatInterval)
 
             //配送系统中的食物需要持有foodContainer中的食物
             this.deliveryManager.init(stageData.foodDataList)
