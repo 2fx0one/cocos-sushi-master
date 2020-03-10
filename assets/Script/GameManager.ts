@@ -27,45 +27,48 @@ import GameData from "./data/GameData";
 export default class GameManager extends cc.Component {
 
     @property(cc.ProgressBar)
-    progressBar: cc.ProgressBar = null
+    progressBar: cc.ProgressBar = null;
 
     @property(SushiCurtain)
-    curtain: SushiCurtain = null
+    curtain: SushiCurtain = null;
 
     //顾客管理员
     @property(CustomerManager)
-    customerManager: CustomerManager = null
+    customerManager: CustomerManager = null;
 
     //菜单
     @property(SushiMenu)
-    sushiMenu: SushiMenu = null
+    sushiMenu: SushiMenu = null;
 
     //主厨
     @property(SushiChef)
-    sushichef: SushiChef = null
+    sushichef: SushiChef = null;
 
     // 传送带
     @property(SushiConveyor)
-    conveyor: SushiConveyor = null
+    conveyor: SushiConveyor = null;
 
     @property(FoodContainer)
-    foodContainer: FoodContainer = null
+    foodContainer: FoodContainer = null;
 
     @property(DeliveryManager)
-    deliveryManager: DeliveryManager = null
+    deliveryManager: DeliveryManager = null;
 
     @property(cc.Label)
-    scoreLabel: cc.Label = null
+    scoreLabel: cc.Label = null;
 
-    private score: number = 100
+    private score: number = 100;
 
-    public restaurantOpen: boolean = true
+    public restaurantOpen: boolean = true;
 
-    private userData: GameUserData = null
+    private userData: GameUserData = null;
 
     // private closedCountSecond = 300 //倒计时300秒
 
-    private currentBgAudio = null
+    private currentBgAudio = null;
+
+    private stageData: StageEntity = null;
+    private currentStageSettle
 
 
     onLoad() {
@@ -81,14 +84,19 @@ export default class GameManager extends cc.Component {
         this.userData = new GameUserData()
         // this.userData = Utils.loadGameUserData()
 
-        this.init()
+        this.stageData = GameData.ALL_STAGE_DATA[1]
+
+        this.init(this.stageData)
     }
 
-    init() {
+    init(stageData) {
         this.updateScoreLabel()
 
-
-        let stageData: StageEntity = GameData.ALL_STAGE_DATA[1]
+        this.currentStageSettle = {
+            customerLost: 0,
+            customerServed: 0,
+            customerUnhappy: 0,
+        }
 
         this.scheduleOnce(() => {
             this.foodContainer.init(stageData.foodDataList)
@@ -203,25 +211,32 @@ export default class GameManager extends cc.Component {
 
     customerLeave(customer: Customer, customerImpatient: boolean) {
         if (customerImpatient) { //没有耐心 提前离开了
-            this.plusScore(-20)
+            // this.plusScore(-20)
+            this.currentStageSettle.customerLost += 1;
         } else {
+            this.currentStageSettle.customerServed += 1;
             this.plusScore(customer.sushiPrice)
         }
         // this.userData.gold += customer.sushiPrice
 
-        //是否打烊就继续
-        if (Singleton.Instance.game.restaurantOpen) {
-            let x = customer.node.x
-            let y = customer.node.y
-            // this.scheduleOnce(() => {
-            //     this.customerManager.createCustomer(x, y)
-            // }, Utils.getRandomInt(1, 5))
-        } else {
-            //若打烊了，查看用户是否都走了
-            if (this.customerManager.customerAmount == 0) {
+        //打烊就继续
+        if (!Singleton.Instance.game.restaurantOpen) {
+            console.log(this.customerManager.customerInSeat())
+            if (this.customerManager.customerInSeat().length == 0) {
                 //都走了
                 this.shutdown()
             }
+            // let x = customer.node.x
+            // let y = customer.node.y
+            // this.scheduleOnce(() => {
+            //     this.customerManager.createCustomer(x, y)
+            // }, Utils.getRandomInt(1, 5))
+            // } else {
+            //     //若打烊了，查看用户是否都走了
+            //     if (this.customerManager.customerInSeat().length == 0) {
+            //         //都走了
+            //         this.shutdown()
+            //     }
         }
     }
 

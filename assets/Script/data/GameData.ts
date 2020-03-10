@@ -54,7 +54,7 @@ export default class GameData {
             2,
             50,
             5,
-            300,
+            10,
             ['1','2','3'].map((v)=>GameData.ALL_TOPPING_DATA[v]),
             ['1','2','3'].map((v)=>GameData.ALL_RECIPE_DATA[v])
         ),

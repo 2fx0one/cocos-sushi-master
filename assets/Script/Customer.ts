@@ -12,29 +12,29 @@ export default class Customer extends cc.Component {
     label: cc.Label = null;
 
     @property(cc.ProgressBar)
-    progressBar: cc.ProgressBar = null
+    progressBar: cc.ProgressBar = null;
 
 
     @property(cc.Sprite)
-    sushiSprite: cc.Sprite = null
+    sushiSprite: cc.Sprite = null;
 
     @property(cc.Node)
-    customerNode: cc.Node = null
+    customerNode: cc.Node = null;
 
     @property(cc.Node)
-    goldNode: cc.Node = null
+    goldNode: cc.Node = null;
 
     // private progressBar: cc.ProgressBar = null
 
-    private sushi: Sushi = null
+    private sushi: Sushi = null;
 
-    private orderSushiId: string
+    private orderSushiId: string;
 
-    sushiPrice: number
+    sushiPrice: number;
 
-    waitTime: number
+    waitTime: number;
 
-    seat: CustomerSeat
+    seat: CustomerSeat = null;
 
 
     private eatAnim: cc.Animation = null
@@ -43,9 +43,10 @@ export default class Customer extends cc.Component {
     private customerManager: CustomerManager = null
 
 
-    init(customerManager: CustomerManager, seat: CustomerSeat) {
+    init(customerManager: CustomerManager) {
         this.customerManager = customerManager
-        this.seat = seat
+        // seat.take(this)
+        // this.seat = seat
         return this.resetData().makeOrder()
     }
 
@@ -57,6 +58,7 @@ export default class Customer extends cc.Component {
         this.label.string = null
         this.progressBar.progress = 1
         this.waitTime = this.customerManager.customerWaitTime
+        this.seat = null
         return this
     }
 
@@ -76,14 +78,13 @@ export default class Customer extends cc.Component {
     onLoad() {
         this.eatAnim = this.getComponent(cc.Animation);
         // console.log('customer on load')
-        this.schedule(()=>{
+        this.schedule(() => {
             // console.log('customer schedule')
             if (this.progressBar.progress < 0) {
-                this.customerManager.customerLeave(this, true)
-                // this.progressBar.progress = 1
+                this.leave(true)
             }
-            this.progressBar.progress -= 1/(this.waitTime * 10)
-        },0.1)
+            this.progressBar.progress -= 1 / (this.waitTime * 10)
+        }, 0.1)
     }
 
     isEatingSushi() {
@@ -97,10 +98,8 @@ export default class Customer extends cc.Component {
     //从传送带上碰到食物 表示拿食物
     onCollisionEnter(other: cc.BoxCollider, self: cc.BoxCollider) {
         let sushi: Sushi = other.node.getComponent(Sushi)
-        if (this.customerNode.active && this.isEatingSushi()  && this.isMySushi(sushi)) {
-
+        if (this.customerNode.active && this.isEatingSushi() && this.isMySushi(sushi)) {
             this.sushi = sushi.takenByCustomer(cc.v2(this.node.position.x, other.node.position.y + 50))
-
             this.scheduleOnce(() => {
                 this.eatOne()
             }, 0.5)
@@ -135,7 +134,23 @@ export default class Customer extends cc.Component {
         console.log('click gold')
         cc.loader.loadRes('audio/getGold', cc.AudioClip, (err, clip) => {
             cc.audioEngine.play(clip, false, 0.4)
+            this.leave();
         })
-        this.customerManager.customerLeave(this)
+
+    }
+
+    takeSeat(seat: CustomerSeat) {
+        this.seat = seat;
+        this.seat.customer = this;
+        return this;
+    }
+
+    leaveSeat() {
+        this.seat.customer = null
+        this.seat = null
+    }
+
+    private leave(customerImpatient: boolean = false) {
+        this.customerManager.customerLeave(this, customerImpatient)
     }
 }
