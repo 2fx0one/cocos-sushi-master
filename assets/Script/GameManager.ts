@@ -1,6 +1,6 @@
 import Food from "./Food";
 
-const { ccclass, property } = cc._decorator;
+const {ccclass, property} = cc._decorator;
 
 import Singleton from './Singleton'
 import CustomerManager from "./CustomerManager";
@@ -87,7 +87,7 @@ export default class GameManager extends cc.Component {
     init() {
         this.updateScoreLabel()
 
-        
+
         let stageData: StageData = GameData.ALL_STAGE_DATA[1]
 
         this.scheduleOnce(() => {
@@ -96,12 +96,12 @@ export default class GameManager extends cc.Component {
 
             this.curtain.init(this.userData.curtainSpeed)
             this.conveyor.init(this.userData.conveyorSpeed)
-            this.customerManager.init(stageData.customerSeatAmount, stageData.customerSeatInterval)
+            this.customerManager.init(stageData.customerSeatAmount, stageData.customerSeatInterval, stageData.customerWaitTime)
 
             //配送系统中的食物需要持有foodContainer中的食物
             this.deliveryManager.init(stageData.foodDataList)
-            
-            this.restaurantOpening(stageData.closedCountSecond)
+
+            this.restaurantOpening(stageData.restaurantClosedSecond)
         }, 1)
 
     }
@@ -139,7 +139,7 @@ export default class GameManager extends cc.Component {
         // 点击食物，首先帘子需要有空位，且帘子卷的动画已经结束才行。
         if (this.curtain.isCanAddFood()) {
             //从格子里面拿食物 拿成功了 返回food 放到帘子上
-            let foodTaken = food.tackFood();
+            let foodTaken: Food = food.tackFood();
             this.curtain.addFood(foodTaken)
         }
     }
@@ -149,7 +149,7 @@ export default class GameManager extends cc.Component {
     }
 
     curtainScrollCompleted(foodInCurtain: string[]) {
-        console.log('sushi complete food Curtain => ', foodInCurtain)
+        // console.log('sushi complete food Curtain => ', foodInCurtain)
         let recipeData = this.sushiMenu.getRecipe(foodInCurtain)
 
         this.conveyor.createSushi(this.sushichef.createSushi(recipeData))
@@ -190,9 +190,9 @@ export default class GameManager extends cc.Component {
         if (Singleton.Instance.game.restaurantOpen) {
             let x = customer.node.x
             let y = customer.node.y
-            this.scheduleOnce(() => {
-                this.customerManager.createCustomer(x, y)
-            }, Utils.getRandomInt(1, 5))
+            // this.scheduleOnce(() => {
+            //     this.customerManager.createCustomer(x, y)
+            // }, Utils.getRandomInt(1, 5))
         } else {
             //若打烊了，查看用户是否都走了
             if (this.customerManager.customerAmount == 0) {
@@ -211,10 +211,10 @@ export default class GameManager extends cc.Component {
     startDeliveryFoodCall(foodData: FoodData, cost: number, deliveryFoodDelay: number) {
 
         this.plusScore(-cost)
-        
+
         //通知食物开始倒计时
         this.foodContainer.notifyFood(foodData)
-        
+
         this.scheduleOnce(() => {
             console.log('delivery')
             cc.loader.loadRes('audio/deliveryArrival', cc.AudioClip, (err, clip) => {

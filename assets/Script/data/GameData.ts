@@ -51,8 +51,9 @@ export default class GameData {
 
     static ALL_STAGE_DATA: { [key: number]: StageData } = {
         1: new StageData(
-            4,
+            9,
             50,
+            30,
             300,
             ['1','2','3'].map((v)=>GameData.ALL_TOPPING_DATA[v]),
             ['1','2','3'].map((v)=>GameData.ALL_RECIPE_DATA[v])

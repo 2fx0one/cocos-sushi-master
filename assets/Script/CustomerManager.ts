@@ -22,19 +22,22 @@ export default class CustomerManager extends cc.Component {
 
     public customerAmount: number = 0 //客户总数
 
-    private customerList: Customer[] = []
+    customerWaitTime: number = 0
+
+    // private customerList: Customer[] = []
 
     onLoad() {
         // this.init()
         this.customerPool = new cc.NodePool();
-        let initCount = 8;
+        let initCount = 10;
         for (let i = 0; i < initCount; ++i) {
             let customer = cc.instantiate(this.customerPrefab) // 创建节点
             this.customerPool.put(customer) // 通过 put 接口放入对象池
         }
     }
 
-    init(seatAmount: number, seatInterval: number) {
+    init(seatAmount: number, seatInterval: number, customerWaitTime) {
+        this.customerWaitTime = customerWaitTime
         let seatWidth = 100
         // let seatInterval = customerSeatInterval
 
