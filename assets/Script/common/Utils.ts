@@ -1,4 +1,4 @@
-import GameUserData from "../entity/GameUserData";
+import GameUserSaveData from "../entity/GameUserSaveData";
 import GlobalConstant from "./GlobalConstant";
 
 export default class Utils {
@@ -8,12 +8,12 @@ export default class Utils {
         return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
     }
 
-    static saveGameUserData(userData: GameUserData): GameUserData {
+    static saveGameUserData(userData: GameUserSaveData): GameUserSaveData {
         cc.sys.localStorage.setItem(GlobalConstant.userDataKey, JSON.stringify(userData))
         return userData
     }
 
-    static loadGameUserData(): GameUserData {
+    static loadGameUserData(): GameUserSaveData {
         return JSON.parse(cc.sys.localStorage.getItem(GlobalConstant.userDataKey));
     }
 

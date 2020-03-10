@@ -51,10 +51,18 @@ export default class GameData {
 
     static ALL_STAGE_DATA: { [key: number]: StageEntity } = {
         1: new StageEntity(
-            2,
+            3,
             50,
-            5,
-            10,
+            80,
+            300,
+            ['1','2','3'].map((v)=>GameData.ALL_TOPPING_DATA[v]),
+            ['1','2','3'].map((v)=>GameData.ALL_RECIPE_DATA[v]),
+        ),
+        2: new StageEntity(
+            3,
+            50,
+            80,
+            300,
             ['1','2','3'].map((v)=>GameData.ALL_TOPPING_DATA[v]),
             ['1','2','3'].map((v)=>GameData.ALL_RECIPE_DATA[v])
         ),

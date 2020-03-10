@@ -53,6 +53,7 @@ export default class Customer extends cc.Component {
     resetData() {
         this.goldNode.active = false
         this.customerNode.active = true
+        this.sushi = null
         this.orderSushiId = null
         this.sushiPrice = null
         this.label.string = null
@@ -83,12 +84,14 @@ export default class Customer extends cc.Component {
             if (this.progressBar.progress < 0) {
                 this.leave(true)
             }
-            this.progressBar.progress -= 1 / (this.waitTime * 10)
+            if (!this.isEatingSushi()) {
+                this.progressBar.progress -= 1 / (this.waitTime * 10)
+            }
         }, 0.1)
     }
 
     isEatingSushi() {
-        return !this.sushi;
+        return this.sushi!=null;
     }
 
     isMySushi(sushi: Sushi) {
@@ -98,7 +101,7 @@ export default class Customer extends cc.Component {
     //从传送带上碰到食物 表示拿食物
     onCollisionEnter(other: cc.BoxCollider, self: cc.BoxCollider) {
         let sushi: Sushi = other.node.getComponent(Sushi)
-        if (this.customerNode.active && this.isEatingSushi() && this.isMySushi(sushi)) {
+        if (this.customerNode.active && !this.isEatingSushi() && this.isMySushi(sushi)) {
             this.sushi = sushi.takenByCustomer(cc.v2(this.node.position.x, other.node.position.y + 50))
             this.scheduleOnce(() => {
                 this.eatOne()

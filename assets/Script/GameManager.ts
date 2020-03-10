@@ -14,7 +14,7 @@ import FoodData from "./entity/FoodData";
 import DeliveryManager from "./DeliveryManager";
 import Utils from "./common/Utils";
 import DeliveryFood from "./DeliveryFood";
-import GameUserData from "./entity/GameUserData";
+import GameUserSaveData from "./entity/GameUserSaveData";
 import GlobalConstant from "./common/GlobalConstant";
 import SushiCurtain from "./SushiCurtain";
 import SushiConveyor from "./SushiConveyor";
@@ -61,7 +61,7 @@ export default class GameManager extends cc.Component {
 
     public restaurantOpen: boolean = true;
 
-    private userData: GameUserData = null;
+    private userData: GameUserSaveData = null;
 
     // private closedCountSecond = 300 //倒计时300秒
 
@@ -81,10 +81,10 @@ export default class GameManager extends cc.Component {
 
         Singleton.Instance.game = this
 
-        this.userData = new GameUserData()
+        this.userData = Utils.loadGameUserData()
         // this.userData = Utils.loadGameUserData()
 
-        this.stageData = GameData.ALL_STAGE_DATA[1]
+        this.stageData = GameData.ALL_STAGE_DATA[this.userData.selectLevel]
 
         this.init(this.stageData)
     }
