@@ -1,4 +1,4 @@
-import StageData from "../entity/StageData";
+import StageEntity from "../entity/StageEntity";
 import FoodData from "../entity/FoodData";
 import RecipeData from "../entity/RecipeData";
 
@@ -49,11 +49,11 @@ export default class GameData {
 
     }
 
-    static ALL_STAGE_DATA: { [key: number]: StageData } = {
-        1: new StageData(
-            9,
+    static ALL_STAGE_DATA: { [key: number]: StageEntity } = {
+        1: new StageEntity(
+            2,
             50,
-            30,
+            5,
             300,
             ['1','2','3'].map((v)=>GameData.ALL_TOPPING_DATA[v]),
             ['1','2','3'].map((v)=>GameData.ALL_RECIPE_DATA[v])

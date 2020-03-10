@@ -2,7 +2,7 @@ import FoodData from "./FoodData";
 import RecipeData from "./RecipeData";
 
 // 关卡数据
-export default class StageData {
+export default class StageEntity {
     customerSeatAmount: number = null //顾客数量座位数量
     customerSeatInterval: number = null //顾客座位间隔
     customerWaitTime: number = null //顾客等待时间

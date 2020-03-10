@@ -3,6 +3,7 @@ import SushiMenu from "./SushiMenu";
 import RecipeData from "./entity/RecipeData";
 import Singleton from "./Singleton";
 import Utils from "./common/Utils";
+import CustomerSeat from "./entity/CustomerSeat";
 
 const {ccclass, property} = cc._decorator;
 
@@ -24,6 +25,8 @@ export default class CustomerManager extends cc.Component {
 
     customerWaitTime: number = 0
 
+    private customPositionList: CustomerSeat[]
+
     // private customerList: Customer[] = []
 
     onLoad() {
@@ -36,8 +39,8 @@ export default class CustomerManager extends cc.Component {
         }
     }
 
-    init(seatAmount: number, seatInterval: number, customerWaitTime) {
-        this.customerWaitTime = customerWaitTime
+    makeSeatPosition(seatAmount: number, seatInterval: number): CustomerSeat[] {
+        let positionList: CustomerSeat[] = []
         let seatWidth = 100
         // let seatInterval = customerSeatInterval
 
@@ -45,19 +48,64 @@ export default class CustomerManager extends cc.Component {
         let total = seatAmount * seatWidth + (seatAmount - 1) * seatInterval
 
         for (let i = 0; i < seatAmount; i++) {
-            let x = i * (seatWidth + seatInterval) - total / 2 + seatInterval
-            this.scheduleOnce(() => {
-                this.createCustomer(x, 0)
-            }, Utils.getRandomInt(1, 5))
+            // let x = i * (seatWidth + seatInterval) - total / 2 + seatInterval
+            positionList.push(
+                new CustomerSeat(
+                    i * (seatWidth + seatInterval) - total / 2 + seatInterval,
+                    0,
+                    false)
+            )
+        }
+        this.customPositionList = positionList;
+        console.log(this.customPositionList)
+        return this.customPositionList
+    }
+
+    findFreeSeatPosition(): CustomerSeat {
+        let freePositionList = this.customPositionList.filter((seat)=>!seat.taken)
+        if (freePositionList.length == 0) {
+            return null
+        } else {
+            // freePositionList[0].taken = true
+            return freePositionList[0]
+
         }
     }
 
-    createCustomer(x, y) {
+    //每8秒一位客人 客人耐心为80秒
+    init(seatAmount: number, seatInterval: number, customerWaitTime) {
+        this.customerWaitTime = customerWaitTime
+
+        this.makeSeatPosition(seatAmount, seatInterval)
+
+        this.schedule(() => {
+            let seat = this.findFreeSeatPosition();
+            if (seat) {
+                this.createCustomer(seat)
+            }
+            // this.createCustomer(x, 0)
+        }, 8, cc.macro.REPEAT_FOREVER, 1)
+
+        // let seatWidth = 100
+        // // let seatInterval = customerSeatInterval
+        //
+        // //座位大小加间隔 总宽度
+        // let total = seatAmount * seatWidth + (seatAmount - 1) * seatInterval
+        //
+        // for (let i = 0; i < seatAmount; i++) {
+        //     let x = i * (seatWidth + seatInterval) - total / 2 + seatInterval
+        //     this.scheduleOnce(() => {
+        //         this.createCustomer(x, 0)
+        //     }, Utils.getRandomInt(3, 5))
+        // }
+    }
+
+    createCustomer(seat: CustomerSeat) {
         this.customerAmount += 1
-        let customer: cc.Node = this.customerPool.size() > 0 ? this.customerPool.get() : cc.instantiate(this.customerPrefab)
-        customer.parent = this.node
-        customer.setPosition(cc.v2(x, y))
-        return customer.getComponent(Customer).init(this)
+        let node: cc.Node = this.customerPool.size() > 0 ? this.customerPool.get() : cc.instantiate(this.customerPrefab)
+        node.parent = this.node
+        node.setPosition(cc.v2(seat.x, seat.y))
+        return this.takeSeat(node.getComponent(Customer).init(this, seat))
     }
 
     putCustomerNodeToPool(customer: cc.Node) {
@@ -70,13 +118,19 @@ export default class CustomerManager extends cc.Component {
         return Singleton.Instance.game.customerManagerGetRandomRecipe()
     }
 
-    // start () {
-
-    // }
-
-    // update (dt) {}
-    customerFinished(customer: Customer) {
+    customerLeave(customer: Customer, customerImpatient: boolean = false) {
+        this.leaveSeat(customer)
         this.putCustomerNodeToPool(customer.node)
-        Singleton.Instance.game.customerFinished(customer)
+        Singleton.Instance.game.customerLeave(customer, customerImpatient)
+    }
+
+    takeSeat(customer: Customer) {
+        customer.seat.taken = true
+        return customer
+    }
+
+    leaveSeat(customer: Customer) {
+        customer.seat.taken = false
+        return customer
     }
 }

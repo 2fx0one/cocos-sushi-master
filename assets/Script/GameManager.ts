@@ -18,8 +18,8 @@ import GameUserData from "./entity/GameUserData";
 import GlobalConstant from "./common/GlobalConstant";
 import SushiCurtain from "./SushiCurtain";
 import SushiConveyor from "./SushiConveyor";
-import Guanka from "./entity/StageData";
-import StageData from "./entity/StageData";
+import Guanka from "./entity/StageEntity";
+import StageEntity from "./entity/StageEntity";
 import GameData from "./data/GameData";
 
 
@@ -74,7 +74,7 @@ export default class GameManager extends cc.Component {
         // console.log(cc.winSize)
         // cc.director.getWinSize().height
         cc.director.getCollisionManager().enabled = true
-        // cc.director.getCollisionManager().enabledDebugDraw = true
+        cc.director.getCollisionManager().enabledDebugDraw = true
 
         Singleton.Instance.game = this
 
@@ -88,7 +88,7 @@ export default class GameManager extends cc.Component {
         this.updateScoreLabel()
 
 
-        let stageData: StageData = GameData.ALL_STAGE_DATA[1]
+        let stageData: StageEntity = GameData.ALL_STAGE_DATA[1]
 
         this.scheduleOnce(() => {
             this.foodContainer.init(stageData.foodDataList)
@@ -177,13 +177,36 @@ export default class GameManager extends cc.Component {
         this.scoreLabel.string = 'Score: ' + this.score.toString()
     }
 
-    customerFinished(customer: Customer) {
+    // customerFinished(customer: Customer) {
+    //     // cc.loader.loadRes('audio/getGold', cc.AudioClip, (err, clip) => {
+    //     //     cc.audioEngine.play(clip, false, 0.4)
+    //     // })
+    //     //积分
+    //     this.plusScore(customer.sushiPrice)
+    //     // this.userData.gold += customer.sushiPrice
+    //
+    //     //是否打烊就继续
+    //     if (Singleton.Instance.game.restaurantOpen) {
+    //         let x = customer.node.x
+    //         let y = customer.node.y
+    //         this.scheduleOnce(() => {
+    //             this.customerManager.createCustomer(x, y)
+    //         }, Utils.getRandomInt(1, 5))
+    //     } else {
+    //         //若打烊了，查看用户是否都走了
+    //         if (this.customerManager.customerAmount == 0) {
+    //             //都走了
+    //             this.shutdown()
+    //         }
+    //     }
+    // }
 
-        cc.loader.loadRes('audio/getGold', cc.AudioClip, (err, clip) => {
-            cc.audioEngine.play(clip, false, 0.4)
-        })
-        //积分
-        this.plusScore(customer.sushiPrice)
+    customerLeave(customer: Customer, customerImpatient: boolean) {
+        if (customerImpatient) { //没有耐心 提前离开了
+            this.plusScore(-20)
+        } else {
+            this.plusScore(customer.sushiPrice)
+        }
         // this.userData.gold += customer.sushiPrice
 
         //是否打烊就继续
@@ -200,7 +223,6 @@ export default class GameManager extends cc.Component {
                 this.shutdown()
             }
         }
-        // customer.node.destroy()
     }
 
     callDelivery() {

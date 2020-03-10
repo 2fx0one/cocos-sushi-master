@@ -62,7 +62,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        178.059,
+        0,
         0,
         0,
         0,
@@ -132,7 +132,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        -3.679,
+        -68.679,
         0,
         0,
         0,
@@ -1093,7 +1093,7 @@
     "_size": {
       "__type__": "cc.Size",
       "width": 64,
-      "height": 182
+      "height": 150
     },
     "_id": ""
   },
