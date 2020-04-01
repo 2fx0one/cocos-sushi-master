@@ -21,6 +21,7 @@ import SushiConveyor from "./SushiConveyor";
 import Guanka from "./entity/StageEntity";
 import StageEntity from "./entity/StageEntity";
 import GameData from "./data/GameData";
+import GameUserSaveStageData from "./entity/GameUserSaveStageData";
 
 
 @ccclass
@@ -57,7 +58,16 @@ export default class GameManager extends cc.Component {
     @property(cc.Label)
     scoreLabel: cc.Label = null;
 
-    private score: number = 100;
+    @property(cc.Label)
+    dayLabel: cc.Label = null;
+
+    @property(cc.Node)
+    pauseNode: cc.Node = null
+
+    // @property(cc.Node)
+    // settlementPanel: cc.Node = null
+
+    private score: number = 0;
 
     public restaurantOpen: boolean = true;
 
@@ -68,28 +78,34 @@ export default class GameManager extends cc.Component {
     private currentBgAudio = null;
 
     private stageData: StageEntity = null;
+
     private currentStageSettle
 
 
     onLoad() {
-
+        console.log('game on load!')
         // console.log(cc.director.getWinSize())
         // console.log(cc.winSize)
         // cc.director.getWinSize().height
         cc.director.getCollisionManager().enabled = true
-        cc.director.getCollisionManager().enabledDebugDraw = true
+        // cc.director.getCollisionManager().enabledDebugDraw = true
 
         Singleton.Instance.game = this
 
         this.userData = Utils.loadGameUserData()
         // this.userData = Utils.loadGameUserData()
 
+        this.dayLabel.string = 'Day ' + this.userData.selectLevel
+
         this.stageData = GameData.ALL_STAGE_DATA[this.userData.selectLevel]
 
-        this.init(this.stageData)
+        this.init()
     }
 
-    init(stageData) {
+    init() {
+
+        console.log(this.stageData)
+
         this.updateScoreLabel()
 
         this.currentStageSettle = {
@@ -99,19 +115,49 @@ export default class GameManager extends cc.Component {
         }
 
         this.scheduleOnce(() => {
-            this.foodContainer.init(stageData.foodDataList)
-            this.sushiMenu.init(stageData.recipeList)
+            this.foodContainer.init(this.stageData.foodDataList)
+            this.sushiMenu.init(this.stageData.recipeList)
 
             this.curtain.init(this.userData.curtainSpeed)
             this.conveyor.init(this.userData.conveyorSpeed)
-            this.customerManager.init(stageData.customerSeatAmount, stageData.customerSeatInterval, stageData.customerWaitTime)
+            this.customerManager.init(this.userData.customerSeatAmount, this.userData.customerSeatInterval, this.userData.customerWaitTime)
 
             //配送系统中的食物需要持有foodContainer中的食物
-            this.deliveryManager.init(stageData.foodDataList)
+            this.deliveryManager.init(this.stageData.foodDataList)
 
-            this.restaurantOpening(stageData.restaurantClosedSecond)
+            this.restaurantOpening(this.stageData.restaurantClosedSecond)
         }, 1)
 
+    }
+
+    pauseGame() {
+        this.pauseNode.active = true
+        cc.director.pause()
+        // cc.game.pause()
+    }
+
+    restartGame() {
+        cc.director.resume()
+        cc.director.loadScene('restaurant')
+        // cc.game.restart()
+    }
+
+    exitGame() {
+        cc.director.loadScene('main')
+    }
+
+    resumeGame() {
+        this.pauseNode.active = false
+        cc.director.resume()
+    }
+
+    //关店
+    shutdown() {
+        console.log('shutdown')
+        this.userData.gold = Number(this.userData.gold) + this.score
+        this.userData.stageData[this.userData.selectLevel] = new GameUserSaveStageData()
+        Utils.saveGameUserData(this.userData)
+        cc.director.loadScene('settlement')
     }
 
     restaurantOpening(closedCountSecond: number) {
@@ -138,10 +184,7 @@ export default class GameManager extends cc.Component {
         this.restaurantOpen = false
     }
 
-    shutdown() {
-        Utils.saveGameUserData(this.userData)
-        console.log('shutdown')
-    }
+
 
     foodContainerTakeFood(food: Food) {
         // 点击食物，首先帘子需要有空位，且帘子卷的动画已经结束才行。
@@ -219,24 +262,9 @@ export default class GameManager extends cc.Component {
         }
         // this.userData.gold += customer.sushiPrice
 
-        //打烊就继续
-        if (!Singleton.Instance.game.restaurantOpen) {
-            console.log(this.customerManager.customerInSeat())
-            if (this.customerManager.customerInSeat().length == 0) {
-                //都走了
-                this.shutdown()
-            }
-            // let x = customer.node.x
-            // let y = customer.node.y
-            // this.scheduleOnce(() => {
-            //     this.customerManager.createCustomer(x, y)
-            // }, Utils.getRandomInt(1, 5))
-            // } else {
-            //     //若打烊了，查看用户是否都走了
-            //     if (this.customerManager.customerInSeat().length == 0) {
-            //         //都走了
-            //         this.shutdown()
-            //     }
+        //打烊 且 人都走了
+        if (!Singleton.Instance.game.restaurantOpen && this.customerManager.customerInSeat().length == 0) {
+            this.shutdown()
         }
     }
 

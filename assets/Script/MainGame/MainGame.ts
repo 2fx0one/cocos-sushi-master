@@ -13,6 +13,7 @@ import StageButton from "./StageButton";
 import Utils from "../common/Utils";
 import GameUserSaveData from "../entity/GameUserSaveData";
 import Game = cc.Game;
+import Integer = cc.Integer;
 
 const {ccclass, property} = cc._decorator;
 
@@ -51,24 +52,15 @@ export default class MainGame extends cc.Component {
     onLoad() {
         this.stagePageView.active = false
         this.firstLoginNode.active = false
-        this.secondLoginNode.active = false
+        this.secondLoginNode.active = true
 
         this.userData = Utils.loadGameUserData()
-        // console.log('userData', this.userData)
-
-        if (!this.userData) {
-            // 第一次登陆
-            this.firstLoginNode.active = true
-        } else {
+        // 第一次登陆 输入框逻辑 暂时不用
+        if (this.userData) {
             this.loadingUserData()
         }
 
-        // Object.keys(GameData.ALL_STAGE_DATA).forEach((no)=>{
-        //     console.log(no)
-        //     let node: cc.Node = cc.instantiate(this.stageButtonPrefab);
-        //     node.parent = this.stagePage1;
-        //     node.getComponent(StageButton).init(this, no)
-        // })
+
     }
 
     loadingUserData() {
@@ -78,11 +70,8 @@ export default class MainGame extends cc.Component {
     }
 
     clickInputNameConfirm() {
-        // console.log('11 input = ', this.yourNameEditBox.string)
         if (this.yourNameEditBox.string.trim()) {
-            // console.log('22 input = ', this.yourNameEditBox.string)
             this.userData = Utils.saveGameUserData(new GameUserSaveData(this.yourNameEditBox.string))
-            // this.yourNameEditBox.string = 'done'
             this.firstLoginNode.active = false
             this.secondLoginNode.active = true
             this.loadingUserData()
@@ -90,7 +79,17 @@ export default class MainGame extends cc.Component {
     }
 
     clickStart() {
-        cc.director.loadScene('restaurant')
+
+        if (!this.userData) {
+            // 第一次登陆
+            this.secondLoginNode.active = false
+            this.firstLoginNode.active = true
+        } else {
+            this.userData.selectLevel = Number(this.userData.level) + 1
+            Utils.saveGameUserData(this.userData)
+            cc.director.loadScene('restaurant')
+            // this.loadingUserData()
+        }
     }
 
     clickSelect() {
@@ -108,7 +107,8 @@ export default class MainGame extends cc.Component {
 
     clickStage(selectLevel: string) {
         console.log(selectLevel)
-        // this.userData.selectLevel = selectLevel;
-        // Utils.saveGameUserData(this.userData)
+        this.userData.selectLevel =  Number(selectLevel);
+        Utils.saveGameUserData(this.userData)
+        cc.director.loadScene('restaurant')
     }
 }

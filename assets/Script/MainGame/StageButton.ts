@@ -39,7 +39,7 @@ export default class StageButton extends cc.Component {
     }
 
     clickStage() {
-        console.log(this.stageLevel)
+        // console.log(this.stageLevel)
         this.mainGame.clickStage(this.stageLevel)
     }
 }
