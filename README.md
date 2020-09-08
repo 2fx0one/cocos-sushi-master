@@ -1,3 +1,2 @@
-# hello-world
-Hello world new project template.
-# cocos-sushi-master
+# 寿司小游戏
+# cocos-creator sushi-master
